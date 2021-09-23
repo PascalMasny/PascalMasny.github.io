@@ -109,3 +109,9 @@ body{
         height: calc(100vh / 10);
     }
   }
+
+@media (pointer:coarse) {
+    img{
+        height: 200%;
+    }
+}
