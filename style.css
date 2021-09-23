@@ -1,5 +1,4 @@
 
-
 body{
     margin: 0;
     overflow-x: hidden;
@@ -8,7 +7,6 @@ body{
 
 .mainContainer{
     width:100vw;
-    height:100vw;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -100,3 +98,9 @@ body{
     display: flex;
     justify-content: space-evenly;
 }
+
+@media only screen and (min-width: 640px) {
+    .mainContainer{
+        height: 100vh;
+    }
+  }
