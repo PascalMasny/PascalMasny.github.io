@@ -22,9 +22,11 @@ body{
 
 .farbe{
     width: 100%;
+    height: calc (100vh / 9);
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+
 }
 
     .A{
@@ -98,9 +100,6 @@ body{
     justify-content: space-evenly;
 }
 
-img{
-    height: 3vmin;
-}
 
 
 
