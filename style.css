@@ -22,7 +22,7 @@ body{
 
 .farbe{
     width: 100%;
-    height: calc(100vh / 10.2);
+    height: calc(100vh / 9);
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -102,11 +102,15 @@ body{
 
 
 
-
 @media only screen and (min-width: 600px) {
-
+    img{
+        height: 150%;
+    }
   }
 
-@media only screen and (min-height: 600px) {
 
+@media only screen and (min-height: 600px) {
+    .farbe{
+        height: calc(100vh / 10.2);
+    }
 }
