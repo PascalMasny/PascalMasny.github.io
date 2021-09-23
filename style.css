@@ -112,6 +112,10 @@ body{
 
 @media (pointer:coarse) {
     img{
-        height: 200%;
+        height: 150%;
+    }
+    
+    body{
+        font-size: 150%;
     }
 }
