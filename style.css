@@ -113,7 +113,7 @@ body{
 
 @media (pointer:none), (pointer:coarse) {
     img{
-        height: 200;
+        height: 200%;
     }
     
     body{
