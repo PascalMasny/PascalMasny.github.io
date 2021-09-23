@@ -111,6 +111,6 @@ body{
 
 @media only screen and (min-height: 600px) {
     .farbe{
-        height: calc(100vh / 10.2);
+        height: calc(100vh / 10);
     }
 }
