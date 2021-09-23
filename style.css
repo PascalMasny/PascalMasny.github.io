@@ -118,7 +118,4 @@ body{
     body{
         font-size: 175%;
     }
-    .farbe{
-        height: calc(100vh / 9);
-    }
 }
