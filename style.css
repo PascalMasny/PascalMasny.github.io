@@ -121,7 +121,26 @@ body{
     }
 
     .farbe{
-        height: calc(100vh / 6);
+        height: calc(100vh / 5);
     }
 
+    #masnyp{
+        height:250px;
+        margin: 10px 0;
+        border-radius: 100%;
+        -webkit-border-radius: 100%;
+        -moz-border-radius: 100%;
+        -ms-border-radius: 100%;
+        -o-border-radius: 100%;
+        margin-left: 5%;
+    }
 }
+
+
+
+
+
+
+
+
+
