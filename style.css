@@ -1,9 +1,9 @@
 
-
 body{
     margin: 0;
-    overflow-x: hidden;
+    min-height: 100vh;
     font-family: 'Roboto Mono', monospace;
+    overflow-y: hidden;
 }
 
 .mainContainer{
@@ -12,7 +12,6 @@ body{
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    flex-wrap: wrap;
 }
 
 .farbeSpecial{
@@ -24,6 +23,7 @@ body{
 
 .farbe{
     width: 100%;
+    height: calc(100vh / 10.2);
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -97,6 +97,6 @@ body{
 .list{
     margin-bottom: 10px;
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-evenly;
 }
+
