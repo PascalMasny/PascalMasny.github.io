@@ -106,7 +106,7 @@ body{
         height: 135%;
     }
     .farbe{
-        height: calc(100vh / 7);
+        height: calc(100vh / 6);
     }
 
   }
