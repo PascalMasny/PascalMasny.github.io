@@ -113,7 +113,7 @@ body{
 
 @media (pointer:coarse) {
     img{
-        height: 150%;
+        height: 175%;
     }
     
     body{
@@ -121,7 +121,7 @@ body{
     }
 
     .farbe{
-        height: calc(100vh / 9);
+        height: calc(100vh / 6);
     }
 
 }
