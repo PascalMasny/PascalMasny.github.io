@@ -111,7 +111,7 @@ body{
 
   }
 
-@media (pointer:none), (pointer:coarse) {
+@media (pointer:coarse) {
     img{
         height: 500%;
     }
