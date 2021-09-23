@@ -3,7 +3,6 @@ body{
     margin: 0;
     min-height: 100vh;
     font-family: 'Roboto Mono', monospace;
-    font-size: 150%;
 }
 
 .mainContainer{
@@ -23,7 +22,6 @@ body{
 
 .farbe{
     width: 100%;
-    height: calc(100vh / 10.2);
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -100,6 +98,10 @@ body{
     justify-content: space-evenly;
 }
 
-img{
-    height:150%;
+@media only screen and (min-width: 600px) {
+    
+  }
+
+@media only screen and (min-height: 600px) {
+
 }
