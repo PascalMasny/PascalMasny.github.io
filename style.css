@@ -106,11 +106,7 @@ body{
     img{
         height: 150%;
     }
-  }
-
-
-@media only screen and (min-height: 600px) {
     .farbe{
-        height: calc(100vh / 10);
+        height: calc(100vh / 10.2);
     }
-}
+  }
