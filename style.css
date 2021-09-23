@@ -101,6 +101,6 @@ body{
 
 @media only screen and (min-width: 640px) {
     .mainContainer{
-        height: 100vh;
+        height: 150%;
     }
   }
