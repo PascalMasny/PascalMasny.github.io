@@ -3,6 +3,7 @@ body{
     margin: 0;
     min-height: 100vh;
     font-family: 'Roboto Mono', monospace;
+    background-color: #FFBA08;
 }
 
 .mainContainer{
@@ -13,14 +14,14 @@ body{
     align-items: center;
 }
 
-.farbeSpecial{
+.colorSpecial{
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.farbe{
+.color{
     width: 100%;
     display: flex;
     justify-content: space-evenly;
@@ -99,29 +100,72 @@ body{
     justify-content: space-evenly;
 }
 
+/*! Desktop browser scaling*/
 
+/* Extra small devices (600px and down) */
+@media only screen and (max-width: 600px) {
+    img{
+        height: 135%;
+    }
+    
+    body{
+        font-size: 125%;
+    }
 
+    .color{
+        height: calc(100vh / 4.5);
+    }
+
+    #masnyp{
+        height:150px;
+        margin: 10px 0;
+        border-radius: 100%;
+        -webkit-border-radius: 100%;
+        -moz-border-radius: 100%;
+        -ms-border-radius: 100%;
+        -o-border-radius: 100%;
+        margin-left: 5%;
+    }
+}
+
+/* Small devices (600px and up) */
 @media only screen and (min-width: 600px) {
     img{
         height: 135%;
     }
-    .farbe{
-        height: calc(100vh / 6);
+    
+    body{
+        font-size: 125%;
     }
 
-  }
+    .color{
+        height: calc(100vh / 4.5);
+    }
 
-@media (pointer:coarse) {
+    #masnyp{
+        height:150px;
+        margin: 10px 0;
+        border-radius: 100%;
+        -webkit-border-radius: 100%;
+        -moz-border-radius: 100%;
+        -ms-border-radius: 100%;
+        -o-border-radius: 100%;
+        margin-left: 5%;
+    }
+}
+
+/* Medium devices (768px and up ) */
+@media only screen and (min-width: 768px) {
     img{
-        height: 225%;
+        height: 135%;
     }
     
     body{
-        font-size: 200%;
+        font-size: 125%;
     }
 
-    .farbe{
-        height: calc(100vh / 5);
+    .color{
+        height: calc(100vh / 4.5);
     }
 
     #masnyp{
@@ -137,10 +181,28 @@ body{
 }
 
 
+/* Large devices (992px and up) */
+@media only screen and (min-width: 992px) {
+    img{
+        height: 135%;
+    }
+    body{
+        font-size: 125%;
+    }
+    .color{
+        height: calc(100vh / 4.5);
+    }
+}
 
-
-
-
-
-
-
+/* Extra large devices (1200px and up) */
+@media only screen and (min-width: 1200px) {
+    img{
+        height: 135%;
+    }
+    body{
+        font-size: 125%;
+    }
+    .color{
+        height: calc(100vh / 4.5);
+    }
+}
