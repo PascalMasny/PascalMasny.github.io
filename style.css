@@ -103,7 +103,7 @@ body{
 /*! Desktop browser scaling*/
 
 /* Extra small devices (600px and down) */
-@media only screen and (max-width: 600px) {
+@media (max-width: 575.98px) {
     img{
         height: 135%;
     }
@@ -129,7 +129,7 @@ body{
 }
 
 /* Small devices (600px and up) */
-@media only screen and (min-width: 600px) {
+@media (max-width: 767.98px) {
     img{
         height: 135%;
     }
@@ -155,7 +155,7 @@ body{
 }
 
 /* Medium devices (768px and up ) */
-@media only screen and (min-width: 768px) {
+@media (max-width: 991.98px){
     img{
         height: 135%;
     }
@@ -182,7 +182,7 @@ body{
 
 
 /* Large devices (992px and up) */
-@media only screen and (min-width: 992px) {
+@media (max-width: 1199.98px) {
     img{
         height: 135%;
     }
@@ -195,7 +195,7 @@ body{
 }
 
 /* Extra large devices (1200px and up) */
-@media only screen and (min-width: 1200px) {
+@media (max-width: 1399.98px) {
     img{
         height: 135%;
     }
@@ -208,86 +208,3 @@ body{
 }
 
 /*! Desktop browser scaling*/
-
-/*! Mobile  browser scaling*/
-
-/* Smal Smartphones
-@media (pointer:none) and (pointer:coarse) and (max-width: 600px) {
-    img{
-        height: 100%;
-    }
-    
-    body{
-        font-size: 125%;
-    }
-
-    .color{
-        height: calc(100vh / 4.5);
-    }
-
-    #masnyp{
-        height:150px;
-        margin: 10px 0;
-        border-radius: 100%;
-        -webkit-border-radius: 100%;
-        -moz-border-radius: 100%;
-        -ms-border-radius: 100%;
-        -o-border-radius: 100%;
-        margin-left: 5%;
-    }
-}
-*/
-
-/* Smartphones *
-@media (pointer:none), (pointer:coarse), (min-device-width: 600px){
-    img{
-        height: 100%;
-    }
-    
-    body{
-        font-size: 100%;
-    }
-
-    .color{
-        height: calc(100vh / 4);
-    }
-
-    #masnyp{
-        height:150px;
-        margin: 10px 0;
-        border-radius: 100%;
-        -webkit-border-radius: 100%;
-        -moz-border-radius: 100%;
-        -ms-border-radius: 100%;
-        -o-border-radius: 100%;
-        margin-left: 5%;
-    }
-}
-*/
-
-/*
-@media (pointer:none) and (pointer:coarse) and (max-device-height: 1024px) {
-    img{
-        height: 500%;
-    }
-    
-    body{
-        font-size: 125%;
-    }
-
-    .color{
-        height: calc(100vh / 4);
-    }
-
-    #masnyp{
-        height:250px;
-        margin: 10px 0;
-        border-radius: 100%;
-        -webkit-border-radius: 100%;
-        -moz-border-radius: 100%;
-        -ms-border-radius: 100%;
-        -o-border-radius: 100%;
-        margin-left: 5%;
-    }
-}
-*/
