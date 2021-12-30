@@ -103,7 +103,7 @@ body{
 /*! Desktop browser scaling*/
 
 /* Extra small devices (600px and down) */
-@media (max-width: 575.98px) {
+@media only screen and (max-width: 600px) {
     img{
         height: 135%;
     }
@@ -129,7 +129,7 @@ body{
 }
 
 /* Small devices (600px and up) */
-@media (max-width: 767.98px) {
+@media only screen and (min-width: 600px) {
     img{
         height: 135%;
     }
@@ -155,7 +155,7 @@ body{
 }
 
 /* Medium devices (768px and up ) */
-@media (max-width: 991.98px){
+@media only screen and (min-width: 768px) {
     img{
         height: 135%;
     }
@@ -182,7 +182,7 @@ body{
 
 
 /* Large devices (992px and up) */
-@media (max-width: 1199.98px) {
+@media only screen and (min-width: 992px) {
     img{
         height: 135%;
     }
@@ -190,12 +190,12 @@ body{
         font-size: 125%;
     }
     .color{
-        height: calc(100vh / 3.5);
+        height: calc(100vh / 4.5);
     }
 }
 
 /* Extra large devices (1200px and up) */
-@media (max-width: 1399.98px) {
+@media only screen and (min-width: 1200px) {
     img{
         height: 135%;
     }
@@ -203,8 +203,6 @@ body{
         font-size: 125%;
     }
     .color{
-        height: calc(100vh / 3.5);
+        height: calc(100vh / 4.5);
     }
 }
-
-/*! Desktop browser scaling*/
