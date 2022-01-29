@@ -1,0 +1,71 @@
+.card
+	.card-back
+		.line-numbers
+			div 1
+			div 2
+			div 3
+			div 4
+			div 5
+			div 6
+			div 7
+			div 8
+			div 9
+		code
+			span.variable const 
+			span.function aboutMe 
+			span.operator = 
+			span {
+			.indent 
+				span.property name
+				span.operator : 
+				span.string 'Joshua Ward'
+				span ,
+			
+			.indent 
+				span.property title
+				span.operator : 
+				span.string 'Sr. UI/UX Developer'
+				span ,
+			.indent 
+				span.property contact
+				span.operator : 
+				span {
+				.indent 
+					span.property email
+					span.operator : 
+					span.string 'joshua.ward@me.com'
+					span ,
+				.indent
+					span.property website
+					span.operator :
+					span.string 'joshuaward.me'
+				span }
+			span }
+	.card-front
+		.line-numbers
+			div 1
+			div 2
+			div 3
+			div 4
+			div 5
+			div 6
+			div 7
+			div 8
+			div 9
+		code
+			span.variable this
+			span .
+			span.method addEventListener
+			span (
+			span.string 'mouseover'
+			span , 
+			span.function () => 
+			span { 
+			.indent
+				span.variable this
+				span .
+				span.property flipCard 
+				span = 
+				span.boolean true
+				span ;
+			span });
