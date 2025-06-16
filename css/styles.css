@@ -1,0 +1,309 @@
+/* styles.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap');
+
+:root {
+  /* Palette-based variables */
+  --primary:    #0094C6; /* bright accent */
+  --secondary:  #005E7C; /* mid-tone buttons, links */
+  --accent:     #000022; /* ultra-dark splashes */
+  --background: #040F16; /* page background */
+  --card-bg:    #001242; /* panels & cards */
+  --text:       #F3F6F8; /* light text on dark */
+  --muted:      #005E7C; /* subdued labels, metadata */
+
+  /* Other design tokens */
+  --border-radius: 12px;
+  --shadow:        0 2px 8px rgba(0, 0, 0, 0.7);
+  --hover-shadow:  0 4px 16px rgba(0, 0, 0, 0.9);
+  --transition:    0.3s ease;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background:   #F3F6F8;
+    --card-bg:      #FFFFFF;
+    --text:         #001242;
+    --muted:        #005E7C;
+    --shadow:       0 2px 8px rgba(0, 0, 0, 0.1);
+    --hover-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Source Code Pro', monospace;
+  background: var(--background);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+header {
+  background: var(--primary);
+  color: #fff;
+  padding: 3rem 1rem 6rem;
+  text-align: center;
+  position: relative;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.profile-pic {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  object-fit: cover;
+  position: absolute;
+  bottom: -130px;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: transform var(--transition);
+  z-index: 1;
+}
+
+.profile-pic:hover {
+  transform: translateX(-50%) scale(1.05);
+}
+
+.header-info {
+  position: relative;
+  z-index: 2;
+}
+
+.header-info h1 {
+  font-size: 4rem;
+  line-height: 1.1;
+}
+
+.header-info p {
+  font-size: 2rem;
+  opacity: 0.9;
+  margin-top: 0.5rem;
+}
+
+main {
+  max-width: 900px;
+  margin: 150px auto 2rem;
+  padding: 0 1rem;
+}
+
+section {
+  background: var(--card-bg);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+
+section:hover {
+  box-shadow: var(--hover-shadow);
+  transform: translateY(-5px);
+}
+
+section h2 {
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  color: var(--primary);
+  font-size: 1.75rem;
+}
+
+a {
+  color: var(--secondary);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+a:hover {
+  color: var(--primary);
+}
+
+ul {
+  list-style: none;
+}
+
+li {
+  transition: transform var(--transition);
+}
+
+li:hover {
+  transform: translateX(5px);
+}
+
+/* Kontakt */
+.contact-list li {
+  margin-bottom: 0.5rem;
+}
+
+/* Profil */
+#profil p {
+  margin-top: 0.5rem;
+}
+
+/* Berufserfahrung */
+.timeline-item {
+  margin-bottom: 1rem;
+}
+
+.timeline-item span.date {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* Skills */
+.skills-list li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+/* Top-Kenntnisse & Zertifikate, Auszeichnungen & Hobbys als Badges */
+.badge-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+}
+
+.badge-list li {
+  background: var(--background);
+  padding: 0.5rem 1rem;
+  margin: 0.25rem;
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+}
+
+/* Sprachen */
+.lang-list li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+/* Ausbildung */
+.timeline-edu .timeline-item {
+  margin-bottom: 1rem;
+}
+
+/* Galerie */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--border-radius);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  transition: transform var(--transition);
+}
+
+.gallery-item:hover img {
+  transform: scale(1.1);
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 0.5rem;
+  text-align: center;
+  transform: translateY(100%);
+  transition: transform var(--transition);
+}
+
+.gallery-item:hover .overlay {
+  transform: translateY(0);
+}
+
+/* Downloads */
+.downloads {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.download-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--border-radius);
+  background: var(--background);
+  box-shadow: var(--shadow);
+}
+
+.download-thumb {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.download-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 0.5rem;
+  text-align: center;
+  transform: translateY(100%);
+  transition: transform var(--transition);
+}
+
+.download-item:hover .download-overlay {
+  transform: translateY(0);
+}
+
+.download-link {
+  display: block;
+  padding: 0.5rem;
+  text-align: center;
+  background: var(--secondary);
+  color: #fff;
+  text-decoration: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  transition: background var(--transition), box-shadow var(--transition);
+}
+
+.download-link:hover {
+  background: var(--primary);
+  box-shadow: var(--hover-shadow);
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* Add this somewhere after your variable declarations */
+a,
+a:visited {
+  color: #ffffff;        /* or var(--text) if you want the same light text color */
+  transition: color var(--transition);
+}
+
+a:hover {
+  color: var(--primary); /* or any accent you like on hover */
+}

@@ -1,0 +1,154 @@
+/* ebiz-styles.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap');
+
+:root {
+  /* Cool blue palette */
+  --primary:      #0094C6; /* bright accent */
+  --secondary:    #005E7C; /* darker hover accent */
+  --accent:       #000022; /* deep navy bits */
+  --background:   #040F16; /* page background */
+  --card-bg:      #001242; /* card panels */
+  --text:         #F3F6F8; /* light text */
+  --muted:        #005E7C; /* subdued labels */
+  
+  /* Layout tokens */
+  --border-radius: 12px;
+  --shadow:        rgba(0, 0, 0, 0.7);
+  --hover-shadow:  rgba(0, 0, 0, 0.9);
+  --transition:    0.3s ease;
+
+  /* Specifics */
+  --container-width: 600px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* Optional light-mode flip */
+    --background:   #F3F6F8;
+    --card-bg:      #FFFFFF;
+    --text:         #001242;
+    --muted:        #005E7C;
+    --shadow:       rgba(0, 0, 0, 0.1);
+    --hover-shadow: rgba(0, 0, 0, 0.2);
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Source Code Pro', monospace;
+  background: var(--background);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  padding: 1rem;
+}
+
+.ebiz-card {
+  background: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 8px var(--shadow);
+  transition: box-shadow var(--transition), transform var(--transition);
+  text-align: center;
+}
+
+.ebiz-card:hover {
+  box-shadow: 0 4px 16px var(--hover-shadow);
+  transform: translateY(-5px);
+}
+
+.ebiz-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid var(--primary);
+  object-fit: cover;
+  margin: 0 auto 1rem;
+  display: block;
+}
+
+.ebiz-info h3 {
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+  color: var(--primary);
+}
+
+.ebiz-info p.catch {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+.badge-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style: none;
+  margin-bottom: 1rem;
+}
+
+.badge-list li {
+  background: var(--primary);
+  color: #fff;
+  padding: 0.25rem 0.75rem;
+  margin: 0.25rem;
+  border-radius: var(--border-radius);
+  font-size: 0.85rem;
+}
+
+.contact-list {
+  list-style: none;
+  margin-bottom: 1rem;
+}
+
+.contact-list li {
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+}
+
+.contact-list li span.icon {
+  margin-right: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.add-contact {
+  display: inline-block;
+  background: var(--primary);
+  color: #fff;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  font-size: 0.95rem;
+  transition: background var(--transition);
+}
+
+.add-contact:hover {
+  background: var(--secondary);
+}
+
+a,
+a:visited {
+  color: #ffffff;        /* or var(--text) if you want the same light text color */
+  transition: color var(--transition);
+}
+
+a:hover {
+  color: var(--primary); /* or any accent you like on hover */
+}

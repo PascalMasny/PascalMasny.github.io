@@ -1,51 +1,199 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Pascal Masny Business Card</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-<link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.5.0/css/all.css'>
-<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Inconsolata'><link rel="stylesheet" href="./style.css">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pascal Masny - Future Systems Engineer</title>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<!-- partial:index.partial.html -->
-<div class="card">
-  <div class="card-back">
-    <div class="line-numbers">
-      <div>1</div>
-      <div>2</div>
-      <div>3</div>
-      <div>4</div>
-      <div>5</div>
-      <div>6</div>
-      <div>7</div>
-      <div>8</div>
-      <div>9</div>
-    </div><code><span class="variable">const </span><span class="function">aboutMe </span><span class="operator">= </span><span>{</span>
-      <div class="indent"> <span class="property">name</span><span class="operator">: </span><span class="string">'Pascal Masny'</span><span>,</span></div>
-      <div class="indent"> <span class="property">title</span><span class="operator">: </span><span class="string">'Software Developer'</span><span>,</span></div>
-      <div class="indent"> <span class="property">contact</span><span class="operator">: </span><span>{</span>
-        <div class="indent"> <span class="property">email</span><span class="operator">: </span><span class="string">'pascal.masny@protonmail.com'</span><span>,</span></div>
-        <div class="indent"><span class="property">linkedin</span><span class="operator">:</span><span class="string">'https://shorturl.at/ddd4d'</span></div><span>}</span>
-      </div><span>}</span></code>
-  </div>
-  <div class="card-front">
-    <div class="line-numbers">
-      <div>1</div>
-      <div>2</div>
-      <div>3</div>
-      <div>4</div>
-      <div>5</div>
-      <div>6</div>
-      <div>7</div>
-      <div>8</div>
-      <div>9</div>
-    </div><code><span class="variable">this</span><span>.</span><span class="method">addEventListener</span><span>(</span><span class="string">'mouseover'</span><span>, </span><span class="function">() => </span><span>{ </span>
-      <div class="indent"><span class="variable">this</span><span>.</span><span class="property">flipCard </span><span>= </span><span class="boolean">true</span><span>;</span></div><span>});</span></code>
-  </div>
-</div>
-<!-- partial -->
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+  <header>
+    <img src="img/picture.jpg" alt="Pascal Masny" class="profile-pic">
+    <div class="header-info">
+      <h1>Pascal Masny</h1>
+      <p>Future Systems Engineer B. Sc.</p>
+    </div>
+  </header>
+  <main>
+
+    <section id="contact">
+      <h2>Kontakt</h2>
+      <ul class="contact-list">
+        <li>📞 <a href="tel:+4915142829338">+49 1514 2829338</a></li>  
+        <li>✉️ <a href="mailto:pascal.masny@protonmail.com">pascal.masny@protonmail.com</a></li>
+        <li>🔗 <a href="https://pascalmasny.github.io" target="_blank">Portfolio</a></li>
+        <li>🔗 <a href="https://www.linkedin.com/in/pascal-masny-116582223" target="_blank">LinkedIn</a></li>
+      </ul>
+    </section>
+    <section id="profil">
+      <h2>Profil</h2>
+      <p>Leidenschaftlicher Problemlöser, der datenbasiert Prozesse intelligent optimiert, Systeme zuverlässig betreibt und dabei stets nach smarter Effizienz strebt. Praxis in Datenanalyse und KI-gestützten Anwendungen, mit nachweisbaren Einsparungen im sechsstelligen Bereich.</p>
+    </section>
+
+    <section id="top-skills">
+      <h2>Top-Kenntnisse 🌟</h2>
+      <ul class="cert-list badge-list">
+        <li>🐍 Python</li>
+        <li>📈 Statistik</li>
+        <li>🤖 Automatisierung</li>
+        <li>🔍 Neugier</li>
+      </ul>
+    </section>
+
+    <section id="skills">
+      <h2>Skills 🛠️</h2>
+      <ul class="skills-list">
+        <li><span>🐍 Python & Statistik</span><span>★★★★★</span></li>
+        <li><span>🔍 Celonis, SAP & MS Office</span><span>★★★★☆</span></li>
+        <li><span>🗄️ Datenbanken & Strukturen</span><span>★★★★☆</span></li>
+        <li><span>⚙️ Mechatronik & Elektronik</span><span>★★★☆☆</span></li>
+        <li><span>🤖 Automatisierung & LLMs</span><span>★★★★★</span></li>
+      </ul>
+    </section>
+
+    <section id="experience">
+      <h2>Berufserfahrung</h2>
+      <div class="timeline-item">
+        <h3>Datenanalyst & Werksstudent - manroland Goss web systems GmbH</h3>
+        <span class="date">Juni 2023 -  Heute</span>
+        <p>KI-gestützte Analysen mit Celonis; LLM-Anwendungen. Einsparungen im sechsstelligen Bereich.</p>
+      </div>
+      <div class="timeline-item">
+        <h3>Fachinformatiker Anwendungsentwicklung - manroland Goss web systems GmbH</h3>
+        <span class="date">Sep 2020 - Juni 2023</span>
+        <p>Python-Datenanalyse, Celonis-Integration zur SAP-Optimierung. <br> IHK 1,9 / Berufsschule 2,1.</p>
+      </div>
+      <div><hr></div>
+      <div class="timeline-item">
+        <h3>Zerspanungsmechaniker - MT Aerospace AG</h3>
+        <span class="date">Juli 2019 (1 Monat)</span>
+        <p>Schülerpraktikum</p>
+      </div>
+      <div class="timeline-item">
+        <h3>Mechatroniker - KUKA</h3>
+        <span class="date">Juni 2019 (1 Monat)</span>
+        <p>Schülerpraktikum</p>
+      </div>
+    </section>
+
+    <section id="education">
+      <h2>Ausbildung 🎓</h2>
+      <div class="timeline-edu">
+        <div class="timeline-item">
+          <h3>B. Sc. Systems Engineering - TH Augsburg</h3>
+          <span class="date">2025 - Heute</span>
+          <p>Teilzeitstudium</p>
+        </div>
+        <div class="timeline-item">
+          <h3>Fachhochschulreife - Berufsoberschule Augsburg</h3>
+          <span class="date">Sep 2023 - Juni 2025</span>
+          <p>Schülersprecher, Abischnitt: Noch unbekannt, Parrallele anstellung bei der manroland</p>
+        </div>
+        <div class="timeline-item">
+          <h3>Fachinformatiker Anwendungsentwicklung - IHK Akademie Schwaben</h3>
+          <span class="date">Sep 2020 - Juni 2023</span>
+          <p>Vollzeit Azubi bei der manrolang Goss web systems GmbH</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="languages">
+      <h2>Sprachen 🌐</h2>
+      <ul class="lang-list">
+        <li><span>🇩🇪 Deutsch</span><span>Muttersprache</span></li>
+        <li><span>🇬🇧 Englisch</span><span>Verhandlungssicher</span></li>
+      </ul>
+    </section>
+    
+    <section id="certificates">
+      <h2>Zertifikate 📜</h2>
+      <ul class="cert-list badge-list">
+        <li>🛡️ Cisco CCNA</li>
+        <li>📊 Celonis Data Scientist</li>
+      </ul>
+    </section>
+
+    <section id="hobbies">
+      <h2>Hobbys 🎳</h2>
+      <ul class="hobbies-list badge-list">
+        <li>🖨️ 3D-Druck</li>
+        <li>💃 Paartanz (Klassik, Latein & Ballett)</li>
+        <li>🌿 Botanik</li>
+        <li>👨‍🍳 Kochen</li>
+      </ul>
+    </section>
+
+    <section id="awards">
+      <h2>Auszeichnungen 🏆</h2>
+      <ul class="award-list badge-list">
+        <li>🤖 Schwäbischer Robotik Meister 2018</li>
+        <li>🚢 ShipIt 2021/22 Gewinner</li>
+      </ul>
+    </section>
+
+    <section id="gallery">
+      <h2>Galerie 📸</h2>
+      <div class="gallery">
+        <div class="gallery-item">
+          <img src="img/1.png" alt="Projektarbeit">
+          <div class="overlay">Projektarbeit mit 3D-Druck</div>
+        </div>
+        <div class="gallery-item">
+          <img src="img/1.png" alt="Tanzveranstaltung">
+          <div class="overlay">Tanzabend Klassik & Latein</div>
+        </div>
+        <div class="gallery-item">
+          <img src="img/1.png" alt="Botanik-Workshop">
+          <div class="overlay">Botanik-Exkursion</div>
+        </div>
+        <div class="gallery-item">
+          <img src="img/1.png" alt="Kochabend">
+          <div class="overlay">Kochsession & Rezepte</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="downloads">
+      <h2>Downloads 📂</h2>
+      <div class="downloads">
+        <a href="pdfs/CV_Pascal_Masny.pdf" class="download-item" download>
+          <img src="img/CV.png" alt="CV" class="download-thumb">
+          <div class="download-overlay">Lebenslauf (PDF, 183 KB)</div>
+          <div class="download-link">Lebenslauf</div>
+        </a>
+        <a href="pdfs/Projektdokumentation_Pascal_Masny.pdf" class="download-item" download>
+          <img src="img/IHK_Arbeit.png" alt="IHK Projektarbeit" class="download-thumb">
+          <div class="download-overlay">IHK Projektarbeit (PDF, 4.526 KB)</div>
+          <div class="download-link">IHK Projektarbeit</div>
+        </a>
+        <a href="pdfs/Clever_Refill_Präsentatio_Pascal_Masny.pdf" class="download-item" download>
+          <img src="img/CleverRefill.png" alt="CleverRefill" class="download-thumb">
+          <div class="download-overlay">CleverRefill (PDF, 925 KB)</div>
+          <div class="download-link">CleverRefill</div>
+        </a>
+        <a href="pdfs/REST_Projektdokumentation_Pasca_Masny.pdf" class="download-item" download>
+          <img src="img/REST.png" alt="REST API" class="download-thumb">
+          <div class="download-overlay">REST Projektarbeit (PDF, 7.043 KB)</div>
+          <div class="download-link">REST Projektarbeit</div>
+        </a>
+      </div>
+    </section>
+  </main>
+  <footer>
+    &copy; 2025 Pascal Masny
+    <br>
+    <br>
+    <p><strong>Hinweis gemäß § 5 TMG</strong></p>
+    <p>
+      Diese Website ist ein rein <strong>privates, nicht-kommerzielles Projekt</strong> und dient ausschließlich der persönlichen Darstellung und Information.<br>
+      Sie verfolgt keinerlei wirtschaftliche Interessen.
+    </p>
+    <p>
+      Gemäß § 5 Telemediengesetz (TMG) besteht daher <strong>keine Impressumspflicht</strong>.
+    </p>
+    <p>
+      Es werden keine personenbezogenen Daten erhoben, keine Cookies gesetzt und keine Tracking- oder Analyse-Tools verwendet.
+    </p>
+  </footer>
 </body>
 </html>
