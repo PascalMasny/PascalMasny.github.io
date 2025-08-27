@@ -19,6 +19,7 @@
   --transition:    0.3s ease;
 }
 
+/*
 @media (prefers-color-scheme: light) {
   :root {
     --background:   #F3F6F8;
@@ -29,6 +30,7 @@
     --hover-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   }
 }
+  */
 
 * {
   margin: 0;
