@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Motivationsschreiben / Letter of Motivation; Pascal Masny</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #d4d8df;
+      color: #1e293b;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    /* ── Controls ─────────────────────────────────────────────────────────── */
+    .controls {
+      position: sticky; top: 0; z-index: 100;
+      background: #0f172a; color: #cbd5e1;
+      display: flex; align-items: center; gap: 12px; padding: 10px 20px; font-size: 12px;
+    }
+    .controls a, .controls button {
+      font-family: 'Inter', sans-serif; font-size: 11px; cursor: pointer;
+      border: 1px solid #334155; border-radius: 4px; padding: 5px 12px;
+      background: transparent; color: #94a3b8; text-decoration: none;
+      transition: border-color .15s, color .15s;
+    }
+    .controls a:hover, .controls button:hover { color: #e2e8f0; border-color: #64748b; }
+    .controls .btn-print { background: #1d4ed8; color: white; border-color: #1d4ed8; }
+    .controls .btn-print:hover { background: #1e40af; border-color: #1e40af; }
+    .controls-spacer { flex: 1; }
+    .controls-hint { color: #475569; font-size: 10px; }
+
+    /* ── A4 page ──────────────────────────────────────────────────────────── */
+    .letter-wrap { padding: 24px 0 40px; }
+    .letter-page {
+      width: 210mm; min-height: 297mm; margin: 0 auto;
+      background: #fff; padding: 25mm 20mm 20mm 25mm;
+      box-shadow: 0 8px 32px rgba(0,0,0,.22);
+    }
+
+    /* ── Sender block ─────────────────────────────────────────────────────── */
+    .sender-block {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 8mm;
+    }
+    .sender-name { font-size: 15px; font-weight: 700; color: #0f1f36; }
+    .sender-title { font-size: 10px; color: #1d4ed8; font-weight: 500; margin-top: 2px; }
+    .sender-details { font-size: 9.5px; color: #4b5563; margin-top: 6px; line-height: 1.8; }
+    .letter-date-block { font-size: 10px; color: #4b5563; text-align: right; }
+
+    .sender-divider {
+      width: 100%; height: 2px;
+      background: linear-gradient(to right, #1a3057, #dbeafe);
+      margin-bottom: 10mm;
+    }
+
+    /* ── Subject ─────────────────────────────────────────────────────────── */
+    .letter-subject {
+      font-size: 12px; font-weight: 700; color: #0f1f36;
+      margin-bottom: 7mm; border-left: 3px solid #1d4ed8; padding-left: 10px;
+    }
+
+    /* ── Salutation & body ────────────────────────────────────────────────── */
+    .letter-salutation { font-size: 11px; margin-bottom: 5mm; }
+    .letter-body { display: flex; flex-direction: column; gap: 4.5mm; }
+    .letter-body p { font-size: 10.5px; color: #1e293b; text-align: justify; }
+
+    /* ── Closing ─────────────────────────────────────────────────────────── */
+    .letter-closing { margin-top: 7mm; }
+    .letter-closing p { font-size: 10.5px; margin-bottom: 14mm; }
+    .signature-name { font-size: 12px; font-weight: 700; color: #0f1f36; }
+    .signature-title { font-size: 9.5px; color: #4b5563; margin-top: 2px; }
+
+    /* ── Print ────────────────────────────────────────────────────────────── */
+    @page { size: A4; margin: 0; }
+    @media print {
+      body { background: none; }
+      .controls { display: none !important; }
+      .letter-wrap { padding: 0; }
+      .letter-page { box-shadow: none; margin: 0; width: 100%; }
+    }
+
+    /* ── Mobile ─────────────────────────────────────────────────────────── */
+    @media (max-width: 820px) {
+      .controls {
+        flex-wrap: wrap;
+        padding: 7px 10px;
+        gap: 5px;
+      }
+      .controls a, .controls button {
+        padding: 4px 8px;
+        font-size: 10px;
+      }
+      .controls-hint { display: none; }
+      .letter-wrap {
+        overflow-x: auto;
+        padding: 0;
+        -webkit-overflow-scrolling: touch;
+      }
+      .letter-page {
+        margin: 0;
+        min-width: 210mm;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Controls ──────────────────────────────────────────────────────────── -->
+<div class="controls">
+  <a href="../index.html" id="back-link">Portfolio</a>
+  <a href="cv.html"       id="cv-link">CV</a>
+  <button id="lang-btn" onclick="toggleLang()">English</button>
+  <span class="controls-spacer"></span>
+  <span class="controls-hint" id="print-hint">Browser-Druckdialog → "Als PDF speichern"</span>
+  <button class="btn-print" id="print-btn" onclick="window.print()">Drucken / Als PDF speichern</button>
+</div>
+
+<!-- ── Letter Page ───────────────────────────────────────────────────────── -->
+<div class="letter-wrap">
+<div class="letter-page">
+
+  <!-- Sender header -->
+  <div class="sender-block">
+    <div>
+      <div class="sender-name">Pascal Masny</div>
+      <div class="sender-title" id="sender-title">IT-Berater; Python-Veteran; Datenanalyst</div>
+      <div class="sender-details" id="sender-details"></div>
+    </div>
+    <div class="letter-date-block" id="letter-date-block"></div>
+  </div>
+  <div class="sender-divider"></div>
+
+  <!-- Subject -->
+  <div class="letter-subject" id="letter-subject"></div>
+
+  <!-- Salutation -->
+  <div class="letter-salutation" id="letter-salutation"></div>
+
+  <!-- Body paragraphs -->
+  <div class="letter-body" id="letter-body"></div>
+
+  <!-- Closing -->
+  <div class="letter-closing">
+    <p id="letter-valediction"></p>
+    <div class="signature-name">Pascal Masny</div>
+    <div class="signature-title" id="sig-title"></div>
+  </div>
+
+</div>
+</div>
+
+<script src="../js/cv-data.js"></script>
+<script>
+  let lang = (navigator.language || 'de').startsWith('en') ? 'en' : 'de';
+
+  const LETTER = {
+    de: {
+      senderTitle:  "IT-Berater; Python-Veteran; Datenanalyst",
+      subject:      "Motivationsschreiben; Pascal Masny",
+      salutation:   "Sehr geehrte Damen und Herren,",
+      paragraphs: (d) => [
+        `seit ich mit 11 Jahren den IT-Raum meiner Realschule betrat, hat mich die Leidenschaft für Technologie nicht mehr losgelassen. Heute bringe ich über ${d.yearsCode} Jahre Programmiererfahrung und mehr als ${d.yearsWork} Jahre Industrie-Praxis mit; aufgebaut ohne Abkürzungen, Zeile für Zeile aus Büchern gelernt.`,
+        `In meiner Tätigkeit als Fachinformatiker Anwendungsentwicklung und anschließend als Werkstudent und Datenanalyst bei manroland Goss web systems GmbH konnte ich reale Wirkung erzielen: Prozessoptimierungen mit Celonis und SAP führten zu nachweisbaren Einsparungen im sechsstelligen Bereich. Seit August 2025 bin ich als IT-Datenanalyse- und Prozessberater bei masyscon GmbH tätig und verantworte Salesforce-CRM-Implementierungen sowie die Entwicklung interner Python-Tools.`,
+        `Was mich auszeichnet, ist das Zusammenspiel aus echtem technischen Verständnis und unternehmerischem Denken. Ich produziere keinen AI-Slop; ich schreibe Code, den ich verstehe, und entwickle Systeme, die funktionieren und nicht kaputt gehen. Mein Profil wird ergänzt durch Zertifizierungen als Salesforce Certified Administrator, Cisco CCNA und Celonis Data Scientist.`,
+        `Neben Beruf und Studium engagiere ich mich ehrenamtlich: Als Ehren-HiWi und FabLab-Freiwilliger an der THA halte ich die 3D-Drucker am Laufen, führe Kommilitonen in die Geräte ein und trage so zum Betrieb des Fabrication Laboratories bei. Davor war ich als gewählter Schülersprecher an der Berufsoberschule Augsburg aktiv.`,
+        `Parallel zu meiner Berufstätigkeit studiere ich Systems Engineering (B.Sc.) an der Technischen Hochschule Augsburg; weil mir die Vertiefung theoretischer Grundlagen in Mathematik, Physik und Informatik wichtig ist und weil ich die Dinge, die ich baue, wirklich verstehen möchte.`,
+        `Ich bin überzeugt, dass ich als erfahrener IT-Generalist mit Python-Expertise, Prozessverständnis und Hands-on-Mentalität echten Mehrwert bringen kann. Über ein persönliches Gespräch freue ich mich sehr.`,
+      ],
+      valediction: "Mit freundlichen Grüßen",
+      sigTitle:    "Systems Engineer; IT-Berater",
+      cvLink:      "CV",
+      printBtn:    "Drucken / Als PDF speichern",
+      printHint:   'Browser-Druckdialog → "Als PDF speichern"',
+      backLink:    "<- Portfolio",
+    },
+    en: {
+      senderTitle:  "IT Consultant; Python Veteran; Data Analyst",
+      subject:      "Letter of Motivation; Pascal Masny",
+      salutation:   "Dear Sir or Madam,",
+      paragraphs: (d) => [
+        `My passion for technology began at the age of 11, when I first walked into the IT room at my secondary school. Since then, I have never stopped programming; building my expertise line by line, from books, without shortcuts or AI-generated code. Today I bring ${d.yearsCode}+ years of programming experience and more than ${d.yearsWork} years of hands-on industry practice.`,
+        `During my apprenticeship and subsequent working-student and data-analyst role at manroland Goss web systems GmbH, I delivered measurable results: process optimisations using Celonis and SAP generated verifiable six-figure savings for the company. Since August 2025 I have been working as an IT Data Analysis & Process Consultant at masyscon GmbH, managing Salesforce CRM implementations and developing internal Python tools such as Briefr; a daily intelligence-briefing platform.`,
+        `What sets me apart is the combination of genuine technical depth and business thinking. I write code I understand and build systems that don't break. My profile is backed by certifications in Salesforce Administration, Cisco CCNA, and Celonis Data Science.`,
+        `Outside of work, I contribute voluntarily: as an honorary student assistant (Ehren-HiWi) and FabLab volunteer at THA, I keep the 3D printers running, onboard fellow students, and help develop lab operations. Previously I served as elected student body president at Berufsoberschule Augsburg.`,
+        `Alongside my professional work, I am pursuing a B.Sc. in Systems Engineering at Technische Hochschule Augsburg; because I believe that strong theoretical foundations in mathematics, physics and computer science make better engineers.`,
+        `I am confident that I can add real value as an experienced IT generalist with Python expertise, process understanding and a hands-on mindset. I look forward to hearing from you.`,
+      ],
+      valediction: "Yours sincerely,",
+      sigTitle:    "Systems Engineer; IT Consultant",
+      cvLink:      "CV",
+      printBtn:    "Print / Save as PDF",
+      printHint:   'Browser print dialog → "Save as PDF"',
+      backLink:    "<- Portfolio",
+    },
+  };
+
+  function todayStr() {
+    return new Date().toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', {
+      day: 'numeric', month: 'long', year: 'numeric'
+    });
+  }
+
+  function render() {
+    const L = LETTER[lang];
+    const d = { yearsCode: CV.yearsCode, yearsWork: CV.yearsWork, age: CV.age };
+
+    document.documentElement.lang = lang;
+
+    document.getElementById('lang-btn').textContent   = lang === 'de' ? 'English' : 'Deutsch';
+    document.getElementById('print-btn').textContent  = L.printBtn;
+    document.getElementById('print-hint').textContent = L.printHint;
+    document.getElementById('back-link').textContent  = L.backLink;
+    document.getElementById('cv-link').textContent    = L.cvLink;
+
+    document.getElementById('sender-title').textContent   = L.senderTitle;
+    document.getElementById('sender-details').innerHTML   =
+      `${CV.location}<br>${CV.email}<br>${CV.linkedin}`;
+    document.getElementById('letter-date-block').textContent =
+      `Augsburg, ${todayStr()}`;
+
+    document.getElementById('letter-subject').textContent   = L.subject;
+    document.getElementById('letter-salutation').textContent = L.salutation;
+    document.getElementById('letter-body').innerHTML =
+      L.paragraphs(d).map(p => `<p>${p}</p>`).join('');
+
+    document.getElementById('letter-valediction').textContent = L.valediction;
+    document.getElementById('sig-title').textContent          = L.sigTitle;
+  }
+
+  function toggleLang() {
+    lang = lang === 'de' ? 'en' : 'de';
+    render();
+  }
+
+  render();
+</script>
+</body>
+</html>

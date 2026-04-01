@@ -1,207 +1,797 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pascal Masny - Future Systems Engineer</title>
+  <title>Pascal Masny | Systems Engineer | Python & Data | Augsburg</title>
+  <meta name="description" content="Pascal Masny – Systems Engineer, Python Veteran & IT Consultant from Augsburg. Specialising in data analysis, Salesforce CRM, process automation and engineering.">
+  <meta name="keywords" content="Pascal Masny, Systems Engineer, Python, Data Analysis, Salesforce, SAP, Celonis, Process Mining, IT Consultant, Augsburg, Portfolio">
+  <meta name="author" content="Pascal Masny">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://pascalmasny.github.io/">
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://pascalmasny.github.io/">
+  <meta property="og:title"       content="Pascal Masny | Systems Engineer | Python & Data | Augsburg">
+  <meta property="og:description" content="Systems Engineer, Python Veteran & IT Consultant. Data analysis, Salesforce CRM, process automation and engineering.">
+  <meta property="og:image"       content="https://pascalmasny.github.io/img/picture.png">
+  <meta property="og:locale"      content="de_DE">
+  <meta property="og:locale:alternate" content="en_GB">
+  <meta property="og:site_name"   content="Pascal Masny Portfolio">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="Pascal Masny | Systems Engineer | Python & Data">
+  <meta name="twitter:description" content="Systems Engineer, Python Veteran & IT Consultant from Augsburg.">
+  <meta name="twitter:image"       content="https://pascalmasny.github.io/img/picture.png">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Pascal Masny",
+    "url": "https://pascalmasny.github.io/",
+    "image": "https://pascalmasny.github.io/img/picture.png",
+    "email": "pascalmasny@pascalmasny.de",
+    "jobTitle": "Systems Engineer",
+    "description": "Systems Engineer, Python Veteran and IT Consultant specialising in data analysis, Salesforce CRM, process automation and engineering.",
+    "alumniOf": [
+      {"@type": "CollegeOrUniversity", "name": "Technische Hochschule Augsburg"},
+      {"@type": "EducationalOrganization", "name": "IHK Akademie Schwaben"}
+    ],
+    "knowsAbout": ["Python", "Data Analysis", "Salesforce", "SAP", "Celonis", "Process Mining", "Machine Learning", "Linux", "3D Printing"],
+    "sameAs": [
+      "https://www.linkedin.com/in/pascalmasny/",
+      "https://github.com/PascalMasny"
+    ],
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Augsburg",
+      "addressCountry": "DE"
+    }
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <header>
-    <img src="img/picture.jpg" alt="Pascal Masny" class="profile-pic">
-    <div class="header-info">
-      <h1>Pascal Masny</h1>
-      <p>Future Systems Engineer B. Sc.</p>
+
+  <!-- ── Navbar ──────────────────────────────────────────────────────────── -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-brand">
+      <span class="brand-prompt">pascal@portfolio:</span><span class="brand-name">~</span><span class="brand-cursor">$</span>
+    </a>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu" id="nav-menu">
+      <ul class="nav-links">
+        <li><a href="#about"    data-key="nav.about">~/about</a></li>
+        <li><a href="#services" data-key="nav.services">~/services</a></li>
+        <li><a href="#journey"  data-key="nav.journey">~/journey</a></li>
+        <li><a href="#projects" data-key="nav.projects">~/projects</a></li>
+        <li><a href="#skills"   data-key="nav.skills">~/skills</a></li>
+        <li><a href="#personal" data-key="nav.personal">~/personal</a></li>
+        <li><a href="#contact"  data-key="nav.contact">~/contact</a></li>
+      </ul>
+      <div class="nav-controls">
+        <button id="lang-toggle"  class="icon-btn">EN</button>
+        <button id="theme-toggle" class="icon-btn"></button>
+        <a href="pages/cv.html" class="btn-cv" data-key="nav.cv">cv.html</a>
+      </div>
     </div>
-  </header>
+  </nav>
+
+  <!-- ── Hero ────────────────────────────────────────────────────────────── -->
+  <section id="hero">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-titlebar">
+          <span class="tbar-dot tbar-dot-r"></span>
+          <span class="tbar-dot tbar-dot-y"></span>
+          <span class="tbar-dot tbar-dot-g"></span>
+          <span class="tbar-title">pascal@portfolio: ~/</span>
+        </div>
+        <p class="hero-greeting" data-key="hero.greeting">$ whoami</p>
+        <h1>Pascal Masny</h1>
+        <div class="hero-role">
+          <span class="role-prompt">&gt;&nbsp;</span>
+          <span id="typewriter"></span><span class="cursor">█</span>
+        </div>
+        <div class="hero-badge">
+          <span class="hero-badge-text" data-key="hero.badge">5+ Jahre Berufserfahrung &mdash; angefangen mit 16</span>
+        </div>
+        <p class="hero-summary" data-key="hero.summary">
+          Python-Veteran; IT Consultant; Systemdenker. Seit 16 in der Industrie; seit 11 am Programmieren. Keine KI, keine Shortcuts.
+        </p>
+        <div class="hero-actions">
+          <a href="#services" class="btn-primary" data-key="hero.ctaContact">./hire_me.sh</a>
+          <a href="pages/pitch.html" class="btn-secondary" data-key="hero.ctaPitch">./pitch.sh</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat stat-featured">
+            <span class="stat-num" id="stat-industry">5+</span>
+            <span class="stat-label" data-key="hero.statIndustry">Jahre Berufserfahrung</span>
+            <span class="stat-sub" data-key="hero.statIndustrySub">Industrie &amp; Beratung ab 16</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num" id="stat-coding">11+</span>
+            <span class="stat-label" data-key="hero.statCoding">Jahre Programmieren</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num" id="stat-age">21</span>
+            <span class="stat-label" data-key="hero.statAge">Jahre alt</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-photo">
+        <div class="photo-window">
+          <div class="photo-titlebar">
+            <span class="tbar-dot tbar-dot-r"></span>
+            <span class="tbar-dot tbar-dot-y"></span>
+            <span class="tbar-dot tbar-dot-g"></span>
+            <span class="tbar-title">pascal.png · Preview</span>
+          </div>
+          <div class="photo-body">
+            <img src="img/picture.png" alt="Pascal Masny">
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="#about" class="scroll-hint" aria-label="Scroll down">
+      <svg viewBox="0 0 24 24" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
+    </a>
+  </section>
+
   <main>
 
-    <section id="contact">
-      <h2>Kontakt</h2>
-      <ul class="contact-list">
-        <li>✉️ <a href="mailto:pascalmasny@pascalmasny.com">pascalmasny@pascalmasny.com</a></li>
-        <li>🔗 <a href="https://www.linkedin.com/in/pascal-masny-116582223" target="_blank">LinkedIn</a></li>
-        <li>🔗 <a href="/pages/business_card.html" target="_blank">Kontakt</a></li>
-
-      </ul>
-    </section>
-    <section id="profil">
-      <h2>Profil</h2>
-      <p>Leidenschaftlicher Problemlöser, der datenbasiert Prozesse intelligent optimiert, Systeme zuverlässig betreibt und dabei stets nach smarter Effizienz strebt. Praxis in Datenanalyse und KI-gestützten Anwendungen, mit nachweisbaren Einsparungen im sechsstelligen Bereich.</p>
-    </section>
-
-    <section id="top-skills">
-      <h2>Top-Kenntnisse 🌟</h2>
-      <ul class="cert-list badge-list">
-        <li>🐍 Python</li>
-        <li>📈 Statistik</li>
-        <li>🤖 Automatisierung</li>
-        <li>🔍 Neugier</li>
-      </ul>
-    </section>
-
-    <section id="skills">
-      <h2>Skills 🛠️</h2>
-      <ul class="skills-list">
-        <li><span>🐍 Python & Statistik</span><span>★★★★☆</span></li>
-        <li><span>🔍 Celonis, SAP & MS Office</span><span>★★★☆☆</span></li>
-        <li><span>🗄️ Datenbanken & Strukturen</span><span>★★☆☆☆</span></li>
-        <li><span>⚙️ Mechatronik & Elektronik</span><span>★☆☆☆☆</span></li>
-        <li><span>🤖 Automatisierung & LLMs</span><span>★★★☆☆</span></li>
-        <li><span>🐧 Linux</span><span>★★★☆☆</span></li>
-      </ul>
-    </section>
-
-    <section id="experience">
-      <h2>Berufserfahrung</h2>
-        <div class="timeline-item">
-        <h3>IT-Datenanalyse- und Prozessberater - masyscon GmbH</h3>
-        <span class="date">September 2025 -  Heute</span>
-        <p>Salesforce-Power für datengetriebene Analysen und schlanke Prozesse.</p>
-      </div>
-      <div class="timeline-item">
-        <h3>Datenanalyst & Werksstudent - manroland Goss web systems GmbH</h3>
-        <span class="date">Juni 2023 -  September 2025 (2 Jahre)</span>
-        <p>KI-gestützte Analysen mit Celonis; LLM-Anwendungen. Einsparungen im sechsstelligen Bereich.</p>
-      </div>
-      <div class="timeline-item">
-        <h3>Fachinformatiker Anwendungsentwicklung - manroland Goss web systems GmbH</h3>
-        <span class="date">September 2020 - Juni 2023 (3 Jahre)</span>
-        <p>Python-Datenanalyse, Celonis-Integration zur SAP-Optimierung. <br> IHK 1,9 / Berufsschule 2,1.</p>
-      </div>
-      <div><hr></div>
-      <div class="timeline-item">
-        <h3>Zerspanungsmechaniker - MT Aerospace AG</h3>
-        <span class="date">Juli 2019 (1 Monat)</span>
-        <p>Schülerpraktikum</p>
-      </div>
-      <div class="timeline-item">
-        <h3>Mechatroniker - KUKA</h3>
-        <span class="date">Juni 2019 (1 Monat)</span>
-        <p>Schülerpraktikum</p>
-      </div>
-    </section>
-
-    <section id="education">
-      <h2>Ausbildung 🎓</h2>
-      <div class="timeline-edu">
-        <div class="timeline-item">
-          <h3>B. Sc. Systems Engineering - TH Augsburg</h3>
-          <span class="date">2025 - Heute</span>
-          <p>Teilzeitstudium</p>
+    <!-- ── About ──────────────────────────────────────────────────────────── -->
+    <section id="about" class="section fade-in">
+      <h2 class="section-title" data-key="about.title">cat README.md</h2>
+      <div class="about-grid">
+        <div class="about-text">
+          <p data-key="about.p1">Mit 11 Jahren habe ich den IT-Raum meiner Realschule gesehen und seitdem nie wieder aufgehört zu programmieren. Keine KI, keine Shortcuts: Ich habe Programmieren mit Büchern gelernt; Zeile für Zeile; Fehler für Fehler. Mit 13 meinen ersten Roboter gebaut und die Schwäbische Robotik-Meisterschaft gewonnen. Mit 14 kamen Arduinos und Lötkolben; inklusive verbrannter Finger. Mit 15 habe ich das Schulnetzwerk lahmgelegt; nicht aus böser Absicht; aus Neugier.</p>
+          <p data-key="about.p2">Mit 16 bin ich als Azubi ins Arbeitsleben eingestiegen und konnte vom ersten Tag an in echten Projekten mitarbeiten. Was für andere der Einstieg war, war für mich schon Routine. In der Ausbildung habe ich Sicherheitslücken im SAP-System aufgedeckt und mit Raspberry Pi und WiFi-Antenne Daten ausgelesen; der Hobby-Hacker lässt sich nicht abstellen.</p>
+          <p data-key="about.p3">Abitur neben der Arbeit; jetzt Systems Engineering (B.Sc.) an der THA; 20+ Stunden Studium und 20 Stunden Arbeit als IT-Berater. Seit ich 16 bin, sind meine 3D-Drucker ständige Begleiter; heute Uni-Projekte und Kohlefaserdrucke, die meinen Oldtimer zusammenhalten. Mit 22: Python-Veteran; 10 Jahre Erfahrung; davon 5 in der Industrie.</p>
+          <blockquote class="about-quote" data-key="about.quote">Programmieren kann heute jeder; Software zu entwickeln und Prozesse wirklich zu verstehen, das können wenige. Ich produziere keinen AI Slop.</blockquote>
         </div>
-        <div class="timeline-item">
-          <h3>Fachhochschulreife - Berufsoberschule Augsburg</h3>
-          <span class="date">Sep 2023 - Juni 2025 (2 Jahre)</span>
-          <p>Schülersprecher, Abischnitt: 2.4, Parrallele anstellung bei der manroland</p>
-        </div>
-        <div class="timeline-item">
-          <h3>Fachinformatiker Anwendungsentwicklung - IHK Akademie Schwaben</h3>
-          <span class="date">Sep 2020 - Juni 2023 (3 Jarhe)</span>
-          <p>Vollzeit Azubi bei der manroland Goss web systems GmbH</p>
+        <div class="about-tags">
+          <div class="tag-group">
+            <span class="tag-label" data-key="about.tagInterests">// stack</span>
+            <div class="tags">
+              <span class="tag">🐍 Python</span>
+              <span class="tag" data-key="about.tag.dataanalysis">📊 Datenanalyse</span>
+              <span class="tag" data-key="about.tag.automation">🔧 Automatisierung</span>
+              <span class="tag">🧠 Machine Learning</span>
+              <span class="tag">🐧 Linux</span>
+              <span class="tag" data-key="about.tag.networks">🌐 Netzwerke</span>
+              <span class="tag" data-key="about.tag.databases">🗄️ Datenbanken</span>
+              <span class="tag">📈 Process Mining</span>
+              <span class="tag">☁️ Salesforce</span>
+              <span class="tag">🔌 REST APIs</span>
+            </div>
+          </div>
+          <div class="tag-group">
+            <span class="tag-label" data-key="about.tagPersonal">// personal</span>
+            <div class="tags">
+              <span class="tag" data-key="about.tag.dance">💃 Paartanz</span>
+              <span class="tag" data-key="about.tag.print">🖨️ 3D-Druck</span>
+              <span class="tag" data-key="about.tag.botany">🌿 Botanik</span>
+              <span class="tag" data-key="about.tag.cooking">👨‍🍳 Kochen</span>
+              <span class="tag" data-key="about.tag.oldtimer">🚗 Oldtimer</span>
+              <span class="tag" data-key="about.tag.hacking">🔓 Hobby-Hacking</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section id="languages">
-      <h2>Sprachen 🌐</h2>
-      <ul class="lang-list">
-        <li><span>🇩🇪 Deutsch</span><span>Muttersprache</span></li>
-        <li><span>🇬🇧 Englisch</span><span>Verhandlungssicher</span></li>
-      </ul>
-    </section>
-    
-    <section id="certificates">
-      <h2>Zertifikate 📜</h2>
-      <ul class="cert-list badge-list">
-        <li>🛡️ Cisco CCNA</li>
-        <li>📊 Celonis Data Scientist</li>
-      </ul>
+    <!-- ── Services ────────────────────────────────────────────────────────── -->
+    <section id="services" class="section fade-in">
+      <h2 class="section-title" data-key="srv.title">cat services.txt</h2>
+      <p class="services-intro" data-key="srv.intro">Was ich anbiete; was ich kann; was ich mache.</p>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-num">01</div>
+          <h3 data-key="srv.python.title">Python; Data Science &amp; Prozesse</h3>
+          <p data-key="srv.python.desc">Automatisierung, Datenanalyse, Custom Tools und Scripts. Statistik und Mathematik. Ich baue Dinge, die funktionieren und nicht kaputt gehen.</p>
+          <div class="tech-tags">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">Data Science</span>
+            <span class="tech-tag">Streamlit</span>
+            <span class="tech-tag">Statistics</span>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-num">02</div>
+          <h3 data-key="srv.enterprise.title">CRM; ERP &amp; Enterprise Systeme</h3>
+          <p data-key="srv.enterprise.desc">Salesforce, SAP, Celonis mit Data Mining. Consulting bedeutet für mich: Problem verstehen, nicht Code-Monkey spielen. Moderne Beratung ist Kommunikation und Systemverständnis.</p>
+          <div class="tech-tags">
+            <span class="tech-tag">Salesforce</span>
+            <span class="tech-tag">SAP</span>
+            <span class="tech-tag">Celonis</span>
+            <span class="tech-tag">Data Mining</span>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-num">03</div>
+          <h3 data-key="srv.engineering.title">Engineering &amp; Making</h3>
+          <p data-key="srv.engineering.desc">3D-Druck FDM/SLA mit CF/GF/PEEK; Fusion 360 und Solidworks; Elektronik bis 230V; CNC, Drehen und Schweißen. Ich baue Dinge, die real existieren.</p>
+          <div class="tech-tags">
+            <span class="tech-tag">3D Druck</span>
+            <span class="tech-tag">CAD</span>
+            <span class="tech-tag">Elektronik</span>
+            <span class="tech-tag">CNC</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="services-cta">
+        <a href="mailto:pascalmasny@pascalmasny.de?subject=Kontakt%20%2F%20Contact%20%E2%80%93%20Pascal%20Masny&body=Hallo%20Pascal%20%2F%20Hello%20Pascal%2C%0A%0A" class="btn-hire" data-key="srv.cta">$ mail --to pascal --subject "hire"</a>
+      </div>
     </section>
 
-    <section id="hobbies">
-      <h2>Hobbys 🎳</h2>
-      <ul class="hobbies-list badge-list">
-        <li>🖨️ 3D-Druck</li>
-        <li>💃 Paartanz (Klassik, Latein & Ballett)</li>
-        <li>🌿 Botanik</li>
-        <li>👨‍🍳 Kochen</li>
-      </ul>
-    </section>
-
-    <section id="awards">
-      <h2>Auszeichnungen 🏆</h2>
-      <ul class="award-list badge-list">
-        <li>🤖 Schwäbischer Robotik Meister 2018</li>
-        <li>🚢 ShipIt 2021/22 Gewinner</li>
-      </ul>
-    </section>
-
-    <!--
-    <section id="gallery">
-      <h2>Galerie 📸</h2>
-      <div class="gallery">
-        <div class="gallery-item">
-          <img src="img/1.png" alt="Projektarbeit">
-          <div class="overlay">Projektarbeit mit 3D-Druck</div>
+    <!-- ── Journey (Git Graph) ─────────────────────────────────────────────── -->
+    <section id="journey" class="section fade-in">
+      <h2 class="section-title">git log --all --oneline --graph</h2>
+      <div class="j-filter-bar">
+        <button class="j-btn j-active" data-jfilter="all"    onclick="filterJourney('all')">* alle Zweige</button>
+        <button class="j-btn"          data-jfilter="work"   onclick="filterJourney('work')">* Beruf</button>
+        <button class="j-btn"          data-jfilter="edu"    onclick="filterJourney('edu')">* Ausbildung</button>
+        <button class="j-btn"          data-jfilter="social" onclick="filterJourney('social')">* Soziales</button>
+      </div>
+      <div class="j-grid" id="j-grid">
+        <div class="j-branch" data-jbranch="work">
+          <span class="j-branch-header" id="j-header-work">work</span>
+          <div class="j-track">
+            <div class="j-rail"></div>
+            <div id="j-events-work"></div>
+          </div>
         </div>
-        <div class="gallery-item">
-          <img src="img/1.png" alt="Tanzveranstaltung">
-          <div class="overlay">Tanzabend Klassik & Latein</div>
+        <div class="j-branch" data-jbranch="edu">
+          <span class="j-branch-header" id="j-header-edu">edu</span>
+          <div class="j-track">
+            <div class="j-rail"></div>
+            <div id="j-events-edu"></div>
+          </div>
         </div>
-        <div class="gallery-item">
-          <img src="img/1.png" alt="Botanik-Workshop">
-          <div class="overlay">Botanik-Exkursion</div>
-        </div>
-        <div class="gallery-item">
-          <img src="img/1.png" alt="Kochabend">
-          <div class="overlay">Kochsession & Rezepte</div>
+        <div class="j-branch" data-jbranch="social">
+          <span class="j-branch-header" id="j-header-social">social</span>
+          <div class="j-track">
+            <div class="j-rail"></div>
+            <div id="j-events-social"></div>
+          </div>
         </div>
       </div>
     </section>
-    -->
 
-    <section id="downloads">
-      <h2>Downloads 📂</h2>
-      <div class="downloads">
-        <a href="pdfs/CV_Pascal_Masny.pdf" class="download-item" download>
-          <img src="img/CV.png" alt="CV" class="download-thumb">
-          <div class="download-overlay">Lebenslauf (PDF, 183 KB)</div>
-          <div class="download-link">Lebenslauf</div>
+    <!-- ── Projects ────────────────────────────────────────────────────────── -->
+    <section id="projects" class="section fade-in">
+      <h2 class="section-title" data-key="proj.title">ls -la projects/</h2>
+      <div class="projects-grid">
+
+        <div class="project-card">
+          <div class="project-header">
+            <div class="project-icon">⛽</div>
+            <div class="project-links">
+              <a href="pdfs/Clever_Refill_Präsentatio_Pascal_Masny.pdf" target="_blank" class="project-link" title="Präsentation lesen">
+                <svg viewBox="0 0 24 24" width="13" height="13"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <h3>CleverRefill</h3>
+          <p data-key="proj.cleverRefill.desc">Python-Web-App zur Echtzeit-Visualisierung lokaler Kraftstoffpreise; günstigste Tankstelle finden und Navigation dorthin. English-Talk-Präsentation an der BS VII. Amortisationszeit: 16 Monate.</p>
+          <div class="tech-tags">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">Streamlit</span>
+            <span class="tech-tag">Pandas</span>
+            <span class="tech-tag">NumPy</span>
+            <span class="tech-tag">gmplot</span>
+            <span class="tech-tag">Linux</span>
+          </div>
+          <div class="project-meta">
+            <span data-key="proj.cleverRefill.at">@ manroland Goss / BS VII · 2022</span>
+            <span data-key="proj.cleverRefill.cost">Projektkosten: 162,53 EUR</span>
+          </div>
+          <div style="margin-top:10px;">
+            <a href="pdfs/Clever_Refill_Präsentatio_Pascal_Masny.pdf" target="_blank" data-key="proj.cleverRefill.read"
+               style="font-size:10px;color:var(--primary);text-decoration:none;border:1px solid var(--primary);border-radius:3px;padding:3px 8px;">
+              Präsentation lesen
+            </a>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-header">
+            <div class="project-icon">🖨️</div>
+            <div class="project-links">
+              <a href="pdfs/IHK_Projektdokumentation_Pascal_Masny.pdf" target="_blank" class="project-link" title="Dokumentation lesen">
+                <svg viewBox="0 0 24 24" width="13" height="13"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <h3 data-key="proj.ihk.title">Druckmaschinen-Analyse</h3>
+          <p data-key="proj.ihk.desc">IHK-Abschlussprojekt: Python-Analyse und Graphviz-Tree-Visualisierung von Druckmaschinen-Strukturstücklisten mit bis zu 190.000 Einzelteilen; PyCelonis- und SAP-S/4HANA-Integration. 6 Einkäufer sparen je 1,5 h/Woche; Amortisation nach 9,32 Wochen.</p>
+          <div class="tech-tags">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">Celonis</span>
+            <span class="tech-tag">SAP</span>
+            <span class="tech-tag">Graphviz</span>
+            <span class="tech-tag">Pandas</span>
+            <span class="tech-tag">OOP</span>
+          </div>
+          <div class="project-meta">
+            <span data-key="proj.ihk.at">@ manroland Goss · 2023 · IHK 1,9</span>
+            <span data-key="proj.ihk.cost">Projektkosten: 6.767,80 EUR</span>
+          </div>
+          <div style="margin-top:10px;">
+            <a href="pdfs/IHK_Projektdokumentation_Pascal_Masny.pdf" target="_blank" data-key="proj.ihk.read"
+               style="font-size:10px;color:var(--primary);text-decoration:none;border:1px solid var(--primary);border-radius:3px;padding:3px 8px;">
+              Dokumentation lesen
+            </a>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-header">
+            <div class="project-icon">{api}</div>
+            <div class="project-links">
+              <a href="pdfs/REST_Projektdokumentation_Pasca_Masny.pdf" target="_blank" class="project-link" title="Dokumentation lesen">
+                <svg viewBox="0 0 24 24" width="13" height="13"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <h3>REST API Projekt</h3>
+          <p data-key="proj.rest.desc">Schulprojekt (BS VII): Node.js/ExpressJS-REST-API für Kundenverwaltung eines fiktiven Online-Shops (WarpShop); MySQL-Backend; vollständige MVC-Architektur mit Route-, Model- und Datenbank-Schicht. 10-Stunden-Projekt; alle Anforderungen erfüllt.</p>
+          <div class="tech-tags">
+            <span class="tech-tag">Node.js</span>
+            <span class="tech-tag">ExpressJS</span>
+            <span class="tech-tag">MySQL</span>
+            <span class="tech-tag">JavaScript</span>
+            <span class="tech-tag">REST</span>
+            <span class="tech-tag">JSON</span>
+          </div>
+          <div class="project-meta">
+            <span data-key="proj.rest.at">@ BS VII · 2023 · Schulprojekt</span>
+            <span data-key="proj.rest.hours">Aufwand: 10 Stunden</span>
+          </div>
+          <div style="margin-top:10px;">
+            <a href="pdfs/REST_Projektdokumentation_Pasca_Masny.pdf" target="_blank" data-key="proj.rest.read"
+               style="font-size:10px;color:var(--primary);text-decoration:none;border:1px solid var(--primary);border-radius:3px;padding:3px 8px;">
+              Dokumentation lesen
+            </a>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-header">
+            <div class="project-icon">{3d}</div>
+            <div class="project-links">
+              <a href="pdfs/4CoreDynamics.pdf" target="_blank" class="project-link" title="Dokumentation lesen">
+                <svg viewBox="0 0 24 24" width="13" height="13"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <h3 data-key="proj.minti.title">MINTi-Würfel</h3>
+          <p data-key="proj.minti.desc">Interaktives Lernspielzeug für Kinder von 2-6 Jahren; bestehend aus Theremin, Zahnradgetriebe, Farbmischer, Kugellabyrinth und Audio-Märchen. Solarbetrieben; vollständig mit FDM-3D-Druck gefertigt. ESP32-C6 Mikrocontroller.</p>
+          <div class="tech-tags">
+            <span class="tech-tag">3D-Druck</span>
+            <span class="tech-tag">ESP32-C6</span>
+            <span class="tech-tag">TPU / PETG</span>
+            <span class="tech-tag">Elektronik</span>
+            <span class="tech-tag">C++</span>
+          </div>
+          <div class="project-meta">
+            <span data-key="proj.minti.at">@ THA; WS 2025/2026</span>
+            <span data-key="proj.minti.price">Stückpreis: 373,86 EUR</span>
+          </div>
+          <div style="margin-top:10px;">
+            <a href="pdfs/4CoreDynamics.pdf" target="_blank" data-key="proj.minti.read"
+               style="font-size:10px;color:var(--primary);text-decoration:none;border:1px solid var(--primary);border-radius:3px;padding:3px 8px;">
+              Dokumentation lesen
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Skills ──────────────────────────────────────────────────────────── -->
+    <section id="skills" class="section fade-in">
+      <h2 class="section-title" data-key="skills.title">pip list &amp;&amp; uname -a</h2>
+      <div class="skills-container">
+
+        <div class="skill-category">
+          <h3 data-key="skills.cat.languages"># programmierung</h3>
+          <div class="skill-items">
+            <div class="skill-item">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="Python" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">🐍</span>
+              <span>Python</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:82%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg" alt="SQL" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">🗄️</span>
+              <span data-key="skill.sql">SQL Familie</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:55%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" alt="Web Dev" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">🌐</span>
+              <span>Web Dev</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:40%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg" alt="C/C++" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">⚙️</span>
+              <span>C / C++</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:35%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3 data-key="skills.cat.data"># data science</h3>
+          <div class="skill-items">
+            <div class="skill-item">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/pandas/pandas-original.svg" alt="Pandas" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">🐼</span>
+              <span>Pandas &amp; NumPy</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:76%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.simpleicons.org/matplotlib" alt="Matplotlib" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">📉</span>
+              <span>Matplotlib</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:70%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.simpleicons.org/streamlit" alt="Streamlit" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">📊</span>
+              <span>Streamlit</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:90%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.simpleicons.org/scikitlearn" alt="ML" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">🧠</span>
+              <span>Machine Learning</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:55%"></div></div>
+            </div>
+            <div class="skill-item">
+              <span class="skill-icon-text">📈</span>
+              <span data-key="skill.stats">Statistik</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:72%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3 data-key="skills.cat.tools"># tools</h3>
+          <div class="skill-items">
+            <div class="skill-item">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg" alt="Linux" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">🐧</span>
+              <span>Linux</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:95%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" alt="Git" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">🔀</span>
+              <span>Git</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:62%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.simpleicons.org/visualstudiocode" alt="VS Code" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">💻</span>
+              <span>VS Code</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:85%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.simpleicons.org/github/b0b8c8" alt="GitHub" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">🐙</span>
+              <span>GitHub</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:80%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.simpleicons.org/scrumalliance" alt="Scrum" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">🔄</span>
+              <span>Scrum</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:70%"></div></div>
+            </div>
+            <div class="skill-item">
+              <span class="skill-icon-text">📋</span>
+              <span data-key="skill.projectmgmt">Projektmanagement</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:50%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.simpleicons.org/awork" alt="Awork" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">📅</span>
+              <span>Awork</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:70%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3 data-key="skills.cat.enterprise"># enterprise</h3>
+          <div class="skill-items">
+            <div class="skill-item">
+              <img src="https://cdn.simpleicons.org/salesforce" alt="Salesforce Admin" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">☁️</span>
+              <span>Salesforce Admin</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:50%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.simpleicons.org/salesforce" alt="Salesforce Dev" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">☁️</span>
+              <span>Salesforce Dev</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:30%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.simpleicons.org/sap" alt="SAP" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">🔷</span>
+              <span>SAP</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:40%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.simpleicons.org/celonis" alt="Celonis" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">⛏️</span>
+              <span>Celonis</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:70%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.simpleicons.org/microsoftoffice" alt="MS Office" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">📄</span>
+              <span>MS Office</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:90%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3 data-key="skills.cat.engineering"># engineering</h3>
+          <div class="skill-items">
+            <div class="skill-item">
+              <span class="skill-icon-text">🖨️</span>
+              <span>3D Druck FDM/SLA</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:80%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.simpleicons.org/autodesk" alt="Fusion 360" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">📐</span>
+              <span>Fusion 360</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:70%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.simpleicons.org/solidworks" alt="Solidworks" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">📐</span>
+              <span>Solidworks</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:40%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/arduino/arduino-original.svg" alt="Microcontroller" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">🔌</span>
+              <span>Microcontroller</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:70%"></div></div>
+            </div>
+            <div class="skill-item">
+              <span class="skill-icon-text">🔧</span>
+              <span data-key="skill.cnc">CNC &amp; Fertigung</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:35%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3 data-key="skills.cat.os"># betriebssysteme</h3>
+          <div class="skill-items">
+            <div class="skill-item">
+              <img src="https://cdn.simpleicons.org/windows11" alt="Windows" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">🪟</span>
+              <span>Windows</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:50%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.simpleicons.org/apple/b0b8c8" alt="macOS" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">🍎</span>
+              <span>macOS</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:65%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.simpleicons.org/debian" alt="Debian" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">🐧</span>
+              <span>Debian / Ubuntu</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:90%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.simpleicons.org/archlinux" alt="Arch Linux" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">🐧</span>
+              <span>Arch Linux</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:65%"></div></div>
+            </div>
+            <div class="skill-item">
+              <img src="https://cdn.simpleicons.org/redhat" alt="Red Hat" class="skill-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="skill-icon-text" style="display:none">🐧</span>
+              <span>Red Hat / Fedora</span>
+              <div class="skill-bar"><div class="skill-fill" style="--pct:65%"></div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="languages-row">
+        <div class="language-item">
+          <span class="flag">🇩🇪</span>
+          <span class="lang-name" data-key="lang.de">Deutsch</span>
+          <span class="lang-level" data-key="lang.de.level">Muttersprache</span>
+        </div>
+        <div class="language-item">
+          <span class="flag">🇬🇧</span>
+          <span class="lang-name" data-key="lang.en">Englisch</span>
+          <span class="lang-level" data-key="lang.en.level">Verhandlungssicher</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Certs & Awards ──────────────────────────────────────────────────── -->
+    <section id="certs" class="section fade-in">
+      <div class="two-col">
+        <div>
+          <h2 class="section-title" data-key="certs.title">ls ~/certs/</h2>
+          <div class="cert-cards">
+            <div class="cert-card">
+              <img src="https://logo.clearbit.com/salesforce.com" alt="Salesforce" onerror="this.style.display='none'">
+              <div>
+                <strong>Salesforce Certified Admin</strong>
+                <span data-key="certs.sf.desc">CRM Administration</span>
+              </div>
+            </div>
+            <div class="cert-card">
+              <img src="https://logo.clearbit.com/cisco.com" alt="Cisco" onerror="this.style.display='none'">
+              <div>
+                <strong>Cisco CCNA</strong>
+                <span data-key="certs.cisco.desc">Networking &amp; Security</span>
+              </div>
+            </div>
+            <div class="cert-card">
+              <img src="https://logo.clearbit.com/celonis.com" alt="Celonis" onerror="this.style.display='none'">
+              <div>
+                <strong>Celonis Data Scientist</strong>
+                <span data-key="certs.celonis.desc">Process Mining</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h2 class="section-title" data-key="awards.title">cat awards.txt</h2>
+          <div class="award-cards">
+            <div class="award-card">
+              <span class="award-icon">🧊</span>
+              <div>
+                <strong data-key="awards.minti.title">MINTi Cube</strong>
+                <span data-key="awards.minti.desc">THA &amp; Funkenwerk · Lernwürfel für Kinder 3–6</span>
+              </div>
+            </div>
+            <div class="award-card">
+              <span class="award-icon">🤖</span>
+              <div>
+                <strong data-key="awards.robot.title">Schwäbischer Robotik Meister</strong>
+                <span>2018</span>
+              </div>
+            </div>
+            <div class="award-card">
+              <span class="award-icon">🚢</span>
+              <div>
+                <strong data-key="awards.shipit.title">ShipIt Gewinner</strong>
+                <span>2021 / 2022</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Personal ────────────────────────────────────────────────────────── -->
+    <section id="personal" class="section fade-in">
+      <h2 class="section-title" data-key="personal.title">cat hobbies.txt</h2>
+      <div class="hobbies-grid">
+        <div class="hobby-card">
+          <div class="hobby-icon">🔓</div>
+          <h3 data-key="hobby.hacking.title">Hobby-Hacking</h3>
+          <p data-key="hobby.hacking.desc">Raspberry Pi, WiFi-Antennen, SAP-Sicherheitslücken; der Hacker in mir lässt sich nicht abstellen.</p>
+        </div>
+        <div class="hobby-card">
+          <div class="hobby-icon">🖨️</div>
+          <h3 data-key="hobby.print.title">3D-Druck</h3>
+          <p data-key="hobby.print.desc">Seit 16; von Fidget Toys zu Kohlefaserdrucken, die meinen Oldtimer zusammenhalten.</p>
+        </div>
+        <div class="hobby-card">
+          <div class="hobby-icon">💃</div>
+          <h3 data-key="hobby.dance.title">Paartanz</h3>
+          <p data-key="hobby.dance.desc">Klassisch, Latein &amp; Ballett; Tanz als Gegenpol zur Bildschirmzeit.</p>
+        </div>
+        <div class="hobby-card">
+          <div class="hobby-icon">🌿</div>
+          <h3 data-key="hobby.botany.title">Botanik</h3>
+          <p data-key="hobby.botany.desc">Pflanzenvielfalt erforschen und kultivieren; systematisches Denken außerhalb des Terminals.</p>
+        </div>
+        <div class="hobby-card">
+          <div class="hobby-icon">👨‍🍳</div>
+          <h3 data-key="hobby.cooking.title">Kochen</h3>
+          <p data-key="hobby.cooking.desc">Kochen als Wissenschaft; Experimentieren mit Rezepten und Techniken aus aller Welt.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Contact ─────────────────────────────────────────────────────────── -->
+    <section id="contact" class="section fade-in">
+      <h2 class="section-title" data-key="contact.title">ping pascal.masny</h2>
+      <div class="contact-grid">
+        <a href="mailto:pascalmasny@pascalmasny.de?subject=Kontakt%20%2F%20Contact%20%E2%80%93%20Pascal%20Masny&body=Hallo%20Pascal%20%2F%20Hello%20Pascal%2C%0A%0A" class="contact-card">
+          <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span>pascalmasny@pascalmasny.de</span>
         </a>
-        <a href="pdfs/Projektdokumentation_Pascal_Masny.pdf" class="download-item" download>
-          <img src="img/IHK_Arbeit.png" alt="IHK Projektarbeit" class="download-thumb">
-          <div class="download-overlay">IHK Projektarbeit (PDF, 4.526 KB)</div>
-          <div class="download-link">IHK Projektarbeit</div>
+        <a href="https://www.linkedin.com/in/pascalmasny/" target="_blank" rel="noopener" class="contact-card">
+          <svg viewBox="0 0 24 24" width="20" height="20"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          <span>linkedin.com/in/pascalmasny</span>
         </a>
-        <a href="pdfs/Clever_Refill_Präsentatio_Pascal_Masny.pdf" class="download-item" download>
-          <img src="img/CleverRefill.png" alt="CleverRefill" class="download-thumb">
-          <div class="download-overlay">CleverRefill (PDF, 925 KB)</div>
-          <div class="download-link">CleverRefill</div>
-        </a>
-        <a href="pdfs/REST_Projektdokumentation_Pasca_Masny.pdf" class="download-item" download>
-          <img src="img/REST.png" alt="REST API" class="download-thumb">
-          <div class="download-overlay">REST Projektarbeit (PDF, 7.043 KB)</div>
-          <div class="download-link">REST Projektarbeit</div>
+        <a href="/pages/business_card.html" class="contact-card">
+          <svg viewBox="0 0 24 24" width="20" height="20"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          <span data-key="contact.card">vcard.vcf</span>
         </a>
       </div>
     </section>
+
+    <!-- ── Downloads ───────────────────────────────────────────────────────── -->
+    <section id="downloads" class="section fade-in">
+      <h2 class="section-title" data-key="downloads.title">ls ~/docs/</h2>
+      <div class="download-cta">
+        <button onclick="downloadAll()" class="btn-download-all" id="download-all-btn">
+          <svg viewBox="0 0 24 24" width="16" height="16"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span data-key="downloads.allBtn">zip -r ./complete_profile.zip *</span>
+        </button>
+        <p class="download-hint" data-key="downloads.hint">Alle Projektdokumentationen</p>
+      </div>
+      <div class="download-grid">
+        <a href="pages/cv.html" class="download-card">
+          <img src="img/CV.png" alt="CV">
+          <div class="download-info">
+            <strong data-key="downloads.cv">CV_Pascal_Masny</strong>
+            <span data-key="downloads.cv.sub">Live · DE &amp; EN · Print → PDF</span>
+          </div>
+        </a>
+        <a href="pages/cover_letter.html" class="download-card">
+          <img src="img/CV.png" alt="Cover Letter" style="filter:hue-rotate(200deg) saturate(0.6)">
+          <div class="download-info">
+            <strong data-key="downloads.cl">Anschreiben / Cover Letter</strong>
+            <span data-key="downloads.cl.sub">Live · DE &amp; EN · Print → PDF</span>
+          </div>
+        </a>
+        <a href="pdfs/IHK_Projektdokumentation_Pascal_Masny.pdf" class="download-card" download>
+          <img src="img/IHK_Arbeit.png" alt="IHK">
+          <div class="download-info">
+            <strong data-key="downloads.ihk">IHK_Projektdokumentation.pdf</strong>
+            <span>4.5 MB</span>
+          </div>
+        </a>
+        <a href="pdfs/Clever_Refill_Präsentatio_Pascal_Masny.pdf" class="download-card" download>
+          <img src="img/CleverRefill.png" alt="CleverRefill">
+          <div class="download-info">
+            <strong data-key="downloads.cleverrefill">CleverRefill_Presentation.pdf</strong>
+            <span>925 KB</span>
+          </div>
+        </a>
+        <a href="pdfs/REST_Projektdokumentation_Pasca_Masny.pdf" class="download-card" download>
+          <img src="img/REST.png" alt="REST">
+          <div class="download-info">
+            <strong data-key="downloads.rest">REST_Projektdokumentation.pdf</strong>
+            <span>7 MB</span>
+          </div>
+        </a>
+        <a href="pdfs/4CoreDynamics.pdf" class="download-card" download>
+          <img src="img/IHK_Arbeit.png" alt="MINTi" style="filter:hue-rotate(120deg) saturate(0.6)">
+          <div class="download-info">
+            <strong data-key="downloads.minti">MINTi_Würfel_Projektdokumentation.pdf</strong>
+            <span>@ THA · WS 2025/26</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
   </main>
+
   <footer>
-    &copy; 2025 Pascal Masny
-    <br>
-    <br>
-    <p><strong>Hinweis gemäß § 5 TMG</strong></p>
-    <p>
-      Diese Website ist ein rein <strong>privates, nicht-kommerzielles Projekt</strong> und dient ausschließlich der persönlichen Darstellung und Information.<br>
-      Sie verfolgt keinerlei wirtschaftliche Interessen.
-    </p>
-    <p>
-      Gemäß § 5 Telemediengesetz (TMG) besteht daher <strong>keine Impressumspflicht</strong>.
-    </p>
-    <p>
-      Es werden keine personenbezogenen Daten erhoben, keine Cookies gesetzt und keine Tracking- oder Analyse-Tools verwendet.
-    </p>
+    <div class="footer-inner">
+      <p class="footer-prompt">© <span id="footer-year">2025</span> Pascal Masny</p>
+      <p data-key="footer.legal"># Privates Projekt; nicht kommerziell; gemäß § 5 TMG von der Impressumspflicht befreit.</p>
+      <p data-key="footer.privacy"># Keine Cookies; kein Tracking; kein externes Analytics. Datenschutz liegt mir am Herzen.</p>
+    </div>
   </footer>
+
+  <script src="js/cv-data.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>

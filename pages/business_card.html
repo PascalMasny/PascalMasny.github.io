@@ -3,31 +3,92 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>E-Business Card Pascal Masny</title>
+  <title>Pascal Masny | Business Card</title>
   <link rel="stylesheet" href="../css/ebiz-styles.css">
-
 </head>
 <body>
-  <div class="container">
+
+  <div class="card-wrap">
     <div class="ebiz-card">
-      <img src="../img/picture.jpg" alt="Pascal Masny" class="ebiz-photo">
-      <div class="ebiz-info">
-        <h3>Pascal Masny</h3>
-        <p class="catch">"Building tomorrow's systems today."</p>
-        <ul class="badge-list">
-          <li>🐍 Python</li>
-          <li>📈 Statistik</li>
-          <li>🤖 Automatisierung</li>
-          <li>🔍 Neugier</li>
-        </ul>
+
+      <!-- Terminal titlebar -->
+      <div class="card-titlebar">
+        <div class="tb-dot tb-dot-r"></div>
+        <div class="tb-dot tb-dot-y"></div>
+        <div class="tb-dot tb-dot-g"></div>
+        <span class="card-file">pascal_masny.vcf</span>
+      </div>
+
+      <div class="card-body">
+
+        <!-- Photo -->
+        <div class="card-photo-wrap">
+          <img src="../img/picture.png" alt="Pascal Masny" class="card-photo">
+        </div>
+
+        <!-- Identity -->
+        <div class="card-identity">
+          <div class="card-name">Pascal Masny</div>
+          <div class="card-role">IT Data &amp; Process Consultant</div>
+          <div class="card-company">masyscon GmbH &middot; TH Augsburg</div>
+          <div class="card-location">Augsburg, Germany</div>
+        </div>
+
+        <!-- Stats strip -->
+        <div class="card-stats">
+          <div class="card-stat">
+            <div class="cs-num">5+</div>
+            <div class="cs-label">Jahre<br>Beruf</div>
+          </div>
+          <div class="card-stat">
+            <div class="cs-num">10+</div>
+            <div class="cs-label">Jahre<br>Python</div>
+          </div>
+          <div class="card-stat">
+            <div class="cs-num">21</div>
+            <div class="cs-label">Jahre<br>alt</div>
+          </div>
+        </div>
+
+        <!-- Contact -->
         <ul class="contact-list">
-          <li><span class="icon">✉️</span>pascal.masny@protonmail.com</li>
-          <li><span class="icon">🔗</span><a href="https://pascalmasny.github.io" target="_blank">Portfolio</a></li>
-          <li><span class="icon">🔗</span><a href="https://www.linkedin.com/in/pascal-masny-116582223" target="_blank">LinkedIn</a></li>
+          <li>
+            <span class="cl-icon">@</span>
+            <a href="mailto:pascalmasny@pascalmasny.de">pascalmasny@pascalmasny.de</a>
+          </li>
+          <li>
+            <span class="cl-icon">//</span>
+            <a href="https://pascalmasny.github.io" target="_blank" rel="noopener">pascalmasny.github.io</a>
+          </li>
+          <li>
+            <span class="cl-icon">in</span>
+            <a href="https://www.linkedin.com/in/pascalmasny/" target="_blank" rel="noopener">linkedin.com/in/pascalmasny</a>
+          </li>
         </ul>
-        <a href="../data/Pascal_Masny.vcf" download class="add-contact">➕ Kontakt hinzufügen</a>
+
+        <div class="card-divider"></div>
+
+        <!-- Skills -->
+        <ul class="tag-list">
+          <li>Python</li>
+          <li>Salesforce</li>
+          <li>Celonis</li>
+          <li>SQL</li>
+          <li>SAP</li>
+          <li class="tag-plain">Systems Engineering</li>
+          <li class="tag-plain">ab 16 in der Industrie</li>
+        </ul>
+
+        <div class="card-divider"></div>
+
+        <!-- CTA -->
+        <a href="../data/Pascal_Masny.vcf" download class="add-contact">
+          + Kontakt speichern
+        </a>
+
       </div>
     </div>
   </div>
+
 </body>
 </html>

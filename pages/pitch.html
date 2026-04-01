@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pitch | Pascal Masny</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ── Variables ────────────────────────────────────────────────────────── */
+    :root {
+      --bg:          #20232a;
+      --bg-alt:      #282c34;
+      --bg-card:     #2c3040;
+      --border:      #383e4c;
+      --border-hi:   #505a70;
+      --primary:     #00d46e;
+      --primary-dim: #00a854;
+      --accent:      #00c8ff;
+      --warn:        #ffd700;
+      --text:        #cdd6de;
+      --text-muted:  #505d72;
+      --text-soft:   #7890a2;
+      --radius:      6px;
+      --radius-sm:   4px;
+      --font:        'JetBrains Mono', monospace;
+      --bar-h:       44px;
+    }
+    [data-theme="light"] {
+      --bg:          #b8bec8;
+      --bg-alt:      #c4cad4;
+      --bg-card:     #c0c6d0;
+      --border:      #98a0b0;
+      --border-hi:   #7880a0;
+      --primary:     #005a2c;
+      --primary-dim: #004020;
+      --accent:      #005a90;
+      --warn:        #8a6000;
+      --text:        #18202e;
+      --text-muted:  #485870;
+      --text-soft:   #28384e;
+    }
+
+    /* ── Reset ───────────────────────────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      height: 100%; overflow: hidden;
+      font-family: var(--font);
+      background: var(--bg); color: var(--text);
+    }
+
+    /* ── Top bar ─────────────────────────────────────────────────────────── */
+    #topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--bar-h);
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 1.25rem; gap: 1rem;
+    }
+    .tb-brand {
+      font-size: 0.78rem; font-weight: 600; color: var(--primary);
+      white-space: nowrap; flex-shrink: 0; letter-spacing: -0.01em;
+    }
+    .tb-brand .dim { color: var(--text-muted); }
+    .tb-brand .cur {
+      color: var(--accent);
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    #progress-track {
+      flex: 1; height: 2px; background: var(--border);
+      border-radius: 2px; overflow: hidden; cursor: pointer;
+      margin: auto 0;
+    }
+    #progress-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transition: width 0.15s linear;
+    }
+
+    .tb-timer {
+      font-size: 0.78rem; font-weight: 600; color: var(--text-muted);
+      white-space: nowrap; flex-shrink: 0; min-width: 3rem; text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    .tb-timer.warn { color: var(--warn); }
+
+    .tb-controls { display: flex; gap: 0.4rem; flex-shrink: 0; }
+    .tb-btn {
+      background: none; border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--text-muted); cursor: pointer;
+      padding: 0.22rem 0.6rem; font-family: var(--font); font-size: 0.7rem; font-weight: 600;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+      line-height: 1.4;
+    }
+    .tb-btn:hover { color: var(--primary); border-color: var(--primary); }
+    .tb-btn.active { color: var(--primary); border-color: var(--primary); background: rgba(0,212,110,0.08); }
+
+    /* ── Stage ───────────────────────────────────────────────────────────── */
+    #stage {
+      position: fixed; top: var(--bar-h); left: 0; right: 0; bottom: 0;
+      display: flex; align-items: stretch;
+    }
+
+    /* scanlines */
+    #stage::before {
+      content: '';
+      position: fixed; inset: var(--bar-h) 0 0 0; z-index: 0; pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 3px,
+        rgba(0,212,110,0.01) 3px, rgba(0,212,110,0.01) 4px
+      );
+    }
+
+    /* ── Slides ──────────────────────────────────────────────────────────── */
+    .slide {
+      display: none; position: relative; z-index: 1;
+      width: 100%; flex-direction: column;
+      animation: fadeUp 0.3s ease both;
+    }
+    .slide.active { display: flex; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* terminal titlebar on every slide */
+    .s-bar {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0 1.5rem; height: 36px; flex-shrink: 0;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-card);
+    }
+    .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .dot-r { background: #ff5f56; }
+    .dot-y { background: #ffbd2e; }
+    .dot-g { background: #27c93f; }
+    .s-bar-file { font-size: 0.67rem; color: var(--text-muted); margin-left: 0.4rem; flex: 1; }
+    .s-bar-label { font-size: 0.67rem; color: var(--text-muted); }
+
+    /* slide content area */
+    .s-body {
+      flex: 1; display: flex; overflow: hidden; min-height: 0;
+    }
+
+    /* ── Left accent strip ───────────────────────────────────────────────── */
+    .s-accent { width: 4px; flex-shrink: 0; }
+    .s-accent.green  { background: var(--primary); }
+    .s-accent.cyan   { background: var(--accent); }
+    .s-accent.yellow { background: var(--warn); }
+
+    /* ── Split layout: 2/3 main + 1/3 notes ─────────────────────────────── */
+    .s-split {
+      flex: 1; display: grid; grid-template-columns: 2fr 1fr;
+      overflow: hidden; min-height: 0;
+    }
+    .s-main {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 2.5rem 3rem 2.5rem 3.5rem;
+      gap: 1.5rem; overflow: hidden; min-height: 0;
+    }
+    .s-notes {
+      border-left: 1px solid var(--border);
+      background: rgba(0,0,0,0.14);
+      display: flex; flex-direction: column;
+      padding: 1.75rem 1.5rem; gap: 0.85rem;
+      overflow-y: auto; min-height: 0;
+    }
+    [data-theme="light"] .s-notes { background: rgba(0,0,0,0.05); }
+    .s-notes-label {
+      font-size: 0.58rem; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.1em; flex-shrink: 0;
+    }
+    .s-notes p {
+      font-size: 0.78rem; color: var(--text-soft); line-height: 1.95;
+    }
+    .s-notes b  { color: var(--text-soft); font-weight: 700; }
+    .s-notes em { color: var(--primary); font-style: normal; }
+    .s-notes .pause { color: var(--text-muted); font-size: 0.65rem; }
+    @media (max-width: 760px) {
+      .s-split { grid-template-columns: 1fr; }
+      .s-notes { display: none; }
+      .s-main  { padding: 2rem 1.5rem 2rem 1.25rem; }
+    }
+
+    /* command prompt label */
+    .s-cmd {
+      font-size: 0.72rem; color: var(--text-muted);
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .s-cmd .prompt { color: var(--primary); }
+    .s-cmd .cmd    { color: var(--text-soft); }
+
+    /* big headline */
+    .s-h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 700; line-height: 1.1; letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .s-h1 .g   { color: var(--primary); }
+    .s-h1 .c   { color: var(--accent); }
+    .s-h1 .y   { color: var(--warn); }
+    .s-h1 .dim { color: var(--text-muted); font-weight: 400; }
+
+    /* stats row */
+    .s-stats { display: flex; gap: 2.5rem; flex-wrap: wrap; }
+    .stat-block { display: flex; flex-direction: column; gap: 0.2rem; }
+    .stat-num {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700; line-height: 1; letter-spacing: -0.03em;
+    }
+    .stat-num.g { color: var(--primary); }
+    .stat-num.c { color: var(--accent); }
+    .stat-num.y { color: var(--warn); }
+    .stat-label {
+      font-size: 0.7rem; color: var(--text-muted); line-height: 1.3;
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+
+    /* two-column layout */
+    .s-cols {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1.25rem 2rem;
+    }
+    @media (max-width: 900px) { .s-cols { grid-template-columns: 1fr; } }
+
+    /* experience card */
+    .exp-card {
+      display: flex; flex-direction: column; gap: 0.4rem;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--primary);
+      border-radius: var(--radius);
+      background: var(--bg-alt);
+    }
+    .exp-card.accent-c { border-left-color: var(--accent); }
+    .exp-card.accent-y { border-left-color: var(--warn); }
+    .exp-card .ec-co   { font-size: 0.72rem; color: var(--text-muted); }
+    .exp-card .ec-role { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+    .exp-card .ec-desc { font-size: 0.78rem; color: var(--text-soft); line-height: 1.6; }
+    .exp-card .ec-date { font-size: 0.68rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+    /* skill grid */
+    .skill-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 0.6rem;
+    }
+    .skill-item {
+      padding: 0.55rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg-alt);
+      font-size: 0.78rem; color: var(--text-soft);
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .skill-item::before { content: '▸'; color: var(--primary); font-size: 0.6rem; flex-shrink: 0; }
+    .skill-item.hi   { border-color: var(--border-hi); color: var(--text); }
+    .skill-item.pers { border-color: #a08000; color: var(--warn); }
+    .skill-section-label {
+      font-size: 0.65rem; color: var(--text-muted); letter-spacing: 0.1em;
+      text-transform: uppercase; grid-column: 1 / -1;
+      padding-top: 0.25rem;
+    }
+
+    /* cert badges */
+    .cert-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .cert {
+      font-size: 0.7rem; padding: 0.28rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid var(--primary-dim);
+      color: var(--primary);
+      background: rgba(0,212,110,0.06);
+    }
+    .cert.cyan  { border-color: #008fb3; color: var(--accent); background: rgba(0,200,255,0.06); }
+    .cert.plain { border-color: var(--border-hi); color: var(--text-muted); background: transparent; }
+
+    /* trait list (slide 8) */
+    .trait-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .trait-item { display: flex; align-items: baseline; gap: 0.75rem; }
+    .trait-key  { font-size: 0.88rem; font-weight: 700; flex-shrink: 0; min-width: 9rem; }
+    .trait-val  { font-size: 0.78rem; color: var(--text-soft); line-height: 1.5; }
+
+    /* closing contact line */
+    .s-contact { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 0.5rem; }
+    .s-contact a, .s-contact span {
+      font-size: 0.8rem; color: var(--text-muted); text-decoration: none;
+      transition: color 0.15s;
+    }
+    .s-contact a:hover { color: var(--primary); }
+    .s-contact .icon { color: var(--text-soft); margin-right: 0.3rem; }
+
+    /* ── Nav ─────────────────────────────────────────────────────────────── */
+    #nav-prev, #nav-next {
+      position: fixed; top: 50%; z-index: 50;
+      transform: translateY(-50%);
+      background: var(--bg-alt); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--text-muted); cursor: pointer;
+      padding: 0.7rem 0.75rem; font-family: var(--font); font-size: 1rem;
+      line-height: 1;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+    #nav-prev { left: 0.6rem; }
+    #nav-next { right: 0.6rem; }
+    #nav-prev:hover, #nav-next:hover {
+      color: var(--primary); border-color: var(--primary); background: rgba(0,212,110,0.06);
+    }
+    #nav-prev:disabled, #nav-next:disabled { opacity: 0.15; cursor: default; pointer-events: none; }
+
+    /* ── Dots & footer ───────────────────────────────────────────────────── */
+    #footer-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+      height: 36px; background: var(--bg-alt); border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 1.25rem;
+    }
+    #back-link {
+      font-size: 0.68rem; color: var(--text-muted); text-decoration: none;
+      transition: color 0.15s;
+    }
+    #back-link:hover { color: var(--primary); }
+    #slide-dots { display: flex; gap: 0.5rem; align-items: center; }
+    .sdot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--border-hi); cursor: pointer;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .sdot.active { background: var(--primary); transform: scale(1.45); }
+    #key-hint { font-size: 0.65rem; color: var(--text-muted); }
+    @media (max-width: 500px) { #key-hint { display: none; } }
+
+    /* ── Script modal ────────────────────────────────────────────────────── */
+    #script-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(10,12,16,0.88);
+      backdrop-filter: blur(6px);
+      align-items: center; justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+    #script-overlay.open { display: flex; }
+    #script-modal {
+      width: 100%; max-width: 680px; max-height: calc(100vh - 4rem);
+      background: var(--bg-card);
+      border: 1px solid var(--border-hi);
+      border-radius: var(--radius);
+      box-shadow: 0 16px 60px rgba(0,0,0,0.6);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      animation: fadeUp 0.22s ease both;
+    }
+    #script-titlebar {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.6rem 1rem;
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    #script-title { flex: 1; font-size: 0.7rem; color: var(--text-muted); margin-left: 0.4rem; }
+    #script-close {
+      background: none; border: none; cursor: pointer;
+      color: var(--text-muted); font-family: var(--font);
+      font-size: 0.72rem; padding: 0.1rem 0.4rem;
+      transition: color 0.15s;
+    }
+    #script-close:hover { color: var(--primary); }
+    #script-body {
+      padding: 2rem 2.25rem 2.25rem;
+      overflow-y: auto; line-height: 2;
+    }
+    #script-body p {
+      font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+      color: var(--text-soft); margin-bottom: 1.25rem;
+    }
+    #script-body p:last-child { margin-bottom: 0; }
+    #script-body b  { color: var(--text); font-weight: 600; }
+    #script-body em { color: var(--primary); font-style: normal; }
+    #script-body .pause {
+      display: inline-block; width: 1.8rem; text-align: center;
+      color: var(--text-muted); font-size: 0.75rem; vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top bar ───────────────────────────────────────────────────────────── -->
+<div id="topbar">
+  <div class="tb-brand">
+    <span class="dim">pascal@pitch:</span>~<span class="cur">$</span>
+  </div>
+  <div id="progress-track"><div id="progress-fill"></div></div>
+  <div class="tb-timer" id="timer-display">2:30</div>
+  <div class="tb-controls">
+    <button class="tb-btn" id="timer-btn">&#9654; run</button>
+    <button class="tb-btn" id="script-btn">[script]</button>
+    <button class="tb-btn" id="theme-btn">[th]</button>
+    <button class="tb-btn" id="lang-btn">EN</button>
+  </div>
+</div>
+
+<!-- ── Script modal ──────────────────────────────────────────────────────── -->
+<div id="script-overlay">
+  <div id="script-modal">
+    <div id="script-titlebar">
+      <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+      <div id="script-title">pitch_script.txt</div>
+      <button id="script-close">&#x2715; close</button>
+    </div>
+    <div id="script-body"></div>
+  </div>
+</div>
+
+<!-- ── Nav ───────────────────────────────────────────────────────────────── -->
+<button id="nav-prev" disabled>&lt;</button>
+<button id="nav-next">&gt;</button>
+
+<!-- ── Stage ─────────────────────────────────────────────────────────────── -->
+<div id="stage">
+
+  <!-- ═══ SLIDE 1: Wer bin ich ════════════════════════════════════════════ -->
+  <div class="slide active" data-i="0">
+    <div class="s-bar">
+      <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+      <div class="s-bar-file">pitch.sh</div>
+      <div class="s-bar-label" id="s1-label">01 / 09 &mdash; Einstieg</div>
+    </div>
+    <div class="s-body">
+      <div class="s-accent green"></div>
+      <div class="s-split">
+        <div class="s-main">
+          <div class="s-cmd"><span class="prompt">$</span><span class="cmd">whoami</span></div>
+          <h1 class="s-h1">
+            <span class="g">Pascal Masny</span><br>
+            <span id="s1-title">IT Consultant<br><span class="c">&amp; Systems Engineer</span></span>
+          </h1>
+          <div class="s-stats">
+            <div class="stat-block">
+              <div class="stat-num g">10+</div>
+              <div class="stat-label" id="s1-stat1">Jahre Python</div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-num c">5</div>
+              <div class="stat-label" id="s1-stat2">Jahre Berufspraxis</div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-num y">21</div>
+              <div class="stat-label" id="s1-stat3">Jahre alt</div>
+            </div>
+          </div>
+        </div>
+        <div class="s-notes">
+          <div class="s-notes-label" id="s1-nlbl">// notizen</div>
+          <p id="s1-notes">Mein Name ist <b>Pascal Masny</b>, 21 Jahre alt, aus Augsburg. Ich bin IT Consultant bei masyscon und studiere parallel Systems Engineering an der TH Augsburg. Ich programmiere seit ich elf bin &mdash; nicht als Pflicht, sondern aus Neugier. In den n&auml;chsten zweieinhalb Minuten zeige ich, wer ich bin.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 2: Ursprung ════════════════════════════════════════════════ -->
+  <div class="slide" data-i="1">
+    <div class="s-bar">
+      <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+      <div class="s-bar-file">pitch.sh</div>
+      <div class="s-bar-label" id="s2-label">02 / 09 &mdash; Ursprung</div>
+    </div>
+    <div class="s-body">
+      <div class="s-accent green"></div>
+      <div class="s-split">
+        <div class="s-main">
+          <div class="s-cmd"><span class="prompt">$</span><span class="cmd">git log --first-parent</span></div>
+          <h1 class="s-h1" id="s2-h1">
+            Python.<br>
+            <span class="g">Mit elf.</span><br>
+            <span class="dim">Aus Neugier.</span>
+          </h1>
+          <div class="s-stats">
+            <div class="stat-block">
+              <div class="stat-num g">10+</div>
+              <div class="stat-label" id="s2-stat">Jahre selbst beigebracht</div>
+            </div>
+          </div>
+        </div>
+        <div class="s-notes">
+          <div class="s-notes-label" id="s2-nlbl">// notizen</div>
+          <p id="s2-notes">Mit elf habe ich angefangen <b>Python</b> zu lernen. Kein Kurs, kein Lehrer &mdash; ich habe mir B&uuml;cher gekauft und einfach angefangen. Ich war fasziniert davon, wie Dinge funktionieren. Dieser Antrieb ist bis heute unver&auml;ndert. Er ist der Grund, warum ich heute dort bin, wo ich bin.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 3: Ausbildung ══════════════════════════════════════════════ -->
+  <div class="slide" data-i="2">
+    <div class="s-bar">
+      <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+      <div class="s-bar-file">pitch.sh</div>
+      <div class="s-bar-label" id="s3-label">03 / 09 &mdash; Ausbildung</div>
+    </div>
+    <div class="s-body">
+      <div class="s-accent yellow"></div>
+      <div class="s-split">
+        <div class="s-main">
+          <div class="s-cmd"><span class="prompt">$</span><span class="cmd">cat ausbildung.log</span></div>
+          <h1 class="s-h1">
+            <span id="s3-h1a">Solide Basis.</span><br>
+            <span class="y" id="s3-h1b">Klare Leistung.</span>
+          </h1>
+          <div class="s-stats">
+            <div class="stat-block">
+              <div class="stat-num y">1,9</div>
+              <div class="stat-label">IHK</div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-num g">2,4</div>
+              <div class="stat-label" id="s3-stat2">Abitur FHR</div>
+            </div>
+          </div>
+          <div class="s-cols">
+            <div class="exp-card accent-y">
+              <div class="ec-co" id="s3-c1co">IHK Augsburg</div>
+              <div class="ec-role" id="s3-c1role">Fachinformatiker Anwendungsentwicklung</div>
+              <div class="ec-desc" id="s3-c1desc">Abschluss Note 1,9. Abschlussprojekt: Python-Datenanalyse bei manroland&nbsp;Goss.</div>
+              <div class="ec-date">Sep 2020 &ndash; Jun 2023</div>
+            </div>
+            <div class="exp-card accent-c">
+              <div class="ec-co" id="s3-c2co">BOS Augsburg</div>
+              <div class="ec-role" id="s3-c2role">Fachhochschulreife</div>
+              <div class="ec-desc" id="s3-c2desc">Abschnitt 2,4. Sch&uuml;lersprecher 2 Jahre lang.</div>
+              <div class="ec-date">Sep 2023 &ndash; Jun 2025</div>
+            </div>
+          </div>
+        </div>
+        <div class="s-notes">
+          <div class="s-notes-label" id="s3-nlbl">// notizen</div>
+          <p id="s3-notes">Meine formale Grundlage: <b>Fachinformatiker Anwendungsentwicklung</b>, abgeschlossen mit IHK-Note 1,9. Mein Abschlussprojekt war eine Python-Datenanalyse direkt im Betrieb. Parallel dazu habe ich die <b>Fachhochschulreife</b> mit 2,4 gemacht und war zwei Jahre lang <b>Sch&uuml;lersprecher</b> an der BOS Augsburg.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 4: manroland Goss ══════════════════════════════════════════ -->
+  <div class="slide" data-i="3">
+    <div class="s-bar">
+      <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+      <div class="s-bar-file">pitch.sh</div>
+      <div class="s-bar-label" id="s4-label">04 / 09 &mdash; manroland Goss</div>
+    </div>
+    <div class="s-body">
+      <div class="s-accent green"></div>
+      <div class="s-split">
+        <div class="s-main">
+          <div class="s-cmd"><span class="prompt">$</span><span class="cmd">git show manroland</span></div>
+          <h1 class="s-h1" id="s4-h1">
+            <span class="g">2+ Jahre.</span><br>
+            Echter Betrieb.<br>
+            <span class="dim">Echter Impact.</span>
+          </h1>
+          <div class="exp-card">
+            <div class="ec-co">manroland Goss web systems GmbH</div>
+            <div class="ec-role" id="s4-c1role">Data Analyst &amp; Werkstudent</div>
+            <div class="ec-desc" id="s4-c1desc">Python-Automatisierung &bull; Celonis Process Mining &bull; SAP-Datenanalyse &bull; IHK-Abschlussprojekt Note 1,9</div>
+            <div class="ec-date">Jun 2023 &ndash; Aug 2025</div>
+          </div>
+        </div>
+        <div class="s-notes">
+          <div class="s-notes-label" id="s4-nlbl">// notizen</div>
+          <p id="s4-notes">Bei manroland Goss war ich &uuml;ber zwei Jahre t&auml;tig &mdash; von der Ausbildung bis zum Werkstudenten. Ich habe <b>Produktionsprozesse mit Python automatisiert</b>, Celonis Process Mining eingef&uuml;hrt und SAP-Daten analysiert. Ein Betrieb mit &uuml;ber tausend Mitarbeitern. Echte Probleme, echte L&ouml;sungen.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 5: masyscon ════════════════════════════════════════════════ -->
+  <div class="slide" data-i="4">
+    <div class="s-bar">
+      <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+      <div class="s-bar-file">pitch.sh</div>
+      <div class="s-bar-label" id="s5-label">05 / 09 &mdash; masyscon</div>
+    </div>
+    <div class="s-body">
+      <div class="s-accent cyan"></div>
+      <div class="s-split">
+        <div class="s-main">
+          <div class="s-cmd"><span class="prompt">$</span><span class="cmd">git show masyscon</span></div>
+          <h1 class="s-h1" id="s5-h1">
+            <span class="c">Consulting.</span><br>
+            CRM. Impact.
+          </h1>
+          <div class="exp-card accent-c">
+            <div class="ec-co">masyscon GmbH</div>
+            <div class="ec-role" id="s5-c1role">IT Data &amp; Process Consultant</div>
+            <div class="ec-desc" id="s5-c1desc">Salesforce CRM &bull; Prozessberatung &bull; Datenintegration &bull; Schnittstelle IT &amp; Fachbereich</div>
+            <div class="ec-date" id="s5-c1date">seit Aug 2025</div>
+          </div>
+          <div class="cert-row">
+            <span class="cert">Salesforce Certified Admin</span>
+            <span class="cert">Celonis Data Scientist</span>
+            <span class="cert cyan">Cisco CCNA</span>
+          </div>
+        </div>
+        <div class="s-notes">
+          <div class="s-notes-label" id="s5-nlbl">// notizen</div>
+          <p id="s5-notes">Seit August 2025 bin ich <b>IT Data &amp; Process Consultant bei masyscon</b>. Ich f&uuml;hre Salesforce CRM ein, berate bei Prozessoptimierungen und integriere Daten. Ich bin die Schnittstelle zwischen Technik und Fachbereich &mdash; ich spreche beide Sprachen und bringe beide Seiten zusammen.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 6: Studium ══════════════════════════════════════════════════ -->
+  <div class="slide" data-i="5">
+    <div class="s-bar">
+      <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+      <div class="s-bar-file">pitch.sh</div>
+      <div class="s-bar-label" id="s6-label">06 / 09 &mdash; Studium</div>
+    </div>
+    <div class="s-body">
+      <div class="s-accent yellow"></div>
+      <div class="s-split">
+        <div class="s-main">
+          <div class="s-cmd"><span class="prompt">$</span><span class="cmd">cat studium.log</span></div>
+          <h1 class="s-h1">
+            <span class="y" id="s6-h1a">TH Augsburg.</span><br>
+            <span id="s6-h1b">B.Sc. Systems Engineering.</span>
+          </h1>
+          <div class="s-cols">
+            <div class="exp-card accent-y">
+              <div class="ec-co">Technische Hochschule Augsburg</div>
+              <div class="ec-role" id="s6-c1role">Systems Engineering B.Sc.</div>
+              <div class="ec-desc" id="s6-c1desc">Berufsbegleitend neben Vollzeitt&auml;tigkeit. Ehren-HiWi Wintersemester 2025/26.</div>
+              <div class="ec-date" id="s6-c1date">seit Okt 2025</div>
+            </div>
+            <div class="exp-card accent-c">
+              <div class="ec-co">FabLab THA</div>
+              <div class="ec-role" id="s6-c2role">Volunteer 3D-Druck &amp; Prototyping</div>
+              <div class="ec-desc" id="s6-c2desc">FDM &amp; SLA Druck, Fusion 360, Solidworks. Lernen h&ouml;rt nicht auf.</div>
+              <div class="ec-date" id="s6-c2date">seit Okt 2025</div>
+            </div>
+          </div>
+        </div>
+        <div class="s-notes">
+          <div class="s-notes-label" id="s6-nlbl">// notizen</div>
+          <p id="s6-notes">Seit Oktober 2025 studiere ich <b>berufsbegleitend Systems Engineering</b> an der TH Augsburg &mdash; parallel zum Vollzeitjob. Ich bin Ehren-HiWi und FabLab Volunteer: 3D-Druck, Prototyping, alles was mit Hands-on Lernen zu tun hat. Lernen ist f&uuml;r mich keine Pflicht, es ist eine Haltung.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 7: Kompetenzen ══════════════════════════════════════════════ -->
+  <div class="slide" data-i="6">
+    <div class="s-bar">
+      <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+      <div class="s-bar-file">pitch.sh</div>
+      <div class="s-bar-label" id="s7-label">07 / 09 &mdash; Kompetenzen</div>
+    </div>
+    <div class="s-body">
+      <div class="s-accent cyan"></div>
+      <div class="s-split">
+        <div class="s-main">
+          <div class="s-cmd"><span class="prompt">$</span><span class="cmd">ls -la skills/</span></div>
+          <h1 class="s-h1">
+            <span id="s7-h1a">Technik.</span>
+            <span class="c" id="s7-h1b">Business.</span>
+            <span id="s7-h1c">Br&uuml;cke.</span>
+          </h1>
+          <div class="skill-grid">
+            <div class="skill-section-label" id="s7-slbl1">// kern</div>
+            <div class="skill-item hi">Python &amp; Pandas / NumPy</div>
+            <div class="skill-item hi">Celonis Process Mining</div>
+            <div class="skill-item hi">Salesforce CRM</div>
+            <div class="skill-item hi">SQL &amp; Datenintegration</div>
+            <div class="skill-section-label" id="s7-slbl2">// weitere</div>
+            <div class="skill-item">Machine Learning (sklearn)</div>
+            <div class="skill-item">SAP</div>
+            <div class="skill-item">Linux &amp; Git</div>
+            <div class="skill-item">C/C++ &amp; Mikrocontroller</div>
+            <div class="skill-item pers">3D-Druck &amp; Prototyping</div>
+          </div>
+        </div>
+        <div class="s-notes">
+          <div class="s-notes-label" id="s7-nlbl">// notizen</div>
+          <p id="s7-notes">Ich denke wie ein <b>Engineer</b> und kommuniziere wie ein <b>Consultant</b>. Python ist meine Muttersprache &mdash; &uuml;ber zehn Jahre. Celonis, Salesforce, SQL, Machine Learning. Ich bin <b>zertifizierter Salesforce Admin</b>, <b>Celonis Data Scientist</b> und <b>Cisco CCNA</b>. Technik ist Mittel, nicht Selbstzweck.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 8: Was mich antreibt ═══════════════════════════════════════ -->
+  <div class="slide" data-i="7">
+    <div class="s-bar">
+      <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+      <div class="s-bar-file">pitch.sh</div>
+      <div class="s-bar-label" id="s8-label">08 / 09 &mdash; Antrieb</div>
+    </div>
+    <div class="s-body">
+      <div class="s-accent green"></div>
+      <div class="s-split">
+        <div class="s-main">
+          <div class="s-cmd"><span class="prompt">$</span><span class="cmd">cat motivation.txt</span></div>
+          <h1 class="s-h1" id="s8-h1">
+            <span class="g">Neugier.</span><br>
+            Tiefe.<br>
+            <span class="c">Eigeninitiative.</span>
+          </h1>
+          <div class="trait-list">
+            <div class="trait-item">
+              <span class="trait-key g" id="s8-t1k">B&uuml;cher, keine Abk&uuml;rzungen</span>
+              <span class="trait-val" id="s8-t1v">ich verstehe, was ich tue</span>
+            </div>
+            <div class="trait-item">
+              <span class="trait-key c" id="s8-t2k">Eigeninitiative</span>
+              <span class="trait-val" id="s8-t2v">ich warte nicht darauf, gefragt zu werden</span>
+            </div>
+            <div class="trait-item">
+              <span class="trait-key y" id="s8-t3k">Verantwortung</span>
+              <span class="trait-val" id="s8-t3v">auch wenn niemand hinschaut</span>
+            </div>
+            <div class="trait-item">
+              <span class="trait-key g" id="s8-t4k">Impact</span>
+              <span class="trait-val" id="s8-t4v">echte Ergebnisse, keine Sichtbarkeit</span>
+            </div>
+          </div>
+        </div>
+        <div class="s-notes">
+          <div class="s-notes-label" id="s8-nlbl">// notizen</div>
+          <p id="s8-notes">Was mich antreibt ist keine Pflicht. Es ist der Anspruch, Dinge wirklich zu <b>verstehen</b>. Ich lerne aus B&uuml;chern, nicht aus Abk&uuml;rzungen. Ich &uuml;bernehme Verantwortung, auch wenn niemand schaut. Ich bin derjenige, der sich mehr &uuml;berlegt als verlangt wurde &mdash; und den n&auml;chsten Schritt schon plant, bevor er gefragt wird.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SLIDE 9: Abschluss ════════════════════════════════════════════════ -->
+  <div class="slide" data-i="8">
+    <div class="s-bar">
+      <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+      <div class="s-bar-file">pitch.sh</div>
+      <div class="s-bar-label" id="s9-label">09 / 09 &mdash; Das bin ich</div>
+    </div>
+    <div class="s-body">
+      <div class="s-accent green"></div>
+      <div class="s-split">
+        <div class="s-main">
+          <div class="s-cmd"><span class="prompt">$</span><span class="cmd">cat pascal.txt</span></div>
+          <h1 class="s-h1">
+            <span id="s9-h1a">Ich denke.</span><br>
+            <span class="g" id="s9-h1b">Ich baue.</span><br>
+            <span class="c" id="s9-h1c">Ich liefere.</span>
+          </h1>
+          <div class="s-contact">
+            <span><span class="icon">&#9671;</span><a href="https://pascalmasny.github.io">pascalmasny.github.io</a></span>
+            <span><span class="icon">&#9671;</span><a href="mailto:pascalmasny@pascalmasny.de">pascalmasny@pascalmasny.de</a></span>
+          </div>
+        </div>
+        <div class="s-notes">
+          <div class="s-notes-label" id="s9-nlbl">// notizen</div>
+          <p id="s9-notes">Das ist <b>Pascal Masny</b> &mdash; IT Consultant, Datenanalyst, Engineer aus Augsburg. Technische Tiefe trifft Prozessverst&auml;ndnis. Ich lerne schnell, arbeite selbstst&auml;ndig und liefere &mdash; nicht weil ich muss, sondern weil <em>gute L&ouml;sungen</em> mich antreiben. Wenn ihr jemanden sucht, der beides kann, freue ich mich auf das Gespr&auml;ch.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /stage -->
+
+<!-- ── Footer bar ────────────────────────────────────────────────────────── -->
+<div id="footer-bar">
+  <a href="../index.html" id="back-link">&larr; portfolio</a>
+  <div id="slide-dots">
+    <div class="sdot active" data-i="0"></div>
+    <div class="sdot" data-i="1"></div>
+    <div class="sdot" data-i="2"></div>
+    <div class="sdot" data-i="3"></div>
+    <div class="sdot" data-i="4"></div>
+    <div class="sdot" data-i="5"></div>
+    <div class="sdot" data-i="6"></div>
+    <div class="sdot" data-i="7"></div>
+    <div class="sdot" data-i="8"></div>
+  </div>
+  <div id="key-hint">&larr; &rarr; &nbsp;|&nbsp; space</div>
+</div>
+
+<script>
+/* ── i18n ─────────────────────────────────────────────────────────────────── */
+const T = {
+  de: {
+    /* slide labels */
+    's1-label': '01 / 09 &mdash; Einstieg',
+    's2-label': '02 / 09 &mdash; Ursprung',
+    's3-label': '03 / 09 &mdash; Ausbildung',
+    's4-label': '04 / 09 &mdash; manroland Goss',
+    's5-label': '05 / 09 &mdash; masyscon',
+    's6-label': '06 / 09 &mdash; Studium',
+    's7-label': '07 / 09 &mdash; Kompetenzen',
+    's8-label': '08 / 09 &mdash; Antrieb',
+    's9-label': '09 / 09 &mdash; Das bin ich',
+
+    /* slide 1 */
+    's1-title': 'IT Consultant<br><span class="c">&amp; Systems Engineer</span>',
+    's1-stat1': 'Jahre Python',
+    's1-stat2': 'Jahre Berufspraxis',
+    's1-stat3': 'Jahre alt',
+    's1-nlbl':  '// notizen',
+    's1-notes': 'Mein Name ist <b>Pascal Masny</b>, 21 Jahre alt, aus Augsburg. Ich bin IT Consultant bei masyscon und studiere parallel Systems Engineering an der TH Augsburg. Ich programmiere seit ich elf bin &mdash; nicht als Pflicht, sondern aus Neugier. In den n&auml;chsten zweieinhalb Minuten zeige ich, wer ich bin.',
+
+    /* slide 2 */
+    's2-h1':    'Python.<br><span class="g">Mit elf.</span><br><span class="dim">Aus Neugier.</span>',
+    's2-stat':  'Jahre selbst beigebracht',
+    's2-nlbl':  '// notizen',
+    's2-notes': 'Mit elf habe ich angefangen <b>Python</b> zu lernen. Kein Kurs, kein Lehrer &mdash; ich habe mir B&uuml;cher gekauft und einfach angefangen. Ich war fasziniert davon, wie Dinge funktionieren. Dieser Antrieb ist bis heute unver&auml;ndert. Er ist der Grund, warum ich heute dort bin, wo ich bin.',
+
+    /* slide 3 */
+    's3-h1a':    'Solide Basis.',
+    's3-h1b':    'Klare Leistung.',
+    's3-stat2':  'Abitur FHR',
+    's3-c1co':   'IHK Augsburg',
+    's3-c1role': 'Fachinformatiker Anwendungsentwicklung',
+    's3-c1desc': 'Abschluss Note 1,9. Abschlussprojekt: Python-Datenanalyse bei manroland&nbsp;Goss.',
+    's3-c2co':   'BOS Augsburg',
+    's3-c2role': 'Fachhochschulreife',
+    's3-c2desc': 'Abschnitt 2,4. Sch&uuml;lersprecher 2 Jahre lang.',
+    's3-nlbl':   '// notizen',
+    's3-notes':  'Meine formale Grundlage: <b>Fachinformatiker Anwendungsentwicklung</b>, abgeschlossen mit IHK-Note 1,9. Mein Abschlussprojekt war eine Python-Datenanalyse direkt im Betrieb. Parallel dazu habe ich die <b>Fachhochschulreife</b> mit 2,4 gemacht und war zwei Jahre lang <b>Sch&uuml;lersprecher</b> an der BOS Augsburg.',
+
+    /* slide 4 */
+    's4-h1':     '<span class="g">2+ Jahre.</span><br>Echter Betrieb.<br><span class="dim">Echter Impact.</span>',
+    's4-c1role': 'Data Analyst &amp; Werkstudent',
+    's4-c1desc': 'Python-Automatisierung &bull; Celonis Process Mining &bull; SAP-Datenanalyse &bull; IHK-Abschlussprojekt Note 1,9',
+    's4-nlbl':   '// notizen',
+    's4-notes':  'Bei manroland Goss war ich &uuml;ber zwei Jahre t&auml;tig &mdash; von der Ausbildung bis zum Werkstudenten. Ich habe <b>Produktionsprozesse mit Python automatisiert</b>, Celonis Process Mining eingef&uuml;hrt und SAP-Daten analysiert. Ein Betrieb mit &uuml;ber tausend Mitarbeitern. Echte Probleme, echte L&ouml;sungen.',
+
+    /* slide 5 */
+    's5-h1':     '<span class="c">Consulting.</span><br>CRM. Impact.',
+    's5-c1role': 'IT Data &amp; Process Consultant',
+    's5-c1desc': 'Salesforce CRM &bull; Prozessberatung &bull; Datenintegration &bull; Schnittstelle IT &amp; Fachbereich',
+    's5-c1date': 'seit Aug 2025',
+    's5-nlbl':   '// notizen',
+    's5-notes':  'Seit August 2025 bin ich <b>IT Data &amp; Process Consultant bei masyscon</b>. Ich f&uuml;hre Salesforce CRM ein, berate bei Prozessoptimierungen und integriere Daten. Ich bin die Schnittstelle zwischen Technik und Fachbereich &mdash; ich spreche beide Sprachen und bringe beide Seiten zusammen.',
+
+    /* slide 6 */
+    's6-h1a':    'TH Augsburg.',
+    's6-h1b':    'B.Sc. Systems Engineering.',
+    's6-c1role': 'Systems Engineering B.Sc.',
+    's6-c1desc': 'Berufsbegleitend neben Vollzeitt&auml;tigkeit. Ehren-HiWi Wintersemester 2025/26.',
+    's6-c1date': 'seit Okt 2025',
+    's6-c2role': 'Volunteer 3D-Druck &amp; Prototyping',
+    's6-c2desc': 'FDM &amp; SLA Druck, Fusion 360, Solidworks. Lernen h&ouml;rt nicht auf.',
+    's6-c2date': 'seit Okt 2025',
+    's6-nlbl':   '// notizen',
+    's6-notes':  'Seit Oktober 2025 studiere ich <b>berufsbegleitend Systems Engineering</b> an der TH Augsburg &mdash; parallel zum Vollzeitjob. Ich bin Ehren-HiWi und FabLab Volunteer: 3D-Druck, Prototyping, alles was mit Hands-on Lernen zu tun hat. Lernen ist f&uuml;r mich keine Pflicht, es ist eine Haltung.',
+
+    /* slide 7 */
+    's7-h1a':   'Technik.',
+    's7-h1b':   'Business.',
+    's7-h1c':   'Br&uuml;cke.',
+    's7-slbl1': '// kern',
+    's7-slbl2': '// weitere',
+    's7-nlbl':  '// notizen',
+    's7-notes': 'Ich denke wie ein <b>Engineer</b> und kommuniziere wie ein <b>Consultant</b>. Python ist meine Muttersprache &mdash; &uuml;ber zehn Jahre. Celonis, Salesforce, SQL, Machine Learning. Ich bin <b>zertifizierter Salesforce Admin</b>, <b>Celonis Data Scientist</b> und <b>Cisco CCNA</b>. Technik ist Mittel, nicht Selbstzweck.',
+
+    /* slide 8 */
+    's8-h1':   '<span class="g">Neugier.</span><br>Tiefe.<br><span class="c">Eigeninitiative.</span>',
+    's8-t1k':  'B&uuml;cher, keine Abk&uuml;rzungen',
+    's8-t1v':  'ich verstehe, was ich tue',
+    's8-t2k':  'Eigeninitiative',
+    's8-t2v':  'ich warte nicht darauf, gefragt zu werden',
+    's8-t3k':  'Verantwortung',
+    's8-t3v':  'auch wenn niemand hinschaut',
+    's8-t4k':  'Impact',
+    's8-t4v':  'echte Ergebnisse, keine Sichtbarkeit',
+    's8-nlbl': '// notizen',
+    's8-notes': 'Was mich antreibt ist keine Pflicht. Es ist der Anspruch, Dinge wirklich zu <b>verstehen</b>. Ich lerne aus B&uuml;chern, nicht aus Abk&uuml;rzungen. Ich &uuml;bernehme Verantwortung, auch wenn niemand schaut. Ich bin derjenige, der sich mehr &uuml;berlegt als verlangt wurde &mdash; und den n&auml;chsten Schritt schon plant, bevor er gefragt wird.',
+
+    /* slide 9 */
+    's9-h1a':  'Ich denke.',
+    's9-h1b':  'Ich baue.',
+    's9-h1c':  'Ich liefere.',
+    's9-nlbl': '// notizen',
+    's9-notes': 'Das ist <b>Pascal Masny</b> &mdash; IT Consultant, Datenanalyst, Engineer aus Augsburg. Technische Tiefe trifft Prozessverst&auml;ndnis. Ich lerne schnell, arbeite selbstst&auml;ndig und liefere &mdash; nicht weil ich muss, sondern weil <em>gute L&ouml;sungen</em> mich antreiben. Wenn ihr jemanden sucht, der beides kann, freue ich mich auf das Gespr&auml;ch.',
+  },
+  en: {
+    /* slide labels */
+    's1-label': '01 / 09 &mdash; Intro',
+    's2-label': '02 / 09 &mdash; Origin',
+    's3-label': '03 / 09 &mdash; Education',
+    's4-label': '04 / 09 &mdash; manroland Goss',
+    's5-label': '05 / 09 &mdash; masyscon',
+    's6-label': '06 / 09 &mdash; Studies',
+    's7-label': '07 / 09 &mdash; Skills',
+    's8-label': '08 / 09 &mdash; Drive',
+    's9-label': '09 / 09 &mdash; That&rsquo;s me',
+
+    /* slide 1 */
+    's1-title': 'IT Consultant<br><span class="c">&amp; Systems Engineer</span>',
+    's1-stat1': 'years Python',
+    's1-stat2': 'years experience',
+    's1-stat3': 'years old',
+    's1-nlbl':  '// notes',
+    's1-notes': 'My name is <b>Pascal Masny</b>, 21 years old, from Augsburg. I&rsquo;m an IT consultant at masyscon and study Systems Engineering part-time at TH Augsburg. I&rsquo;ve been coding since I was eleven &mdash; not as an obligation, but out of curiosity. In the next two and a half minutes, let me show you who I am.',
+
+    /* slide 2 */
+    's2-h1':    'Python.<br><span class="g">At eleven.</span><br><span class="dim">Out of curiosity.</span>',
+    's2-stat':  'years self-taught',
+    's2-nlbl':  '// notes',
+    's2-notes': 'At eleven I started learning <b>Python</b>. No course, no teacher &mdash; I bought books and just started. I was fascinated by how things work. That drive has never changed. It&rsquo;s the reason I am where I am today.',
+
+    /* slide 3 */
+    's3-h1a':    'Solid foundation.',
+    's3-h1b':    'Clear performance.',
+    's3-stat2':  'A-levels equiv.',
+    's3-c1co':   'IHK Augsburg',
+    's3-c1role': 'Certified Software Developer',
+    's3-c1desc': 'Graduated with grade 1.9 (top). Final project: Python data analysis at manroland&nbsp;Goss.',
+    's3-c2co':   'BOS Augsburg',
+    's3-c2role': 'Fachhochschulreife',
+    's3-c2desc': 'Grade 2.4. Student representative for 2 years.',
+    's3-nlbl':   '// notes',
+    's3-notes':  'My formal foundation: <b>Certified Software Developer</b>, completed with a top grade of 1.9. My final project was a Python data analysis directly in production. In parallel I completed my <b>A-levels equivalent</b> with grade 2.4 and served two years as <b>student representative</b> at BOS Augsburg.',
+
+    /* slide 4 */
+    's4-h1':     '<span class="g">2+ years.</span><br>Real industry.<br><span class="dim">Real impact.</span>',
+    's4-c1role': 'Data Analyst &amp; Working Student',
+    's4-c1desc': 'Python automation &bull; Celonis Process Mining &bull; SAP data analysis &bull; IHK final project grade 1.9',
+    's4-nlbl':   '// notes',
+    's4-notes':  'At manroland Goss I worked for over two years &mdash; from apprentice to working student. I <b>automated production processes with Python</b>, introduced Celonis Process Mining, and analysed SAP data. A company with over a thousand employees. Real problems, real solutions.',
+
+    /* slide 5 */
+    's5-h1':     '<span class="c">Consulting.</span><br>CRM. Impact.',
+    's5-c1role': 'IT Data &amp; Process Consultant',
+    's5-c1desc': 'Salesforce CRM &bull; Process consulting &bull; Data integration &bull; Bridge between IT &amp; business',
+    's5-c1date': 'since Aug 2025',
+    's5-nlbl':   '// notes',
+    's5-notes':  'Since August 2025 I&rsquo;ve been <b>IT Data &amp; Process Consultant at masyscon</b>. I implement Salesforce CRM, advise on process improvements and integrate data. I&rsquo;m the bridge between tech and business &mdash; I speak both languages and bring both sides together.',
+
+    /* slide 6 */
+    's6-h1a':    'TH Augsburg.',
+    's6-h1b':    'B.Sc. Systems Engineering.',
+    's6-c1role': 'Systems Engineering B.Sc.',
+    's6-c1desc': 'Part-time alongside full-time work. Volunteer student assistant WS 2025/26.',
+    's6-c1date': 'since Oct 2025',
+    's6-c2role': 'Volunteer 3D Printing &amp; Prototyping',
+    's6-c2desc': 'FDM &amp; SLA printing, Fusion 360, Solidworks. Learning never stops.',
+    's6-c2date': 'since Oct 2025',
+    's6-nlbl':   '// notes',
+    's6-notes':  'Since October 2025 I&rsquo;ve been studying <b>Systems Engineering part-time</b> at TH Augsburg &mdash; alongside a full-time job. I&rsquo;m a volunteer student assistant and FabLab volunteer: 3D printing, prototyping, anything hands-on. Learning isn&rsquo;t a subject for me &mdash; it&rsquo;s a mindset.',
+
+    /* slide 7 */
+    's7-h1a':   'Tech.',
+    's7-h1b':   'Business.',
+    's7-h1c':   'Bridge.',
+    's7-slbl1': '// core',
+    's7-slbl2': '// more',
+    's7-nlbl':  '// notes',
+    's7-notes': 'I think like an <b>engineer</b> and communicate like a <b>consultant</b>. Python is my mother tongue &mdash; over ten years. Celonis, Salesforce, SQL, machine learning. I&rsquo;m a <b>certified Salesforce Admin</b>, <b>Celonis Data Scientist</b> and <b>Cisco CCNA</b>. Technology is a means, not an end.',
+
+    /* slide 8 */
+    's8-h1':   '<span class="g">Curiosity.</span><br>Depth.<br><span class="c">Initiative.</span>',
+    's8-t1k':  'Books, not shortcuts',
+    's8-t1v':  'I understand what I do',
+    's8-t2k':  'Initiative',
+    's8-t2v':  'I don&rsquo;t wait to be asked',
+    's8-t3k':  'Ownership',
+    's8-t3v':  'even when no one is watching',
+    's8-t4k':  'Impact',
+    's8-t4v':  'real results, not visibility',
+    's8-nlbl': '// notes',
+    's8-notes': 'What drives me is not obligation. It&rsquo;s the desire to genuinely <b>understand</b> things. I learn from books, not shortcuts. I take ownership even when no one is watching. I&rsquo;m the person who thinks further than required &mdash; and plans the next step before being asked.',
+
+    /* slide 9 */
+    's9-h1a':  'I think.',
+    's9-h1b':  'I build.',
+    's9-h1c':  'I deliver.',
+    's9-nlbl': '// notes',
+    's9-notes': 'That&rsquo;s <b>Pascal Masny</b> &mdash; IT consultant, data analyst, engineer from Augsburg. Technical depth meets process understanding. I learn fast, work independently and deliver &mdash; not because I have to, but because <em>good solutions</em> are what drive me. If you&rsquo;re looking for someone who can do both, I&rsquo;d love to talk.',
+  }
+};
+
+/* ── Pitch script (full read-through) ───────────────────────────────────── */
+const SCRIPT = {
+  de: `
+    <p>Ich bin <b>Pascal Masny</b> &ndash; 21 Jahre alt, aus Augsburg.<span class="pause">//</span></p>
+    <p>Ich schreibe Python seit ich <em>elf</em> bin &ndash; nicht als Schulfach, sondern weil mich fasziniert hat, wie Dinge funktionieren. Aus dieser Neugier ist eine Karriere entstanden.<span class="pause">//</span></p>
+    <p>Meine Ausbildung zum <b>Fachinformatiker Anwendungsentwicklung</b> habe ich mit IHK-Note <em>1,9</em> abgeschlossen. Das Abschlussprojekt war eine Python-Datenanalyse direkt bei manroland Goss. Parallel dazu: Fachhochschulreife mit 2,4 und zwei Jahre Schülersprecher.<span class="pause">//</span></p>
+    <p>Bei <b>manroland Goss</b> war ich über zwei Jahre tätig &ndash; Python-Automatisierung, Celonis Process Mining, SAP-Datenanalyse. Echte Industrie, echter Impact.<span class="pause">//</span></p>
+    <p>Seit August 2025 bin ich <b>IT Data &amp; Process Consultant bei masyscon</b>. Salesforce CRM, Prozessberatung, Datenintegration &ndash; ich bin die Brücke zwischen Technik und Fachbereich.<span class="pause">//</span></p>
+    <p>Seit Oktober 2025 studiere ich berufsbegleitend <b>Systems Engineering</b> an der TH Augsburg. Nebenbei: Ehren-HiWi, FabLab Volunteer, 3D-Druck.<span class="pause">//</span></p>
+    <p>Ich bin <em>zertifizierter Salesforce Admin</em>, <em>Celonis Data Scientist</em> und <em>Cisco CCNA</em>. Ich denke wie ein <b>Engineer</b> und kommuniziere wie ein <b>Consultant</b>.<span class="pause">//</span></p>
+    <p>Was mich antreibt: Ich lerne aus Büchern, nicht aus Abkürzungen. Ich übernehme Verantwortung, auch wenn niemand schaut. Ich liefere &ndash; nicht weil ich muss, sondern weil <b>gute Lösungen</b> mich antreiben.<span class="pause">//</span></p>
+    <p>Das bin ich. Wenn ihr jemanden sucht, der technische Tiefe mit Prozessverständnis verbindet &ndash; freue ich mich auf das Gespräch.</p>
+  `,
+  en: `
+    <p>I&rsquo;m <b>Pascal Masny</b> &ndash; 21 years old, based in Augsburg, Germany.<span class="pause">//</span></p>
+    <p>I&rsquo;ve been writing Python since I was <em>eleven</em> &ndash; not as a school subject, but because I was fascinated by how things work. That curiosity turned into a career.<span class="pause">//</span></p>
+    <p>I completed my <b>software developer apprenticeship</b> with a top grade of <em>1.9</em>. My final project was a Python data analysis directly in production at manroland Goss. In parallel: A-levels equivalent with grade 2.4 and two years as student representative.<span class="pause">//</span></p>
+    <p>At <b>manroland Goss</b> I worked for over two years &ndash; Python automation, Celonis process mining, SAP data analysis. Real industry, real impact.<span class="pause">//</span></p>
+    <p>Since August 2025 I&rsquo;ve been <b>IT Data &amp; Process Consultant at masyscon</b>. Salesforce CRM, process consulting, data integration &ndash; I&rsquo;m the bridge between tech and business.<span class="pause">//</span></p>
+    <p>Since October 2025 I&rsquo;ve been studying <b>Systems Engineering</b> part-time at TH Augsburg. On the side: volunteer student assistant, FabLab volunteer, 3D printing.<span class="pause">//</span></p>
+    <p>I&rsquo;m a <em>certified Salesforce Admin</em>, <em>Celonis Data Scientist</em> and <em>Cisco CCNA</em>. I think like an <b>engineer</b> and communicate like a <b>consultant</b>.<span class="pause">//</span></p>
+    <p>What drives me: I learn from books, not shortcuts. I take ownership even when no one is watching. I deliver &ndash; not because I have to, but because <b>good solutions</b> are what drive me.<span class="pause">//</span></p>
+    <p>That&rsquo;s who I am. If you&rsquo;re looking for someone who combines technical depth with process understanding &ndash; I&rsquo;d love to talk.</p>
+  `
+};
+
+/* ── Skill items ─────────────────────────────────────────────────────────── */
+const SKILLS_DE = [
+  'Python &amp; Pandas / NumPy', 'Celonis Process Mining', 'Salesforce CRM', 'SQL &amp; Datenintegration',
+  'Machine Learning (sklearn)', 'SAP', 'Linux &amp; Git', 'C/C++ &amp; Mikrocontroller', '3D-Druck &amp; Prototyping'
+];
+const SKILLS_EN = [
+  'Python &amp; Pandas / NumPy', 'Celonis Process Mining', 'Salesforce CRM', 'SQL &amp; data integration',
+  'Machine Learning (sklearn)', 'SAP', 'Linux &amp; Git', 'C/C++ &amp; microcontrollers', '3D printing &amp; prototyping'
+];
+
+/* ── State ───────────────────────────────────────────────────────────────── */
+const TOTAL   = 150;
+const slides  = Array.from(document.querySelectorAll('.slide'));
+const dots    = Array.from(document.querySelectorAll('.sdot'));
+const btnPrev = document.getElementById('nav-prev');
+const btnNext = document.getElementById('nav-next');
+let current   = 0;
+let lang      = 'de';
+let timerRunning  = false;
+let remaining     = TOTAL;
+let timerInterval = null;
+
+/* ── Navigation ──────────────────────────────────────────────────────────── */
+function goTo(i) {
+  slides[current].classList.remove('active');
+  dots[current].classList.remove('active');
+  current = i;
+  slides[current].classList.add('active');
+  dots[current].classList.add('active');
+  btnPrev.disabled = current === 0;
+  btnNext.disabled = current === slides.length - 1;
+}
+
+btnPrev.addEventListener('click', () => { if (current > 0) goTo(current - 1); });
+btnNext.addEventListener('click', () => { if (current < slides.length - 1) goTo(current + 1); });
+dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.i)));
+document.addEventListener('keydown', e => {
+  if      (e.key === 'ArrowRight' || e.key === 'ArrowDown')  { if (current < slides.length - 1) goTo(current + 1); }
+  else if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')    { if (current > 0) goTo(current - 1); }
+  else if (e.key === ' ')                                    { e.preventDefault(); toggleTimer(); }
+});
+
+/* ── Timer ───────────────────────────────────────────────────────────────── */
+const timerBtn  = document.getElementById('timer-btn');
+const timerDisp = document.getElementById('timer-display');
+const progFill  = document.getElementById('progress-fill');
+
+function updateTimerDisplay() {
+  const m = Math.floor(remaining / 60);
+  const s = remaining % 60;
+  timerDisp.textContent = m + ':' + String(s).padStart(2, '0');
+  timerDisp.classList.toggle('warn', remaining <= 20);
+  progFill.style.width = ((TOTAL - remaining) / TOTAL * 100) + '%';
+}
+
+function toggleTimer() {
+  if (timerRunning) {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    timerBtn.innerHTML = '&#9654; run';
+    timerBtn.classList.remove('active');
+  } else {
+    if (remaining === 0) { remaining = TOTAL; updateTimerDisplay(); }
+    timerRunning = true;
+    timerBtn.innerHTML = '&#9646;&#9646; stop';
+    timerBtn.classList.add('active');
+    timerInterval = setInterval(() => {
+      remaining--;
+      updateTimerDisplay();
+      if (remaining <= 0) {
+        clearInterval(timerInterval);
+        timerRunning = false;
+        timerBtn.innerHTML = '&#9654; run';
+        timerBtn.classList.remove('active');
+      }
+    }, 1000);
+  }
+}
+
+timerBtn.addEventListener('click', toggleTimer);
+document.getElementById('progress-track').addEventListener('click', () => {
+  remaining = TOTAL; updateTimerDisplay();
+});
+updateTimerDisplay();
+
+/* ── Language ────────────────────────────────────────────────────────────── */
+const langBtn = document.getElementById('lang-btn');
+
+function applyLang(l) {
+  lang = l;
+  document.documentElement.lang = l;
+  langBtn.textContent = l === 'de' ? 'EN' : 'DE';
+
+  const t = T[l];
+  Object.keys(t).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = t[id];
+  });
+
+  const skillItems = document.querySelectorAll('.skill-item');
+  const skills = l === 'de' ? SKILLS_DE : SKILLS_EN;
+  skillItems.forEach((el, i) => { if (skills[i]) el.innerHTML = skills[i]; });
+}
+
+langBtn.addEventListener('click', () => {
+  applyLang(lang === 'de' ? 'en' : 'de');
+  if (scriptOverlay.classList.contains('open')) scriptBody.innerHTML = SCRIPT[lang];
+});
+
+/* ── Script modal ────────────────────────────────────────────────────────── */
+const scriptOverlay = document.getElementById('script-overlay');
+const scriptBody    = document.getElementById('script-body');
+const scriptBtn     = document.getElementById('script-btn');
+const scriptClose   = document.getElementById('script-close');
+
+function openScript() {
+  scriptBody.innerHTML = SCRIPT[lang];
+  scriptOverlay.classList.add('open');
+  scriptBtn.classList.add('active');
+}
+function closeScript() {
+  scriptOverlay.classList.remove('open');
+  scriptBtn.classList.remove('active');
+}
+
+scriptBtn.addEventListener('click', () => {
+  scriptOverlay.classList.contains('open') ? closeScript() : openScript();
+});
+scriptClose.addEventListener('click', closeScript);
+scriptOverlay.addEventListener('click', e => { if (e.target === scriptOverlay) closeScript(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeScript(); });
+
+/* ── Theme ───────────────────────────────────────────────────────────────── */
+const themeBtn = document.getElementById('theme-btn');
+const stored   = localStorage.getItem('theme');
+if (stored) document.documentElement.setAttribute('data-theme', stored);
+
+themeBtn.addEventListener('click', () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+});
+
+/* ── Init ────────────────────────────────────────────────────────────────── */
+btnPrev.disabled = true;
+</script>
+</body>
+</html>
