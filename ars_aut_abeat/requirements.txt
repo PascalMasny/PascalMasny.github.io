@@ -1,0 +1,10 @@
+streamlit>=1.32
+streamlit-webrtc>=0.47
+streamlit-autorefresh>=1.0
+mediapipe>=0.10
+opencv-python-headless>=4.9
+Pillow>=10
+sqlalchemy>=2.0
+numpy>=1.26
+av>=11.0
+matplotlib>=3.8

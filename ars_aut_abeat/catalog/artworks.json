@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "imago_vera",
+    "title": "Imago Vera",
+    "artist": "—",
+    "year": "Photograph",
+    "image_path": "catalog/artworks/imago_vera.jpg",
+    "description": "A true image. Flesh, shadow, and breath."
+  },
+  {
+    "slug": "icon_picta",
+    "title": "Icon Picta",
+    "artist": "—",
+    "year": "Painted Portrait",
+    "image_path": "catalog/artworks/icon_picta.jpg",
+    "description": "Brushstrokes declare themselves. No one mistakes it for a person."
+  },
+  {
+    "slug": "simulacrum_marmoreum",
+    "title": "Simulacrum Marmoreum",
+    "artist": "—",
+    "year": "Marble Bust",
+    "image_path": "catalog/artworks/simulacrum_marmoreum.jpg",
+    "description": "Stone, obviously stone. Yet the eyes follow."
+  },
+  {
+    "slug": "effigies_cerea",
+    "title": "Effigies Cerea",
+    "artist": "—",
+    "year": "Wax Figure",
+    "image_path": "catalog/artworks/effigies_cerea.jpg",
+    "description": "Every pore rendered. Every hair implanted. Still — wax."
+  },
+  {
+    "slug": "vultus_syntheticus",
+    "title": "Vultus Syntheticus",
+    "artist": "—",
+    "year": "Synthesized Portrait",
+    "image_path": "catalog/artworks/vultus_syntheticus.jpg",
+    "description": "A face that never breathed. Generated in seconds."
+  },
+  {
+    "slug": "automaton",
+    "title": "Automaton",
+    "artist": "—",
+    "year": "Animatronic",
+    "image_path": "catalog/artworks/automaton.jpg",
+    "description": "Motors behind the smile. The jaw moves when you move."
+  }
+]
