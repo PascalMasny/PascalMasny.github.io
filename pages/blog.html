@@ -73,7 +73,7 @@
       <button class="tb-btn pv-close" aria-label="close">&#x2715;</button>
     </div>
     <div class="pv-body">
-      <div class="pv-scroll" id="pv-scroll"></div>
+      <div class="pv-stage" id="pv-stage"><canvas id="pv-canvas"></canvas></div>
       <button class="pv-nav pv-prev" id="pv-prev" aria-label="previous page">&#x2039;</button>
       <button class="pv-nav pv-next" id="pv-next" aria-label="next page">&#x203a;</button>
     </div>
@@ -180,29 +180,45 @@ function renderPdfs() {
     </a>`).join('');
 }
 
-// ── PDF viewer (PDF.js) ─────────────────────────────────────────────────────
+// ── PDF viewer (PDF.js, e-reader / paged) ───────────────────────────────────
 const pv       = document.getElementById('pdfviewer');
-const pvScroll = document.getElementById('pv-scroll');
+const pvStage  = document.getElementById('pv-stage');
+const pvCanvas = document.getElementById('pv-canvas');
 const pvCount  = document.getElementById('pv-count');
+const pvPrev   = document.getElementById('pv-prev');
+const pvNext   = document.getElementById('pv-next');
 if (window.pdfjsLib) {
   pdfjsLib.GlobalWorkerOptions.workerSrc =
     'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 }
-let pvDoc = null, pvNum = 0, pvCur = 1, pvObserver = null, pvToken = 0;
+let pvDoc = null, pvNum = 0, pvCur = 1, pvToken = 0, pvTask = null;
 
 function setCount(n) { pvCur = n; pvCount.textContent = pvNum ? `${n} / ${pvNum}` : ''; }
+function updateNav() {
+  pvPrev.classList.toggle('disabled', pvCur <= 1);
+  pvNext.classList.toggle('disabled', pvCur >= pvNum);
+}
 
-async function renderPage(slot) {
-  if (slot.dataset.rendered || !pvDoc) return;
-  slot.dataset.rendered = '1';
-  const page  = await pvDoc.getPage(+slot.dataset.page);
-  const base  = page.getViewport({ scale: 1 });
-  const scale = Math.min(2, ((pvScroll.clientWidth - 32) || 800) / base.width);
-  const vp    = page.getViewport({ scale: scale * Math.min(2, window.devicePixelRatio || 1) });
-  const canvas = document.createElement('canvas');
-  canvas.width = vp.width; canvas.height = vp.height;
-  slot.innerHTML = ''; slot.appendChild(canvas);
-  await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+// Render one page, scaled to fit the stage (e-reader: one page at a time).
+async function showPage(n) {
+  if (!pvDoc || !pvNum) return;
+  n = Math.max(1, Math.min(pvNum, n));
+  setCount(n); updateNav();
+  const token = pvToken;
+  const page  = await pvDoc.getPage(n);
+  if (token !== pvToken) return;
+  const base   = page.getViewport({ scale: 1 });
+  const availW = Math.max(120, pvStage.clientWidth  - 24);
+  const availH = Math.max(120, pvStage.clientHeight - 24);
+  const fit    = Math.min(availW / base.width, availH / base.height);
+  const dpr    = Math.min(2, window.devicePixelRatio || 1);
+  const vp     = page.getViewport({ scale: fit * dpr });
+  pvCanvas.width = vp.width; pvCanvas.height = vp.height;
+  pvCanvas.style.width  = (vp.width  / dpr) + 'px';
+  pvCanvas.style.height = (vp.height / dpr) + 'px';
+  if (pvTask) { try { pvTask.cancel(); } catch (_) {} }
+  pvTask = page.render({ canvasContext: pvCanvas.getContext('2d'), viewport: vp });
+  try { await pvTask.promise; } catch (_) { /* superseded by a newer page */ }
 }
 
 async function openPdf(i) {
@@ -215,37 +231,18 @@ async function openPdf(i) {
   document.body.style.overflow = 'hidden';
 
   const token = ++pvToken;                 // guards against fast open/close races
-  pvScroll.innerHTML = `<div class="pv-loading">${STR[lang].pdfLoading}</div>`;
-  setCount(0);
+  pvStage.classList.add('loading');
+  setCount(0); updateNav();
 
-  if (!window.pdfjsLib) {                   // CDN blocked → graceful fallback
-    pvScroll.innerHTML = `<div class="pv-loading">${STR[lang]['pdf.hint']}</div>`;
-    return;
-  }
+  if (!window.pdfjsLib) { pvStage.classList.remove('loading'); return; }
   try {
     const doc = await pdfjsLib.getDocument(url).promise;
     if (token !== pvToken) { doc.destroy(); return; }
     pvDoc = doc; pvNum = doc.numPages;
-    const first = await doc.getPage(1);
-    const r = first.getViewport({ scale: 1 });
-    pvScroll.innerHTML = '';
-    for (let n = 1; n <= pvNum; n++) {
-      const slot = document.createElement('div');
-      slot.className = 'pv-page';
-      slot.dataset.page = n;
-      slot.style.aspectRatio = (r.width / r.height).toFixed(4);
-      pvScroll.appendChild(slot);
-    }
-    if (pvObserver) pvObserver.disconnect();
-    pvObserver = new IntersectionObserver(ents => {
-      ents.forEach(en => { if (en.isIntersecting) renderPage(en.target); });
-    }, { root: pvScroll, rootMargin: '300px 0px' });
-    [...pvScroll.children].forEach(s => pvObserver.observe(s));
-    pvScroll.scrollTop = 0;
-    setCount(1);
+    pvStage.classList.remove('loading');
+    await showPage(1);
   } catch (_) {
-    if (token === pvToken)
-      pvScroll.innerHTML = `<div class="pv-loading">${STR[lang]['pdf.hint']}</div>`;
+    if (token === pvToken) pvStage.classList.remove('loading');
   }
 }
 
@@ -253,27 +250,21 @@ function closePdf() {
   pv.classList.remove('open');
   document.body.style.overflow = '';
   pvToken++;
-  if (pvObserver) { pvObserver.disconnect(); pvObserver = null; }
+  if (pvTask) { try { pvTask.cancel(); } catch (_) {} pvTask = null; }
   if (pvDoc) { pvDoc.destroy(); pvDoc = null; }
-  pvNum = 0; pvScroll.innerHTML = ''; setCount(0);
+  pvNum = 0; setCount(0);
+  const ctx = pvCanvas.getContext('2d');
+  if (ctx) ctx.clearRect(0, 0, pvCanvas.width, pvCanvas.height);
 }
 
-function gotoPage(n) {
-  n = Math.max(1, Math.min(pvNum, n));
-  const slot = pvScroll.querySelector(`.pv-page[data-page="${n}"]`);
-  if (slot) slot.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  setCount(n);
-}
+function gotoPage(n) { showPage(n); }
 
-// Update the page counter from whatever is centered in the scroll viewport.
-pvScroll.addEventListener('scroll', () => {
-  if (!pvNum) return;
-  const mid = pvScroll.scrollTop + pvScroll.clientHeight / 2;
-  let cur = 1;
-  for (const s of pvScroll.children) {
-    if (s.offsetTop <= mid) cur = +s.dataset.page; else break;
-  }
-  if (cur !== pvCur) setCount(cur);
+// Re-fit the current page on window resize.
+let pvResizeT;
+window.addEventListener('resize', () => {
+  if (!pv.classList.contains('open') || !pvNum) return;
+  clearTimeout(pvResizeT);
+  pvResizeT = setTimeout(() => showPage(pvCur), 150);
 });
 
 document.getElementById('pdfs').addEventListener('click', e => {

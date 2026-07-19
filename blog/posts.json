@@ -1,16 +1,17 @@
 [
   {
-    "slug": "about-me",
+    "slug": "ars-aut-abeat",
     "date": "2026-07-19",
-    "cover": "img/picture.png",
-    "tags": ["about", "hallo"],
+    "cover": "img/PLEB.png",
+    "tags": ["projekt", "ki", "kunst"],
+    "pdf": "pdfs/PLEB_Consulting.pdf",
     "title": {
-      "de": "Hallo, ich bin Pascal",
-      "en": "Hi, I'm Pascal"
+      "de": "Ars Aut Abeat",
+      "en": "Ars Aut Abeat"
     },
     "excerpt": {
-      "de": "Systems Engineer, Python-Veteran und IT-Berater aus Augsburg — wer ich bin, was ich mache und wie du mich erreichst.",
-      "en": "Systems engineer, Python veteran and IT consultant from Augsburg — who I am, what I do, and how to reach me."
+      "de": "Interaktive Kunstinstallation, die das Uncanny Valley erfahrbar macht: KI-Verfremdung klassischer Werke plus Emotionserkennung in Echtzeit. Team PLEB Consulting, THA.",
+      "en": "An interactive art installation that makes the Uncanny Valley tangible: AI distortion of classical works plus real-time emotion recognition. Team PLEB Consulting, THA."
     }
   },
   {

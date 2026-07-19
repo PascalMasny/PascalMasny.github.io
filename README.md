@@ -18,9 +18,9 @@ Portfolio and landing page for Pascal Masny: Systems Engineer, Python veteran, a
 |---|---|
 | **Bilingual** | German / English toggle, persisted in `localStorage`, shared across all pages |
 | **Dark / light theme** | Full theme switch via CSS custom properties, persisted in `localStorage` |
-| **Blog** | Markdown posts rendered in the browser, one `.de.md` / `.en.md` per post |
+| **Blog** | Markdown posts rendered in the browser, one `.de.md` / `.en.md` per post; a post can embed a PDF |
 | **Photo gallery** | Grid with click-to-zoom lightbox |
-| **PDF viewer** | In-page PDF.js viewer: scroll, prev/next page arrows, page counter, keyboard nav |
+| **PDF viewer** | In-page PDF.js e-reader: one page at a time, prev/next arrows, page counter, keyboard nav, fullscreen (scrollable) and download |
 | **Dynamic stats** | Age and years of experience auto-calculated from birth date and work start date |
 | **Particle canvas** | Animated hero background |
 | **Typewriter effect** | Rotating role titles, language-aware |
@@ -88,7 +88,9 @@ The blog is fully static. No CMS, no build step: you add files, commit, and push
 
 - `~/posts`: cards linking to `post.html?slug=<slug>`, which fetches `blog/posts/<slug>.<lang>.md` and renders it with marked + DOMPurify. Each post can have a German and an English file; if only one exists, the viewer falls back to it.
 - `~/photos`: a grid from `blog/photos.json` with a click-to-zoom lightbox.
-- `~/pdfs`: cards from `blog/pdfs.json` with first-page thumbnail covers. Clicking one opens the PDF.js viewer (scroll, prev/next arrows, page counter, arrow-key navigation), with `open in tab` and `download` as fallbacks.
+- `~/pdfs`: cards from `blog/pdfs.json` with first-page thumbnail covers. Clicking one opens the PDF.js e-reader: one page at a time, fit to view, with ‹ / › arrows (and keyboard ← / →), a page counter, and `open in tab` / `download`.
+
+A post can also **embed a PDF**: add a `"pdf": "pdfs/<file>.pdf"` field to its `posts.json` entry and `post.html` renders an inline e-reader below the text, with prev/next paging, a **fullscreen** button (which switches to a full-width scrollable view) and a **download** button.
 
 Full authoring instructions (add a post, add a photo, add a PDF, generate a thumbnail) live in **[`blog/README.md`](blog/README.md)**.
 
@@ -113,7 +115,7 @@ Why the site is built the way it is:
 - **Static, no build step.** The whole site is hand-written HTML/CSS/JS served by GitHub Pages. No framework, no bundler, no CI. Publishing is `git push`. This keeps the site fast, dependency-free, and trivial to host.
 - **Content as data (JSON + Markdown).** Posts, photos, and PDFs are described in small JSON index files, with post bodies in Markdown. Adding content never touches HTML or JS. The pages render the data at runtime.
 - **Bilingual by convention.** UI strings live in a `STR` (or `T`) object keyed `de` / `en`; posts use `<slug>.de.md` / `<slug>.en.md`. The chosen language is stored in `localStorage` and shared across every page. Single-language content falls back gracefully.
-- **PDF.js instead of an `<iframe>`.** An `<iframe src="*.pdf">` renders blank in some browsers (notably mobile Safari) and gives no page controls. PDF.js renders each page to a canvas, so the viewer looks and behaves the same everywhere, with real scroll, page arrows, and a counter. Pages render lazily via IntersectionObserver so a 37-page document does not render all at once.
+- **PDF.js e-reader instead of an `<iframe>`.** An `<iframe src="*.pdf">` renders blank in some browsers (notably mobile Safari) and gives no page controls. PDF.js renders one page at a time to a canvas, scaled to fit, so the viewer looks and behaves the same everywhere: prev/next arrows, keyboard paging, a page counter, plus fullscreen (a full-width scrollable view) and download. Only the current page renders, and stale renders are cancelled when you page quickly.
 - **First-page thumbnails for PDF cards.** Covers are real first-page previews generated once with `pdftoppm` and committed as static PNGs, rather than a generic file icon.
 - **Mobile-first verification.** Every page is checked at a 375px viewport for horizontal overflow and touch-target size. The PDF viewer goes full-bleed on small screens and its controls shrink to fit one line.
 - **CDN libraries, not vendored.** marked, DOMPurify, PDF.js, and JSZip load from jsDelivr. If a CDN is ever blocked, the PDF viewer degrades to an `open in tab` / `download` link.
@@ -150,7 +152,7 @@ Stats update automatically every year, no manual edits needed.
 2. **About**: personal story, tech stack tags, personal interest tags
 3. **Services**: Python/Data, CRM/ERP, Engineering & Making
 4. **Experience**: timeline with company logos
-5. **Projects**: CleverRefill, IHK graduation project, REST API
+5. **Projects**: CleverRefill, IHK graduation project, REST API, MINTi Cube, Ars Aut Abeat (PLEB Consulting)
 6. **Skills**: categorised skill bars
 7. **Education**: THA, BOS, IHK, Berufsschule, Realschule
 8. **Certifications & Awards**

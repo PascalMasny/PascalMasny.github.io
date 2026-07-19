@@ -26,12 +26,14 @@
   <div class="tags" id="post-tags" style="margin-top:0.7rem;"></div>
   <img class="post-cover" id="post-cover" src="" alt="" hidden>
   <div class="prose" id="post-body"></div>
+  <div class="post-pdf" id="post-pdf"></div>
   <div class="state" id="post-state"></div>
 </article>
 
 <!-- markdown rendering + sanitising (CDN, no build step) -->
 <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 <script>
 const STR = {
   de: { back: 'Blog', notFound: '# Beitrag nicht gefunden', loadErr: '# konnte Beitrag nicht laden' },
@@ -44,6 +46,92 @@ let theme = localStorage.getItem('theme') || 'dark';
 
 const slug = new URLSearchParams(location.search).get('slug');
 let META = null;
+let pdfRendered = false;
+
+if (window.pdfjsLib) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+}
+
+// Render a post's PDF (META.pdf) inline as an e-reader: one page + prev/next.
+async function renderInlinePdf() {
+  const wrap = document.getElementById('post-pdf');
+  if (pdfRendered) return;
+  if (!META || !META.pdf) { wrap.innerHTML = ''; return; }
+  const fallback = `<a class="pdf-fallback" href="${asset(META.pdf)}" target="_blank" rel="noopener">PDF öffnen ↗</a>`;
+  if (!window.pdfjsLib) { wrap.innerHTML = fallback; return; }
+  pdfRendered = true;
+  const fsLabel = lang === 'de' ? 'Vollbild' : 'Fullscreen';
+  wrap.innerHTML =
+    `<div class="reader">
+       <div class="reader-top">
+         <div class="reader-spacer"></div>
+         <button class="reader-btn" id="reader-fs">&#x26F6; <span id="reader-fs-label">${fsLabel}</span></button>
+         <a class="reader-btn" id="reader-dl" href="${asset(META.pdf)}" download>&#x2193; Download</a>
+       </div>
+       <div class="reader-stage"><canvas id="reader-canvas"></canvas></div>
+       <div class="reader-bar">
+         <button class="reader-nav" id="reader-prev" aria-label="previous page">&#x2039;</button>
+         <span class="reader-count" id="reader-count"></span>
+         <button class="reader-nav" id="reader-next" aria-label="next page">&#x203a;</button>
+       </div>
+     </div>`;
+  const reader = wrap.querySelector('.reader');
+  const stage  = wrap.querySelector('.reader-stage');
+  const canvas = document.getElementById('reader-canvas');
+  const count  = document.getElementById('reader-count');
+  const prev   = document.getElementById('reader-prev');
+  const next   = document.getElementById('reader-next');
+  const fsBtn  = document.getElementById('reader-fs');
+  let doc, num = 0, cur = 1, task = null;
+
+  const isFs = () => document.fullscreenElement === reader;
+
+  async function draw(n) {
+    n = Math.max(1, Math.min(num, n)); cur = n;
+    count.textContent = `${n} / ${num}`;
+    prev.classList.toggle('disabled', n <= 1);
+    next.classList.toggle('disabled', n >= num);
+    const page   = await doc.getPage(n);
+    const base   = page.getViewport({ scale: 1 });
+    const availW = Math.max(120, stage.clientWidth  - 16);
+    const availH = Math.max(120, stage.clientHeight - 16);
+    // fullscreen fits to width so the page is large and vertically scrollable;
+    // inline fits the whole page in view (e-reader).
+    const fit    = isFs() ? (availW / base.width)
+                          : Math.min(availW / base.width, availH / base.height);
+    const dpr    = Math.min(2, window.devicePixelRatio || 1);
+    const vp     = page.getViewport({ scale: fit * dpr });
+    canvas.width = vp.width; canvas.height = vp.height;
+    canvas.style.width  = (vp.width  / dpr) + 'px';
+    canvas.style.height = (vp.height / dpr) + 'px';
+    if (task) { try { task.cancel(); } catch (_) {} }
+    task = page.render({ canvasContext: canvas.getContext('2d'), viewport: vp });
+    try { await task.promise; } catch (_) { /* superseded */ }
+  }
+
+  fsBtn.addEventListener('click', () => {
+    if (!document.fullscreenElement) reader.requestFullscreen?.();
+    else document.exitFullscreen?.();
+  });
+  document.addEventListener('fullscreenchange', () => {
+    stage.scrollTop = 0;
+    draw(cur);
+  });
+
+  try {
+    doc = await pdfjsLib.getDocument(asset(META.pdf)).promise;
+    num = doc.numPages;
+    prev.addEventListener('click', () => draw(cur - 1));
+    next.addEventListener('click', () => draw(cur + 1));
+    let rt;
+    window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => draw(cur), 150); });
+    await draw(1);
+  } catch (_) {
+    pdfRendered = false;
+    wrap.innerHTML = fallback;
+  }
+}
 
 const asset = p => '../' + p.replace(/^\/+/, '');
 function fmtDate(iso) {
@@ -91,6 +179,7 @@ async function renderPost() {
         const md = await res.text();
         body.innerHTML = DOMPurify.sanitize(marked.parse(md));
         state.textContent = '';
+        renderInlinePdf();
         return;
       }
     } catch (_) { /* try next */ }
