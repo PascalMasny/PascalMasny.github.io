@@ -1,4 +1,4 @@
-# Blog — how to publish
+# Blog: how to publish
 
 The blog is fully static. No build step, no CMS. To publish you add files and
 commit. GitHub Pages serves them; the pages fetch the `.json`/`.md` at runtime.
