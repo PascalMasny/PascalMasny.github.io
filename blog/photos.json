@@ -1,0 +1,20 @@
+[
+  {
+    "src": "img/CleverRefill.png",
+    "date": "2026-06-10",
+    "tags": ["projekt"],
+    "caption": { "de": "Clever Refill — Projektarbeit", "en": "Clever Refill — project work" }
+  },
+  {
+    "src": "img/IHK_Arbeit.png",
+    "date": "2026-05-20",
+    "tags": ["ihk"],
+    "caption": { "de": "IHK Projektdokumentation", "en": "IHK project documentation" }
+  },
+  {
+    "src": "img/CV.png",
+    "date": "2026-04-15",
+    "tags": ["design"],
+    "caption": { "de": "Lebenslauf-Layout", "en": "CV layout" }
+  }
+]

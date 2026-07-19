@@ -1,0 +1,16 @@
+[
+  {
+    "slug": "first-post",
+    "date": "2026-06-13",
+    "cover": "img/REST.png",
+    "tags": ["meta", "blog"],
+    "title": {
+      "de": "Willkommen auf meinem Blog",
+      "en": "Welcome to my blog"
+    },
+    "excerpt": {
+      "de": "Hier teile ich meine Projekte, Gedanken zur Softwareentwicklung und ein paar coole Fotos.",
+      "en": "Here I share my projects, thoughts on software development, and a few cool photos."
+    }
+  }
+]

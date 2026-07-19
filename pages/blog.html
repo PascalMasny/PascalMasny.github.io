@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog | Pascal Masny</title>
+  <meta name="description" content="Blog & Fotos von Pascal Masny — Projekte, Gedanken und Bilder.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/blog.css">
+</head>
+<body>
+
+<!-- ── Top bar ───────────────────────────────────────────────────────────── -->
+<div id="topbar">
+  <a class="tb-back" href="../index.html">&larr; <span data-key="back">Portfolio</span></a>
+  <div class="tb-brand"><span class="dim">pascal@blog:</span>~<span class="cur">$</span></div>
+  <div class="tb-spacer"></div>
+  <button class="tb-btn" id="theme-btn">[th]</button>
+  <button class="tb-btn" id="lang-btn">EN</button>
+</div>
+
+<div class="wrap">
+  <div class="page-head">
+    <h1><span class="accent">~/</span><span data-key="head.title">blog</span></h1>
+    <p data-key="head.sub">Projekte, Gedanken & Fotos.</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="posts" data-key="tab.posts">~/posts</button>
+    <button class="tab" data-tab="photos" data-key="tab.photos">~/photos</button>
+  </div>
+
+  <section class="panel active" id="panel-posts">
+    <div class="cards" id="cards"></div>
+    <div class="state" id="posts-state"></div>
+  </section>
+
+  <section class="panel" id="panel-photos">
+    <div class="photos" id="photos"></div>
+    <div class="state" id="photos-state"></div>
+  </section>
+</div>
+
+<!-- ── Lightbox ──────────────────────────────────────────────────────────── -->
+<div id="lightbox">
+  <button class="lb-close" aria-label="close">&#x2715;</button>
+  <div>
+    <img id="lb-img" src="" alt="">
+    <div class="lb-cap" id="lb-cap"></div>
+  </div>
+</div>
+
+<script>
+// ── Language + theme (shared localStorage keys with the homepage) ───────────
+const STR = {
+  de: { back: 'Portfolio', 'head.title': 'blog', 'head.sub': 'Projekte, Gedanken & Fotos.',
+        'tab.posts': '~/posts', 'tab.photos': '~/photos',
+        emptyPosts: '# noch keine Beiträge', emptyPhotos: '# noch keine Fotos',
+        loadErr: '# konnte Inhalte nicht laden' },
+  en: { back: 'Portfolio', 'head.title': 'blog', 'head.sub': 'Projects, thoughts & photos.',
+        'tab.posts': '~/posts', 'tab.photos': '~/photos',
+        emptyPosts: '# no posts yet', emptyPhotos: '# no photos yet',
+        loadErr: '# failed to load content' }
+};
+
+let lang  = localStorage.getItem('lang')
+            || ((navigator.language || 'de').toLowerCase().startsWith('de') ? 'de' : 'en');
+let theme = localStorage.getItem('theme') || 'dark';
+
+let POSTS = [];
+let PHOTOS = [];
+
+function applyTheme(t) {
+  theme = t; localStorage.setItem('theme', t);
+  document.documentElement.setAttribute('data-theme', t);
+}
+function applyLang(l) {
+  lang = l; localStorage.setItem('lang', l);
+  document.documentElement.lang = l;
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const v = STR[l][el.dataset.key]; if (v != null) el.textContent = v;
+  });
+  document.getElementById('lang-btn').textContent = l === 'de' ? 'EN' : 'DE';
+  renderPosts(); renderPhotos();
+}
+
+function fmtDate(iso) {
+  const d = new Date(iso);
+  return isNaN(d) ? iso : d.toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB',
+    { year: 'numeric', month: 'short', day: 'numeric' });
+}
+// cover/src in the JSON are paths from the site root → resolve from /pages/
+const asset = p => '../' + p.replace(/^\/+/, '');
+
+// ── Render ──────────────────────────────────────────────────────────────────
+function renderPosts() {
+  const wrap = document.getElementById('cards');
+  const state = document.getElementById('posts-state');
+  if (!POSTS.length) { wrap.innerHTML = ''; state.textContent = STR[lang].emptyPosts; return; }
+  state.textContent = '';
+  wrap.innerHTML = POSTS.map(p => `
+    <a class="card" href="post.html?slug=${encodeURIComponent(p.slug)}">
+      ${p.cover ? `<div class="card-cover"><img src="${asset(p.cover)}" alt="" loading="lazy"></div>` : ''}
+      <div class="card-body">
+        <div class="card-date">${fmtDate(p.date)}</div>
+        <div class="card-title">${p.title[lang] || p.title.de || ''}</div>
+        <div class="card-excerpt">${p.excerpt?.[lang] || p.excerpt?.de || ''}</div>
+        ${(p.tags || []).length ? `<div class="tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>` : ''}
+      </div>
+    </a>`).join('');
+}
+
+function renderPhotos() {
+  const wrap = document.getElementById('photos');
+  const state = document.getElementById('photos-state');
+  if (!PHOTOS.length) { wrap.innerHTML = ''; state.textContent = STR[lang].emptyPhotos; return; }
+  state.textContent = '';
+  wrap.innerHTML = PHOTOS.map((ph, i) => `
+    <div class="photo" data-i="${i}">
+      <img src="${asset(ph.src)}" alt="${(ph.caption?.[lang] || '').replace(/"/g, '&quot;')}" loading="lazy">
+      ${ph.caption?.[lang] ? `<div class="photo-cap">${ph.caption[lang]}</div>` : ''}
+    </div>`).join('');
+}
+
+// ── Lightbox ──────────────────────────────────────────────────────────────
+const lb = document.getElementById('lightbox');
+function openLightbox(i) {
+  const ph = PHOTOS[i]; if (!ph) return;
+  document.getElementById('lb-img').src = asset(ph.src);
+  document.getElementById('lb-cap').textContent = ph.caption?.[lang] || '';
+  lb.classList.add('open');
+}
+lb.addEventListener('click', () => lb.classList.remove('open'));
+document.getElementById('photos').addEventListener('click', e => {
+  const el = e.target.closest('.photo'); if (el) openLightbox(+el.dataset.i);
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.remove('open'); });
+
+// ── Tabs ────────────────────────────────────────────────────────────────────
+document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t === tab));
+  document.querySelectorAll('.panel').forEach(p =>
+    p.classList.toggle('active', p.id === 'panel-' + tab.dataset.tab));
+}));
+
+// ── Controls ─────────────────────────────────────────────────────────────────
+document.getElementById('theme-btn').addEventListener('click', () => applyTheme(theme === 'dark' ? 'light' : 'dark'));
+document.getElementById('lang-btn').addEventListener('click', () => applyLang(lang === 'de' ? 'en' : 'de'));
+
+// ── Load data ─────────────────────────────────────────────────────────────────
+applyTheme(theme);
+applyLang(lang);
+
+Promise.all([
+  fetch('../blog/posts.json').then(r => r.ok ? r.json() : []).catch(() => null),
+  fetch('../blog/photos.json').then(r => r.ok ? r.json() : []).catch(() => null)
+]).then(([posts, photos]) => {
+  if (posts === null || photos === null) {
+    document.getElementById('posts-state').textContent = STR[lang].loadErr;
+    return;
+  }
+  POSTS  = (posts  || []).sort((a, b) => new Date(b.date) - new Date(a.date));
+  PHOTOS = (photos || []).sort((a, b) => new Date(b.date) - new Date(a.date));
+  renderPosts(); renderPhotos();
+});
+</script>
+</body>
+</html>

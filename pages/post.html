@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beitrag | Pascal Masny</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/blog.css">
+</head>
+<body>
+
+<div id="topbar">
+  <a class="tb-back" href="blog.html">&larr; <span data-key="back">Blog</span></a>
+  <div class="tb-brand"><span class="dim">pascal@blog:</span>~/post<span class="cur">$</span></div>
+  <div class="tb-spacer"></div>
+  <button class="tb-btn" id="theme-btn">[th]</button>
+  <button class="tb-btn" id="lang-btn">EN</button>
+</div>
+
+<article class="post-wrap">
+  <div class="post-meta" id="post-meta"></div>
+  <h1 class="page-head" id="post-title" style="margin-bottom:0;"></h1>
+  <div class="tags" id="post-tags" style="margin-top:0.7rem;"></div>
+  <img class="post-cover" id="post-cover" src="" alt="" hidden>
+  <div class="prose" id="post-body"></div>
+  <div class="state" id="post-state"></div>
+</article>
+
+<!-- markdown rendering + sanitising (CDN, no build step) -->
+<script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script>
+const STR = {
+  de: { back: 'Blog', notFound: '# Beitrag nicht gefunden', loadErr: '# konnte Beitrag nicht laden' },
+  en: { back: 'Blog', notFound: '# post not found',          loadErr: '# failed to load post' }
+};
+
+let lang  = localStorage.getItem('lang')
+            || ((navigator.language || 'de').toLowerCase().startsWith('de') ? 'de' : 'en');
+let theme = localStorage.getItem('theme') || 'dark';
+
+const slug = new URLSearchParams(location.search).get('slug');
+let META = null;
+
+const asset = p => '../' + p.replace(/^\/+/, '');
+function fmtDate(iso) {
+  const d = new Date(iso);
+  return isNaN(d) ? iso : d.toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB',
+    { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+function applyTheme(t) {
+  theme = t; localStorage.setItem('theme', t);
+  document.documentElement.setAttribute('data-theme', t);
+}
+
+async function applyLang(l) {
+  lang = l; localStorage.setItem('lang', l);
+  document.documentElement.lang = l;
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const v = STR[l][el.dataset.key]; if (v != null) el.textContent = v;
+  });
+  document.getElementById('lang-btn').textContent = l === 'de' ? 'EN' : 'DE';
+  await renderPost();
+}
+
+async function renderPost() {
+  const state = document.getElementById('post-state');
+  const body  = document.getElementById('post-body');
+  if (!META) { state.textContent = STR[lang].notFound; return; }
+
+  document.getElementById('post-meta').textContent = fmtDate(META.date);
+  document.getElementById('post-title').textContent = META.title[lang] || META.title.de || '';
+  document.title = (META.title[lang] || META.title.de || 'Beitrag') + ' | Pascal Masny';
+
+  const cover = document.getElementById('post-cover');
+  if (META.cover) { cover.src = asset(META.cover); cover.hidden = false; } else { cover.hidden = true; }
+
+  const tags = document.getElementById('post-tags');
+  tags.innerHTML = (META.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+
+  // try requested language, fall back to the other one
+  const tryLangs = [lang, lang === 'de' ? 'en' : 'de'];
+  for (const L of tryLangs) {
+    try {
+      const res = await fetch(`../blog/posts/${slug}.${L}.md`);
+      if (res.ok) {
+        const md = await res.text();
+        body.innerHTML = DOMPurify.sanitize(marked.parse(md));
+        state.textContent = '';
+        return;
+      }
+    } catch (_) { /* try next */ }
+  }
+  body.innerHTML = '';
+  state.textContent = STR[lang].loadErr;
+}
+
+document.getElementById('theme-btn').addEventListener('click', () => applyTheme(theme === 'dark' ? 'light' : 'dark'));
+document.getElementById('lang-btn').addEventListener('click', () => applyLang(lang === 'de' ? 'en' : 'de'));
+
+applyTheme(theme);
+document.documentElement.lang = lang;
+document.getElementById('lang-btn').textContent = lang === 'de' ? 'EN' : 'DE';
+
+fetch('../blog/posts.json')
+  .then(r => r.ok ? r.json() : [])
+  .then(posts => { META = (posts || []).find(p => p.slug === slug) || null; return renderPost(); })
+  .catch(() => { document.getElementById('post-state').textContent = STR[lang].loadErr; });
+</script>
+</body>
+</html>

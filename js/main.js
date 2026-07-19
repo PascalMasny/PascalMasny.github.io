@@ -21,7 +21,7 @@ const T = {
   de: {
     'nav.about': '~/about', 'nav.projects': '~/projects',
     'nav.skills': '~/skills', 'nav.services': '~/services',
-    'nav.personal': '~/personal', 'nav.contact': '~/contact', 'nav.cv': 'cv.html',
+    'nav.personal': '~/personal', 'nav.contact': '~/contact', 'nav.blog': '~/blog', 'nav.cv': 'cv.html',
 
     'hero.greeting': '$ whoami',
     'hero.badge':    '5+ Jahre Berufserfahrung \u2014 angefangen mit 16',
@@ -119,7 +119,7 @@ const T = {
   en: {
     'nav.about': '~/about', 'nav.projects': '~/projects',
     'nav.skills': '~/skills', 'nav.services': '~/services',
-    'nav.personal': '~/personal', 'nav.contact': '~/contact', 'nav.cv': 'cv.html',
+    'nav.personal': '~/personal', 'nav.contact': '~/contact', 'nav.blog': '~/blog', 'nav.cv': 'cv.html',
 
     'hero.greeting': '$ whoami',
     'hero.badge':    '5+ years industry experience \u2014 started at 16',
