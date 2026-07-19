@@ -1,5 +1,19 @@
 [
   {
+    "slug": "about-me",
+    "date": "2026-07-19",
+    "cover": "img/picture.png",
+    "tags": ["about", "hallo"],
+    "title": {
+      "de": "Hallo, ich bin Pascal",
+      "en": "Hi, I'm Pascal"
+    },
+    "excerpt": {
+      "de": "Systems Engineer, Python-Veteran und IT-Berater aus Augsburg — wer ich bin, was ich mache und wie du mich erreichst.",
+      "en": "Systems engineer, Python veteran and IT consultant from Augsburg — who I am, what I do, and how to reach me."
+    }
+  },
+  {
     "slug": "first-post",
     "date": "2026-06-13",
     "cover": "img/REST.png",
