@@ -63,6 +63,36 @@ Inline images: `![alt](../blog/img/screenshot.jpg)` (path is relative to `/pages
 
 ---
 
+## Add a PDF
+
+The `~/pdfs` tab lists project PDFs and opens them in an in-page viewer.
+
+1. Drop the PDF in the site-root `pdfs/` folder, e.g. `pdfs/my-doc.pdf`.
+2. Generate a first-page thumbnail (needs `poppler`'s `pdftoppm`):
+
+   ```bash
+   pdftoppm -png -f 1 -l 1 -scale-to 640 "pdfs/my-doc.pdf" blog/img/pdf/my-doc
+   mv blog/img/pdf/my-doc-1.png blog/img/pdf/my-doc.png
+   ```
+3. Add **one entry** to `blog/pdfs.json`:
+
+   ```json
+   {
+     "file": "pdfs/my-doc.pdf",
+     "date": "2026-07-19",
+     "pages": 12,
+     "cover": "blog/img/pdf/my-doc.png",
+     "tags": ["projekt"],
+     "title": { "de": "Mein Dokument", "en": "My document" },
+     "desc":  { "de": "Kurzbeschreibung.", "en": "Short summary." }
+   }
+   ```
+
+   `pages` and `cover` are optional (a card renders fine without them).
+4. Commit + push.
+
+---
+
 ## Test locally
 
 `fetch()` of local files needs a server (not `file://`):

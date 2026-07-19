@@ -127,6 +127,49 @@ a { color: inherit; text-decoration: none; }
 #lightbox .lb-cap { color: #ddd; font-size: 0.85rem; margin-top: 1rem; text-align: center; }
 #lightbox .lb-close { position: absolute; top: 1.2rem; right: 1.4rem; font-size: 1.4rem; color: #fff; background: none; border: none; cursor: pointer; }
 
+/* ── PDF cards ────────────────────────────────────────────────────────────── */
+/* PDF covers are first-page previews — anchor to the top so the header shows. */
+.card-cover-pdf { aspect-ratio: 4 / 3; background: var(--bg-alt); }
+.card-cover-pdf img { object-fit: cover; object-position: top center; }
+
+/* ── PDF viewer ───────────────────────────────────────────────────────────── */
+#pdfviewer {
+  position: fixed; inset: 0; z-index: 250;
+  display: none; place-items: center;
+  background: rgba(0,0,0,0.9);
+  padding: 1.5rem;
+}
+#pdfviewer.open { display: grid; }
+.pv-panel {
+  display: flex; flex-direction: column;
+  width: 100%; max-width: 1100px; height: 92vh;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.pv-bar {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  background: var(--bg-alt);
+  border-bottom: 1px solid var(--border);
+}
+.pv-title {
+  font-size: 0.85rem; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pv-spacer { flex: 1; }
+.pv-bar .tb-btn { text-decoration: none; }
+.pv-close { line-height: 1; }
+.pv-body { position: relative; flex: 1; background: #525659; }
+#pv-frame { width: 100%; height: 100%; border: 0; display: block; }
+.pv-hint {
+  position: absolute; inset: auto 0 0 0; z-index: -1;
+  padding: 1.2rem; text-align: center;
+  font-size: 0.8rem; color: var(--text-muted);
+}
+
 /* ── Empty / loading state ────────────────────────────────────────────────── */
 .state { color: var(--text-muted); font-size: 0.85rem; padding: 2rem 0; }
 
@@ -160,4 +203,8 @@ a { color: inherit; text-decoration: none; }
   .photos { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
   .tb-brand { font-size: 0.75rem; }
   .page-head h1 { font-size: 1.5rem; }
+  #pdfviewer { padding: 0; }
+  .pv-panel { height: 100%; max-width: none; border: 0; border-radius: 0; }
+  .pv-title { font-size: 0.78rem; }
+  .pv-bar .tb-btn { padding: 0.3rem 0.5rem; font-size: 0.72rem; }
 }

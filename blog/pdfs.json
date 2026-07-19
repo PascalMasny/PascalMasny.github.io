@@ -1,0 +1,62 @@
+[
+  {
+    "file": "pdfs/IHK_Projektdokumentation_Pascal_Masny.pdf",
+    "date": "2026-03-23",
+    "pages": 37,
+    "cover": "blog/img/pdf/ihk.png",
+    "tags": ["ihk", "doku"],
+    "title": { "de": "IHK Projektdokumentation", "en": "IHK Project Documentation" },
+    "desc": {
+      "de": "Abschlussdokumentation meines IHK-Abschlussprojekts.",
+      "en": "Final documentation of my IHK graduation project."
+    }
+  },
+  {
+    "file": "pdfs/REST_Projektdokumentation_Pasca_Masny.pdf",
+    "date": "2026-03-23",
+    "pages": 15,
+    "cover": "blog/img/pdf/rest.png",
+    "tags": ["rest", "api", "doku"],
+    "title": { "de": "REST Projektdokumentation", "en": "REST Project Documentation" },
+    "desc": {
+      "de": "Dokumentation zur Umsetzung einer REST-Schnittstelle.",
+      "en": "Documentation of a REST API implementation."
+    }
+  },
+  {
+    "file": "pdfs/Clever_Refill_Präsentatio_Pascal_Masny.pdf",
+    "date": "2026-03-18",
+    "pages": 11,
+    "cover": "blog/img/pdf/cleverrefill.png",
+    "tags": ["projekt", "präsentation"],
+    "title": { "de": "Clever Refill — Präsentation", "en": "Clever Refill — Presentation" },
+    "desc": {
+      "de": "Projektpräsentation zu Clever Refill.",
+      "en": "Project presentation for Clever Refill."
+    }
+  },
+  {
+    "file": "pdfs/4CoreDynamics.pdf",
+    "date": "2026-03-22",
+    "pages": 17,
+    "cover": "blog/img/pdf/minti.png",
+    "tags": ["projekt", "doku"],
+    "title": { "de": "MINTi Cube — Dokumentation", "en": "MINTi Cube — Documentation" },
+    "desc": {
+      "de": "Dokumentation zum MINTi-Cube-Projekt (4CoreDynamics).",
+      "en": "Documentation of the MINTi Cube project (4CoreDynamics)."
+    }
+  },
+  {
+    "file": "pdfs/CV_Pascal_Masny.pdf",
+    "date": "2026-03-18",
+    "pages": 1,
+    "cover": "blog/img/pdf/cv.png",
+    "tags": ["cv"],
+    "title": { "de": "Lebenslauf", "en": "Curriculum Vitae" },
+    "desc": {
+      "de": "Mein aktueller Lebenslauf als PDF.",
+      "en": "My current CV as a PDF."
+    }
+  }
+]
