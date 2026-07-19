@@ -128,7 +128,7 @@ a { color: inherit; text-decoration: none; }
 #lightbox .lb-close { position: absolute; top: 1.2rem; right: 1.4rem; font-size: 1.4rem; color: #fff; background: none; border: none; cursor: pointer; }
 
 /* ── PDF cards ────────────────────────────────────────────────────────────── */
-/* PDF covers are first-page previews — anchor to the top so the header shows. */
+/* PDF covers are first-page previews, anchored to the top so the header shows. */
 .card-cover-pdf { aspect-ratio: 4 / 3; background: var(--bg-alt); }
 .card-cover-pdf img { object-fit: cover; object-position: top center; }
 
@@ -158,17 +158,44 @@ a { color: inherit; text-decoration: none; }
 .pv-title {
   font-size: 0.85rem; color: var(--text);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 48%;
 }
+.pv-count { font-size: 0.75rem; color: var(--text-muted); white-space: nowrap; }
 .pv-spacer { flex: 1; }
 .pv-bar .tb-btn { text-decoration: none; }
 .pv-close { line-height: 1; }
-.pv-body { position: relative; flex: 1; background: #525659; }
-#pv-frame { width: 100%; height: 100%; border: 0; display: block; }
-.pv-hint {
-  position: absolute; inset: auto 0 0 0; z-index: -1;
-  padding: 1.2rem; text-align: center;
-  font-size: 0.8rem; color: var(--text-muted);
+
+.pv-body { position: relative; flex: 1; min-height: 0; background: #3a3d42; }
+.pv-scroll {
+  position: absolute; inset: 0;
+  overflow-y: auto; overflow-x: hidden;
+  padding: 1rem;
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  scroll-behavior: smooth;
 }
+.pv-page {
+  width: 100%; max-width: 900px;
+  background: #fff;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  border-radius: 2px;
+}
+.pv-page canvas { display: block; width: 100%; height: auto; border-radius: 2px; }
+.pv-loading { color: #cfd3d8; font-size: 0.85rem; padding: 3rem 1rem; text-align: center; }
+
+/* Floating prev/next page arrows */
+.pv-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px; border-radius: 50%;
+  display: grid; place-items: center;
+  font-size: 1.5rem; line-height: 1;
+  color: #fff; background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.2);
+  cursor: pointer; z-index: 5;
+  transition: background 0.15s, opacity 0.15s;
+}
+.pv-nav:hover { background: var(--primary); color: #000; }
+.pv-prev { left: 0.8rem; }
+.pv-next { right: 0.8rem; }
 
 /* ── Empty / loading state ────────────────────────────────────────────────── */
 .state { color: var(--text-muted); font-size: 0.85rem; padding: 2rem 0; }

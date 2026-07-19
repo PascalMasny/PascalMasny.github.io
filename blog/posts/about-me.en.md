@@ -6,15 +6,15 @@ At 11 I walked into my school's IT room and never stopped coding. I learned it f
 
 ## What I do
 
-- **Python & data analysis** — understanding processes, automating them, and pulling real answers out of data.
-- **CRM, ERP & enterprise systems** — from the integration to the clean process behind it.
-- **Engineering & making** — 3D printing, electronics and robots; from fidget toys to carbon-fiber prints holding my vintage car together.
+- **Python & data analysis:** understanding processes, automating them, and pulling real answers out of data.
+- **CRM, ERP & enterprise systems:** from the integration to the clean process behind it.
+- **Engineering & making:** 3D printing, electronics and robots; from fidget toys to carbon-fiber prints holding my vintage car together.
 
 > Anyone can write code today; building software and truly understanding processes is a different skill entirely. I don't produce AI slop.
 
 ## Let's connect
 
-I'm always happy to hear from you — about projects, collaboration, or just to chat.
+I'm always happy to hear from you, about projects, collaboration, or just to chat.
 
 - **LinkedIn:** [linkedin.com/in/pascalmasny](https://www.linkedin.com/in/pascalmasny/)
 - **GitHub:** [github.com/PascalMasny](https://github.com/PascalMasny)

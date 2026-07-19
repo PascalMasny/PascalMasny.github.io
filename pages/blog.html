@@ -4,12 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blog | Pascal Masny</title>
-  <meta name="description" content="Blog & Fotos von Pascal Masny — Projekte, Gedanken und Bilder.">
+  <meta name="description" content="Blog & Fotos von Pascal Masny: Projekte, Gedanken und Bilder.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/styles.css">
   <link rel="stylesheet" href="../css/blog.css">
+  <!-- PDF.js: in-page PDF rendering for the ~/pdfs viewer -->
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 </head>
 <body>
 
@@ -64,14 +66,16 @@
   <div class="pv-panel">
     <div class="pv-bar">
       <div class="pv-title" id="pv-title"></div>
+      <span class="pv-count" id="pv-count"></span>
       <div class="pv-spacer"></div>
       <a class="tb-btn" id="pv-open" href="#" target="_blank" rel="noopener" data-key="pdf.open">open ↗</a>
       <a class="tb-btn" id="pv-dl" href="#" download data-key="pdf.download">download</a>
       <button class="tb-btn pv-close" aria-label="close">&#x2715;</button>
     </div>
     <div class="pv-body">
-      <iframe id="pv-frame" title="PDF" src="about:blank"></iframe>
-      <div class="pv-hint" id="pv-hint" data-key="pdf.hint"></div>
+      <div class="pv-scroll" id="pv-scroll"></div>
+      <button class="pv-nav pv-prev" id="pv-prev" aria-label="previous page">&#x2039;</button>
+      <button class="pv-nav pv-next" id="pv-next" aria-label="next page">&#x203a;</button>
     </div>
   </div>
 </div>
@@ -85,6 +89,7 @@ const STR = {
         emptyPdfs: '# noch keine PDFs',
         'pdf.open': 'im Tab öffnen ↗', 'pdf.download': 'download',
         'pdf.hint': 'Vorschau lädt nicht? Im Tab öffnen.',
+        pdfLoading: 'lädt …',
         pageWord: 'Seiten',
         loadErr: '# konnte Inhalte nicht laden' },
   en: { back: 'Portfolio', 'head.title': 'blog', 'head.sub': 'Projects, thoughts & photos.',
@@ -93,6 +98,7 @@ const STR = {
         emptyPdfs: '# no pdfs yet',
         'pdf.open': 'open in tab ↗', 'pdf.download': 'download',
         'pdf.hint': "Preview not loading? Open in a new tab.",
+        pdfLoading: 'loading …',
         pageWord: 'pages',
         loadErr: '# failed to load content' }
 };
@@ -174,29 +180,110 @@ function renderPdfs() {
     </a>`).join('');
 }
 
-// ── PDF viewer ─────────────────────────────────────────────────────────────
-const pv = document.getElementById('pdfviewer');
-function openPdf(i) {
+// ── PDF viewer (PDF.js) ─────────────────────────────────────────────────────
+const pv       = document.getElementById('pdfviewer');
+const pvScroll = document.getElementById('pv-scroll');
+const pvCount  = document.getElementById('pv-count');
+if (window.pdfjsLib) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+}
+let pvDoc = null, pvNum = 0, pvCur = 1, pvObserver = null, pvToken = 0;
+
+function setCount(n) { pvCur = n; pvCount.textContent = pvNum ? `${n} / ${pvNum}` : ''; }
+
+async function renderPage(slot) {
+  if (slot.dataset.rendered || !pvDoc) return;
+  slot.dataset.rendered = '1';
+  const page  = await pvDoc.getPage(+slot.dataset.page);
+  const base  = page.getViewport({ scale: 1 });
+  const scale = Math.min(2, ((pvScroll.clientWidth - 32) || 800) / base.width);
+  const vp    = page.getViewport({ scale: scale * Math.min(2, window.devicePixelRatio || 1) });
+  const canvas = document.createElement('canvas');
+  canvas.width = vp.width; canvas.height = vp.height;
+  slot.innerHTML = ''; slot.appendChild(canvas);
+  await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+}
+
+async function openPdf(i) {
   const p = PDFS[i]; if (!p) return;
   const url = asset(p.file);
   document.getElementById('pv-title').textContent = p.title?.[lang] || p.title?.de || '';
-  document.getElementById('pv-frame').src = url;
   document.getElementById('pv-open').href = url;
   document.getElementById('pv-dl').href = url;
   pv.classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  const token = ++pvToken;                 // guards against fast open/close races
+  pvScroll.innerHTML = `<div class="pv-loading">${STR[lang].pdfLoading}</div>`;
+  setCount(0);
+
+  if (!window.pdfjsLib) {                   // CDN blocked → graceful fallback
+    pvScroll.innerHTML = `<div class="pv-loading">${STR[lang]['pdf.hint']}</div>`;
+    return;
+  }
+  try {
+    const doc = await pdfjsLib.getDocument(url).promise;
+    if (token !== pvToken) { doc.destroy(); return; }
+    pvDoc = doc; pvNum = doc.numPages;
+    const first = await doc.getPage(1);
+    const r = first.getViewport({ scale: 1 });
+    pvScroll.innerHTML = '';
+    for (let n = 1; n <= pvNum; n++) {
+      const slot = document.createElement('div');
+      slot.className = 'pv-page';
+      slot.dataset.page = n;
+      slot.style.aspectRatio = (r.width / r.height).toFixed(4);
+      pvScroll.appendChild(slot);
+    }
+    if (pvObserver) pvObserver.disconnect();
+    pvObserver = new IntersectionObserver(ents => {
+      ents.forEach(en => { if (en.isIntersecting) renderPage(en.target); });
+    }, { root: pvScroll, rootMargin: '300px 0px' });
+    [...pvScroll.children].forEach(s => pvObserver.observe(s));
+    pvScroll.scrollTop = 0;
+    setCount(1);
+  } catch (_) {
+    if (token === pvToken)
+      pvScroll.innerHTML = `<div class="pv-loading">${STR[lang]['pdf.hint']}</div>`;
+  }
 }
+
 function closePdf() {
   pv.classList.remove('open');
-  document.getElementById('pv-frame').src = 'about:blank';
   document.body.style.overflow = '';
+  pvToken++;
+  if (pvObserver) { pvObserver.disconnect(); pvObserver = null; }
+  if (pvDoc) { pvDoc.destroy(); pvDoc = null; }
+  pvNum = 0; pvScroll.innerHTML = ''; setCount(0);
 }
+
+function gotoPage(n) {
+  n = Math.max(1, Math.min(pvNum, n));
+  const slot = pvScroll.querySelector(`.pv-page[data-page="${n}"]`);
+  if (slot) slot.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  setCount(n);
+}
+
+// Update the page counter from whatever is centered in the scroll viewport.
+pvScroll.addEventListener('scroll', () => {
+  if (!pvNum) return;
+  const mid = pvScroll.scrollTop + pvScroll.clientHeight / 2;
+  let cur = 1;
+  for (const s of pvScroll.children) {
+    if (s.offsetTop <= mid) cur = +s.dataset.page; else break;
+  }
+  if (cur !== pvCur) setCount(cur);
+});
+
 document.getElementById('pdfs').addEventListener('click', e => {
   const card = e.target.closest('.card[data-pdf]');
   if (card) { e.preventDefault(); openPdf(+card.dataset.pdf); }
 });
 pv.addEventListener('click', e => { if (e.target === pv) closePdf(); });
 pv.querySelector('.pv-close').addEventListener('click', closePdf);
+document.getElementById('pv-prev').addEventListener('click', () => gotoPage(pvCur - 1));
+document.getElementById('pv-next').addEventListener('click', () => gotoPage(pvCur + 1));
 
 // ── Lightbox ──────────────────────────────────────────────────────────────
 const lb = document.getElementById('lightbox');
@@ -212,6 +299,10 @@ document.getElementById('photos').addEventListener('click', e => {
 });
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { lb.classList.remove('open'); closePdf(); }
+  if (pv.classList.contains('open')) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); gotoPage(pvCur + 1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { e.preventDefault(); gotoPage(pvCur - 1); }
+  }
 });
 
 // ── Tabs ────────────────────────────────────────────────────────────────────

@@ -6,15 +6,15 @@ Mit 11 habe ich den IT-Raum meiner Realschule gesehen und seitdem nie wieder auf
 
 ## Was ich mache
 
-- **Python & Datenanalyse** — Prozesse verstehen, automatisieren und aus Daten echte Antworten ziehen.
-- **CRM, ERP & Enterprise-Systeme** — von der Schnittstelle bis zum sauberen Prozess.
-- **Engineering & Making** — 3D-Druck, Elektronik und Roboter; von Fidget Toys bis zu Kohlefaserdrucken, die meinen Oldtimer zusammenhalten.
+- **Python & Datenanalyse:** Prozesse verstehen, automatisieren und aus Daten echte Antworten ziehen.
+- **CRM, ERP & Enterprise-Systeme:** von der Schnittstelle bis zum sauberen Prozess.
+- **Engineering & Making:** 3D-Druck, Elektronik und Roboter; von Fidget Toys bis zu Kohlefaserdrucken, die meinen Oldtimer zusammenhalten.
 
 > Programmieren kann heute jeder; Software zu entwickeln und Prozesse wirklich zu verstehen, das können wenige. Ich produziere keinen AI Slop.
 
 ## Lass uns vernetzen
 
-Ich freue mich über Nachrichten — zu Projekten, Zusammenarbeit oder einfach zum Austausch.
+Ich freue mich über Nachrichten zu Projekten, Zusammenarbeit oder einfach zum Austausch.
 
 - **LinkedIn:** [linkedin.com/in/pascalmasny](https://www.linkedin.com/in/pascalmasny/)
 - **GitHub:** [github.com/PascalMasny](https://github.com/PascalMasny)
