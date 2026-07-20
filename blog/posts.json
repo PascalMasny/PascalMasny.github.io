@@ -1,31 +1,31 @@
 [
   {
-    "slug": "ars-aut-abeat",
-    "date": "2026-07-19",
-    "cover": "img/PLEB.png",
-    "tags": ["projekt", "ki", "kunst"],
-    "pdf": "pdfs/PLEB_Consulting.pdf",
+    "slug": "minti-wuerfel",
+    "date": "2026-07-20",
+    "cover": "blog/img/minti-cubus1.png",
+    "tags": ["projekt", "hardware", "esp32", "3d-druck"],
+    "pdf": "pdfs/4CoreDynamics.pdf",
     "title": {
-      "de": "Ars Aut Abeat",
-      "en": "Ars Aut Abeat"
+      "de": "MINTi Würfel",
+      "en": "MINTi Cube"
     },
     "excerpt": {
-      "de": "Interaktive Kunstinstallation, die das Uncanny Valley erfahrbar macht: KI-Verfremdung klassischer Werke plus Emotionserkennung in Echtzeit. Team PLEB Consulting, THA.",
-      "en": "An interactive art installation that makes the Uncanny Valley tangible: AI distortion of classical works plus real-time emotion recognition. Team PLEB Consulting, THA."
+      "de": "Ein Lernwürfel mit sechs Experimentierseiten für Kinder von zwei bis sechs. Die härtesten Anforderungen kamen nicht aus der Technik, sondern vom Nutzer: er kann nicht lesen und lässt das Produkt fallen. Team 4CoreDynamics, THA.",
+      "en": "A learning cube with six experiment sides for children aged two to six. The hardest requirements came from the user, not the technology: they cannot read and they drop your product. Team 4CoreDynamics, THA."
     }
   },
   {
     "slug": "first-post",
     "date": "2026-06-13",
-    "cover": "img/REST.png",
+    "cover": "img/picture.png",
     "tags": ["meta", "blog"],
     "title": {
       "de": "Willkommen auf meinem Blog",
       "en": "Welcome to my blog"
     },
     "excerpt": {
-      "de": "Hier teile ich meine Projekte, Gedanken zur Softwareentwicklung und ein paar coole Fotos.",
-      "en": "Here I share my projects, thoughts on software development, and a few cool photos."
+      "de": "Warum es diesen Blog gibt, was hier landet und warum er aus Textdateien besteht statt aus einem CMS.",
+      "en": "Why this blog exists, what ends up here, and why it is built from text files instead of a CMS."
     }
   }
 ]

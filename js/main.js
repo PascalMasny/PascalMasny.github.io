@@ -85,11 +85,6 @@ const T = {
     'proj.minti.price': 'Stückpreis: 373,86 EUR (Material 75,73 EUR + Arbeit 111,20 EUR + 100% Marge)',
     'proj.minti.at': '@ THA; WS 2025/2026',
     'proj.minti.read': 'Dokumentation lesen',
-    'proj.pleb.title': 'Ars Aut Abeat',
-    'proj.pleb.desc': 'Interaktive Kunstinstallation (THA, Systems Engineering), die das Uncanny Valley erfahrbar macht: Klassische Kunstwerke werden durch eine KI-Rückkopplungsschleife Schritt für Schritt verfremdet, während eine Kamera in Echtzeit sieben Emotionen des Betrachters erfasst und auswertet. FastAPI-Backend; datenschutzfreundlich (keine Videos, lokale Analyse). Team PLEB Consulting.',
-    'proj.pleb.at': '@ THA · SoSe 2026 · Team PLEB Consulting',
-    'proj.pleb.budget': 'Prototyp-Budget: unter 100 EUR',
-    'proj.pleb.read': 'Dokumentation lesen',
 
     'skills.title': 'pip list && uname -a',
     'skills.cat.languages': '# programmierung', 'skills.cat.tools': '# tools',
@@ -118,7 +113,6 @@ const T = {
     'downloads.cl': 'Anschreiben / Cover Letter', 'downloads.cl.sub': 'Live · DE & EN · Drucken → PDF',
     'downloads.ihk': 'IHK_Projektdokumentation.pdf',
     'downloads.minti': 'MINTi_Würfel_Projektdokumentation.pdf',
-    'downloads.pleb': 'Ars_Aut_Abeat_PLEB_Consulting.pdf',
     'footer.legal': '# Privates Projekt; nicht kommerziell; gemäß § 5 TMG von der Impressumspflicht befreit.',
     'footer.privacy': '# Keine Cookies; kein Tracking; kein externes Analytics. Datenschutz liegt mir am Herzen.',
   },
@@ -189,11 +183,6 @@ const T = {
     'proj.minti.price': 'Unit price: 373.86 EUR (materials 75.73 EUR + labour 111.20 EUR + 100% margin)',
     'proj.minti.at': '@ THA; WS 2025/2026',
     'proj.minti.read': 'Read documentation',
-    'proj.pleb.title': 'Ars Aut Abeat',
-    'proj.pleb.desc': "Interactive art installation (THA, Systems Engineering) that makes the Uncanny Valley tangible: classical artworks are progressively distorted through an AI feedback loop while a camera reads and evaluates seven of the viewer's emotions in real time. FastAPI backend; privacy-friendly (no video stored, local analysis). Team PLEB Consulting.",
-    'proj.pleb.at': '@ THA · Summer 2026 · Team PLEB Consulting',
-    'proj.pleb.budget': 'Prototype budget: under 100 EUR',
-    'proj.pleb.read': 'Read documentation',
 
     'skills.title': 'pip list && uname -a',
     'skills.cat.languages': '# programming', 'skills.cat.tools': '# tools',
@@ -222,7 +211,6 @@ const T = {
     'downloads.cl': 'Cover Letter / Anschreiben', 'downloads.cl.sub': 'Live · DE & EN · Print → PDF',
     'downloads.ihk': 'IHK_Projektdokumentation.pdf',
     'downloads.minti': 'MINTi_Cube_Documentation.pdf',
-    'downloads.pleb': 'Ars_Aut_Abeat_PLEB_Consulting.pdf',
     'footer.legal': '# Personal website; non-commercial; disclosed under § 5 TMG (German Telemedia Act).',
     'footer.privacy': '# No cookies; no tracking; no external analytics. I value your privacy.',
   }
@@ -497,7 +485,6 @@ function downloadAll() {
     { url: 'pdfs/Clever_Refill_Präsentatio_Pascal_Masny.pdf', name: 'CleverRefill_Presentation.pdf' },
     { url: 'pdfs/REST_Projektdokumentation_Pasca_Masny.pdf',  name: 'REST_Projektdokumentation.pdf' },
     { url: 'pdfs/4CoreDynamics.pdf',                          name: 'MINTi_Cube_Documentation.pdf' },
-    { url: 'pdfs/PLEB_Consulting.pdf',                        name: 'Ars_Aut_Abeat_PLEB_Consulting.pdf' },
   ];
   files.forEach((f, i) => {
     setTimeout(() => {

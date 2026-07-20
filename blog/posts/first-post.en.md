@@ -1,24 +1,21 @@
 # Welcome to my blog
 
-Glad you're here! This is the first post on my new blog.
+This site has an ancestor. My very first task as an apprentice at manroland Goss was to host a personal website internally, so that every apprentice had one. My trainer insisted back then that networking and presenting are as much part of the job as the code itself. At seventeen I found that moderately convincing. These days I see the point, and this is the same idea, just grown up.
 
-## What's this about?
+## What ends up here
 
-Here I share:
+- **Projects:** what I am currently building and what was actually hard about it. Not the polished version, but the part where it got stuck.
+- **Thoughts:** on software development, tools, and why some systems feel right and others do not.
+- **Photos:** in the `~/photos` tab, for no deeper reason.
 
-- **Projects** — what I'm working on and what I learn along the way
-- **Thoughts** — on software development, tools, and workflows
-- **Photos** — cool shots in the `~/photos` tab
+Everything exists in German and English. The toggle is in the top right.
 
-## How it works
+## How this is built
 
-Every post is a plain Markdown file. Code looks like this:
+No CMS, no build step, no framework. Every post is a Markdown file, fetched on load and rendered in the browser. GitHub Pages serves the whole thing. Publishing means: create two files, add one entry to a JSON file, commit.
 
-```python
-def hello():
-    print("Hello world")
-```
+That is a deliberate choice, not laziness. A blog that needs `npm install` before you can fix a typo is a blog you eventually stop maintaining. Dependencies rot, build tools change their config, and after a two-year gap you spend an evening repairing your own toolchain instead of writing. Text files do not do that. This should still work in ten years.
 
-> Write, commit, done. No complicated CMS.
+> Write, commit, done.
 
-More coming soon. Until then — feel free to look around.
+Have a look around.
