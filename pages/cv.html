@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Shared translation layer: same stored choice as every other page. -->
+  <script src="../js/i18n.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Inter', sans-serif; background: #d4d8df; color: #1e293b; font-size: 12px; line-height: 1.5; }
@@ -189,7 +191,7 @@
 
 <div class="controls">
   <a id="back-link" href="../index.html">← Portfolio</a>
-  <button id="lang-btn" onclick="toggleLang()">English</button>
+  <button id="lang-btn" data-lang-label="name">English</button>
   <span class="controls-spacer"></span>
   <span class="controls-hint" id="print-hint">Browser-Druckdialog → "Als PDF speichern"</span>
   <button class="btn-print" id="print-btn" onclick="window.print()">Drucken / Als PDF speichern</button>
@@ -285,7 +287,8 @@
 
 <script src="../js/cv-data.js"></script>
 <script>
-  let lang = (navigator.language || 'de').startsWith('en') ? 'en' : 'de';
+  // Language comes from i18n.js (stored choice, shared with the whole site).
+  let lang = I18n.lang;
 
   function dots(pct) {
     const n = Math.round(pct / 20);
@@ -393,9 +396,8 @@
     );
   }
 
-  function toggleLang() { lang = lang === 'de' ? 'en' : 'de'; render(); }
-
-  render();
+  // i18n.js owns the toggle and persistence; we just re-render on change.
+  document.addEventListener('i18n:change', e => { lang = e.detail.lang; render(); });
 </script>
 </body>
 </html>

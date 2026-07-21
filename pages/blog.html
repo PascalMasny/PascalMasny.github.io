@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="../css/blog.css">
   <!-- PDF.js: in-page PDF rendering for the ~/pdfs viewer -->
   <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <!-- Shared translation layer: same stored choice as every other page. -->
+  <script src="../js/i18n.js"></script>
 </head>
 <body>
 
@@ -103,8 +105,10 @@ const STR = {
         loadErr: '# failed to load content' }
 };
 
-let lang  = localStorage.getItem('lang')
-            || ((navigator.language || 'de').toLowerCase().startsWith('de') ? 'de' : 'en');
+// Strings go into the shared store; i18n.js handles detection, persistence,
+// the toggle and every [data-key] on the page.
+I18n.register(STR);
+let lang  = I18n.lang;
 let theme = localStorage.getItem('theme') || 'dark';
 
 let POSTS = [];
@@ -115,15 +119,12 @@ function applyTheme(t) {
   theme = t; localStorage.setItem('theme', t);
   document.documentElement.setAttribute('data-theme', t);
 }
-function applyLang(l) {
-  lang = l; localStorage.setItem('lang', l);
-  document.documentElement.lang = l;
-  document.querySelectorAll('[data-key]').forEach(el => {
-    const v = STR[l][el.dataset.key]; if (v != null) el.textContent = v;
-  });
-  document.getElementById('lang-btn').textContent = l === 'de' ? 'EN' : 'DE';
+// Static text is painted by i18n.js; the card lists are rendered from JSON,
+// so they need a re-render whenever the language changes.
+document.addEventListener('i18n:change', e => {
+  lang = e.detail.lang;
   renderPosts(); renderPhotos(); renderPdfs();
-}
+});
 
 function fmtDate(iso) {
   const d = new Date(iso);
@@ -305,11 +306,9 @@ document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', (
 
 // ── Controls ─────────────────────────────────────────────────────────────────
 document.getElementById('theme-btn').addEventListener('click', () => applyTheme(theme === 'dark' ? 'light' : 'dark'));
-document.getElementById('lang-btn').addEventListener('click', () => applyLang(lang === 'de' ? 'en' : 'de'));
 
 // ── Load data ─────────────────────────────────────────────────────────────────
 applyTheme(theme);
-applyLang(lang);
 
 Promise.all([
   fetch('../blog/posts.json').then(r => r.ok ? r.json() : []).catch(() => null),

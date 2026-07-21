@@ -9,6 +9,8 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/styles.css">
   <link rel="stylesheet" href="../css/blog.css">
+  <!-- Shared translation layer: same stored choice as every other page. -->
+  <script src="../js/i18n.js"></script>
 </head>
 <body>
 
@@ -74,8 +76,10 @@ function renderContact() {
      </div>`;
 }
 
-let lang  = localStorage.getItem('lang')
-            || ((navigator.language || 'de').toLowerCase().startsWith('de') ? 'de' : 'en');
+// Strings go into the shared store; i18n.js handles detection, persistence,
+// the toggle and every [data-key] on the page.
+I18n.register(STR);
+let lang  = I18n.lang;
 let theme = localStorage.getItem('theme') || 'dark';
 
 const slug = new URLSearchParams(location.search).get('slug');
@@ -179,15 +183,10 @@ function applyTheme(t) {
   document.documentElement.setAttribute('data-theme', t);
 }
 
-async function applyLang(l) {
-  lang = l; localStorage.setItem('lang', l);
-  document.documentElement.lang = l;
-  document.querySelectorAll('[data-key]').forEach(el => {
-    const v = STR[l][el.dataset.key]; if (v != null) el.textContent = v;
-  });
-  document.getElementById('lang-btn').textContent = l === 'de' ? 'EN' : 'DE';
-  await renderPost();
-}
+// Static text is painted by i18n.js; the post body comes from JSON, so it
+// needs a re-render whenever the language changes.
+// META is null until posts.json lands; the fetch below does the first render.
+document.addEventListener('i18n:change', e => { lang = e.detail.lang; if (META) renderPost(); });
 
 async function renderPost() {
   const state = document.getElementById('post-state');
@@ -224,11 +223,8 @@ async function renderPost() {
 }
 
 document.getElementById('theme-btn').addEventListener('click', () => applyTheme(theme === 'dark' ? 'light' : 'dark'));
-document.getElementById('lang-btn').addEventListener('click', () => applyLang(lang === 'de' ? 'en' : 'de'));
 
 applyTheme(theme);
-document.documentElement.lang = lang;
-document.getElementById('lang-btn').textContent = lang === 'de' ? 'EN' : 'DE';
 
 fetch('../blog/posts.json')
   .then(r => r.ok ? r.json() : [])

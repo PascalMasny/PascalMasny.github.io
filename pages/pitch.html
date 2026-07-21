@@ -380,6 +380,8 @@
       color: var(--text-muted); font-size: 0.75rem; vertical-align: middle;
     }
   </style>
+  <!-- Shared translation layer: same stored choice as every other page. -->
+  <script src="../js/i18n.js"></script>
 </head>
 <body>
 
@@ -1014,7 +1016,7 @@ const dots    = Array.from(document.querySelectorAll('.sdot'));
 const btnPrev = document.getElementById('nav-prev');
 const btnNext = document.getElementById('nav-next');
 let current   = 0;
-let lang      = 'de';
+let lang      = I18n.lang;   // stored choice, shared with the whole site
 let timerRunning  = false;
 let remaining     = TOTAL;
 let timerInterval = null;
@@ -1101,9 +1103,10 @@ function applyLang(l) {
   skillItems.forEach((el, i) => { if (skills[i]) el.innerHTML = skills[i]; });
 }
 
-langBtn.addEventListener('click', () => {
-  applyLang(lang === 'de' ? 'en' : 'de');
-  if (scriptOverlay.classList.contains('open')) scriptBody.innerHTML = SCRIPT[lang];
+// i18n.js owns the toggle and persistence; we just re-render on change.
+document.addEventListener('i18n:change', e => {
+  applyLang(e.detail.lang);
+  if (scriptOverlay && scriptOverlay.classList.contains('open')) scriptBody.innerHTML = SCRIPT[lang];
 });
 
 /* ── Script modal ────────────────────────────────────────────────────────── */

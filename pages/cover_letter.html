@@ -108,6 +108,8 @@
       }
     }
   </style>
+  <!-- Shared translation layer: same stored choice as every other page. -->
+  <script src="../js/i18n.js"></script>
 </head>
 <body>
 
@@ -115,7 +117,7 @@
 <div class="controls">
   <a href="../index.html" id="back-link">Portfolio</a>
   <a href="cv.html"       id="cv-link">CV</a>
-  <button id="lang-btn" onclick="toggleLang()">English</button>
+  <button id="lang-btn" data-lang-label="name">English</button>
   <span class="controls-spacer"></span>
   <span class="controls-hint" id="print-hint">Browser-Druckdialog → "Als PDF speichern"</span>
   <button class="btn-print" id="print-btn" onclick="window.print()">Drucken / Als PDF speichern</button>
@@ -157,7 +159,8 @@
 
 <script src="../js/cv-data.js"></script>
 <script>
-  let lang = (navigator.language || 'de').startsWith('en') ? 'en' : 'de';
+  // Language comes from i18n.js (stored choice, shared with the whole site).
+  let lang = I18n.lang;
 
   const LETTER = {
     de: {
@@ -233,12 +236,8 @@
     document.getElementById('sig-title').textContent          = L.sigTitle;
   }
 
-  function toggleLang() {
-    lang = lang === 'de' ? 'en' : 'de';
-    render();
-  }
-
-  render();
+  // i18n.js owns the toggle and persistence; we just re-render on change.
+  document.addEventListener('i18n:change', e => { lang = e.detail.lang; render(); });
 </script>
 </body>
 </html>

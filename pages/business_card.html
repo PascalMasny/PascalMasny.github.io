@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pascal Masny | Business Card</title>
   <link rel="stylesheet" href="../css/ebiz-styles.css">
+  <!-- Shared translation layer. No toggle here on purpose: the card is a
+       hand-out, so it just follows whatever language the site is set to. -->
+  <script src="../js/i18n.js"></script>
 </head>
 <body>
 
@@ -38,15 +41,15 @@
         <div class="card-stats">
           <div class="card-stat">
             <div class="cs-num">5+</div>
-            <div class="cs-label">Jahre<br>Beruf</div>
+            <div class="cs-label" data-key="card.statWork">Jahre<br>Beruf</div>
           </div>
           <div class="card-stat">
             <div class="cs-num">10+</div>
-            <div class="cs-label">Jahre<br>Python</div>
+            <div class="cs-label" data-key="card.statPython">Jahre<br>Python</div>
           </div>
           <div class="card-stat">
             <div class="cs-num">21</div>
-            <div class="cs-label">Jahre<br>alt</div>
+            <div class="cs-label" data-key="card.statAge">Jahre<br>alt</div>
           </div>
         </div>
 
@@ -76,13 +79,13 @@
           <li>SQL</li>
           <li>SAP</li>
           <li class="tag-plain">Systems Engineering</li>
-          <li class="tag-plain">ab 16 in der Industrie</li>
+          <li class="tag-plain" data-key="card.since16">ab 16 in der Industrie</li>
         </ul>
 
         <div class="card-divider"></div>
 
         <!-- CTA -->
-        <a href="../data/Pascal_Masny.vcf" download class="add-contact">
+        <a href="../data/Pascal_Masny.vcf" download class="add-contact" data-key="card.save">
           + Kontakt speichern
         </a>
 
@@ -90,5 +93,25 @@
     </div>
   </div>
 
+<script>
+  I18n.register({
+    de: {
+      'card.role':      'IT Data &amp; Process Consultant',
+      'card.statWork':  'Jahre<br>Beruf',
+      'card.statPython':'Jahre<br>Python',
+      'card.statAge':   'Jahre<br>alt',
+      'card.since16':   'ab 16 in der Industrie',
+      'card.save':      '+ Kontakt speichern',
+    },
+    en: {
+      'card.role':      'IT Data &amp; Process Consultant',
+      'card.statWork':  'years<br>in work',
+      'card.statPython':'years<br>Python',
+      'card.statAge':   'years<br>old',
+      'card.since16':   'in industry since 16',
+      'card.save':      '+ save contact',
+    },
+  });
+</script>
 </body>
 </html>

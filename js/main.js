@@ -217,45 +217,31 @@ const T = {
 };
 
 // ─── State ────────────────────────────────────────────────────────────────────
-// Language: use stored preference, otherwise detect from browser Accept-Language.
-// navigator.language is already sent as an HTTP header on every request; no cookies needed.
-function detectLang() {
-  const stored = localStorage.getItem('lang');
-  if (stored) return stored;
-  return (navigator.language || 'de').toLowerCase().startsWith('de') ? 'de' : 'en';
-}
-let currentLang  = detectLang();
+// Language detection, persistence and the toggle live in js/i18n.js so every
+// page agrees on the same choice. Here we only hand over the strings and react.
+I18n.register(T);
+I18n.vars(calcStats());
+
 let currentTheme = localStorage.getItem('theme') || 'dark';
 
-// ─── Apply language ───────────────────────────────────────────────────────────
-function applyLang(lang) {
-  currentLang = lang;
-  localStorage.setItem('lang', lang);
-  document.documentElement.lang = lang;
+// ─── Language-dependent rendering ─────────────────────────────────────────────
+// i18n.js paints every [data-key]; this fills in what markup alone can't carry.
+document.addEventListener('i18n:change', () => {
   const { age, yearsWork, yearsCode } = calcStats();
-  document.querySelectorAll('[data-key]').forEach(el => {
-    let v = T[lang][el.dataset.key];
-    if (v !== undefined) {
-      v = v.replace(/\{age\}/g, age)
-           .replace(/\{yearsWork\}/g, yearsWork)
-           .replace(/\{yearsCode\}/g, yearsCode);
-      el.textContent = v;
-    }
-  });
-  // Update hero stat numbers dynamically
+
   const statAge  = document.getElementById('stat-age');
   const statWork = document.getElementById('stat-industry');
   const statCode = document.getElementById('stat-coding');
   if (statAge)  statAge.textContent  = age;
   if (statWork) statWork.textContent = yearsWork + '+';
   if (statCode) statCode.textContent = yearsCode + '+';
-  // Update footer year
+
   const fyEl = document.getElementById('footer-year');
   if (fyEl) fyEl.textContent = new Date().getFullYear();
-  document.getElementById('lang-toggle').textContent = lang === 'de' ? 'EN' : 'DE';
+
   renderJourney();
   startTypewriter();
-}
+});
 
 // ─── Journey (Git Graph) ──────────────────────────────────────────────────────
 let journeyFilter = 'all';
@@ -267,7 +253,7 @@ const JOURNEY_BTN_LABELS = {
 
 function renderJourney() {
   if (typeof CV === 'undefined') return;
-  const lang = currentLang;
+  const lang = I18n.lang;
   const t    = CV.T[lang];
   const lbls = JOURNEY_BTN_LABELS[lang];
 
@@ -340,7 +326,7 @@ function startTypewriter() {
   const el = document.getElementById('typewriter');
   if (!el) return;
   let ri = 0, ci = 0, deleting = false;
-  const list = roles[currentLang];
+  const list = roles[I18n.lang];
   function tick() {
     const word = list[ri];
     if (!deleting) {
@@ -544,9 +530,9 @@ function showEasterEgg() {
 // ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   applyTheme(currentTheme);
-  applyLang(currentLang);
+  // Language is applied by i18n.js and re-rendered through the 'i18n:change'
+  // listener above; the toggle is wired there too.
 
-  document.getElementById('lang-toggle').addEventListener('click',  () => applyLang(currentLang   === 'de' ? 'en' : 'de'));
   document.getElementById('theme-toggle').addEventListener('click', () => applyTheme(currentTheme === 'dark' ? 'light' : 'dark'));
 
   initNavbar();
