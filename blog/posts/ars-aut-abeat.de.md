@@ -1,119 +1,109 @@
-# Ars Aut Abeat: den Uncanny Valley messen statt darüber zu reden
+# Ars Aut Abeat: Ab welchem Bild ist Kunst keine Kunst mehr?
 
-Eine interaktive Installation, die misst, wie tief Besucher in den Uncanny Valley fallen. Gezeigt am 19.09.2026 auf der Langen Kunstnacht in Landsberg am Lech, im Rahmen des **TTZ Data Science und Autonome Systeme** der THA, unter dem Abendthema „Automatisierte Kunst".
+Eine interaktive Installation, die misst, bei welchem Bild Kunst für einen Menschen aufhört, Kunst zu sein. Nicht per Umfrage, sondern am Gesicht. Gebaut von **PLEB Art Consulting** im Modul Projekt 2 des Studiengangs Systems Engineering an der TH Augsburg, gezeigt an zwei Orten:
 
-Auf der Leinwand heißt sie **VALLIS · SIMVLACRI**, das Tal der Ähnlichkeit. Man stellt sich davor, hebt beide Hände, schaut sechs Sekunden lang ein Bildnis an, und bekommt ein Urteil auf Latein.
+- **16.07.2026**, Vernissage „Engineering meets Arts" im Vöhlinschloss Illertissen
+- **19.09.2026**, 27. Lange Kunstnacht in Landsberg am Lech, beim **TTZ Data Science und Autonome Systeme** der THA, unter dem Abendthema „Automatisierte Kunst"
+
+Auf der Leinwand heißt sie **VALLIS · SIMVLACRI**, das Tal der Ähnlichkeit. Man stellt sich davor, hebt beide Hände und sieht zu, wie ein Gemälde in zehn Schritten zerfällt. Am Ende steht ein Urteil auf Latein: *ars aut abeat*, Kunst, oder sie gehe.
 
 ## Mori, 1970
 
-Masahiro Mori hat beschrieben, was passiert, wenn etwas uns immer ähnlicher wird: die Sympathie steigt, und dann, kurz vor der vollen Menschenähnlichkeit, kippt sie um. Nicht in Gleichgültigkeit, sondern in Abscheu. Das ist der Uncanny Valley.
+Masahiro Mori hat beschrieben, was passiert, wenn etwas uns immer ähnlicher wird: Die Sympathie steigt, und dann, kurz vor der vollen Menschenähnlichkeit, kippt sie um. Nicht in Gleichgültigkeit, sondern in Befremden. Das ist der Uncanny Valley.
 
-Darüber wird viel geredet und wenig gemessen. Die Installation dreht das um: sechs Bildnisse, angeordnet entlang genau dieser Achse, von unverdächtig bis unheimlich.
-
-| Bildnis | Was es ist |
-|---|---|
-| **Imago Vera** | Fotografie |
-| **Icon Picta** | gemaltes Porträt |
-| **Simulacrum Marmoreum** | Marmorbüste |
-| **Effigies Cerea** | Wachsfigur |
-| **Vultus Syntheticus** | KI-generiertes Gesicht |
-| **Automaton** | Animatronic |
-
-Die Reihenfolge ist die Hypothese. Ob die Gesichter der Besucher ihr folgen, ist die Frage.
+Darüber wird viel geredet und wenig gemessen. Die Installation dreht es um: Sie nimmt etwas, das eindeutig Kunst ist, ein klassisches Gemälde der menschlichen Figur, und lässt eine KI es so lange neu malen, bis es falsch wird. Die Frage ist nicht, ob das irgendwann nicht mehr Kunst ist. Die Frage ist, **wann**, und ob das bei allen an derselben Stelle passiert.
 
 ## Was passiert, wenn man davorsteht
 
-Eine Zustandsmaschine mit sechs Phasen, alle Dauern in `config.py`.
-
 | Phase | Dauer | Was passiert |
 |---|---|---|
-| **IDLE** | offen | Man sieht sich selbst im Spiegel, formatfüllend |
-| **LOCKED** | 2,5 s | Beide Hände über die Schultern, 1,5 s ruhig halten, dann rastet es ein |
-| **VIEWING** | 6 s | Das Bildnis im vergoldeten Rahmen, daneben die Emotionen live auf Latein |
-| **VERDICT_PERSONAL** | 8 s | Die eigene Aufschlüsselung, besiegelt in Wachs |
-| **VERDICT_COLLECTIVE** | 8 s | *Vox Populi*: das Urteil aller bisherigen Besucher, und wie nah man daran liegt |
-| **FADE** | 3 s | „The valley awaits the next soul." |
+| **Ruhe** | offen | Man sieht sich selbst im Spiegel. Beide Hände 1,5 s heben startet die Sitzung, das ist auch das Einverständnis |
+| **Baseline** | 19 s | Das unveränderte Original mit Titel und Beschreibung. Die Kamera mittelt das Gesicht zum persönlichen Ruhezustand: das eigene Gesicht vor echter Kunst |
+| **Galerie** | 30 s | Zehn KI-Bilder, alle drei Sekunden eines, mit weicher Überblendung. Jedes Bild bekommt seine eigenen Messwerte |
+| **Urteil** | 25 s | Original, das letzte Bild, das noch Kunst war (**ARS**), und der Bruchpunkt (**ABEAT**) nebeneinander, darunter die eigene Reaktionskurve |
 
-Kein Knopf, kein Touchscreen, keine Erklärung, die jemand lesen muss. Hände heben ist die einzige Geste, und sie funktioniert auch bei jemandem, der von hinten in die Menge geschoben wird.
+Kein Knopf, kein Touchscreen, keine Anleitung, die jemand lesen muss. Wer bei keinem Bild reagiert, bekommt **ARS MANSIT**: Für dich blieb es Kunst. Und auf dem Urteil steht: *Diese Linie hast du gezogen, nicht die Maschine.*
+
+Die zehn Bilder entstehen vorab mit Stable Diffusion img2img. Bild 1 bis 5 werden jeweils direkt aus dem Original erzeugt, mit wachsender Stärke. Ab Bild 6 geht jedes Ergebnis wieder in die KI: ein echter Model Collapse, bei dem sich Fehler aufschaukeln, bis die Farbe zerfällt, während die Komposition noch steht.
 
 ## Wie gemessen wird
 
-Keine TensorFlow-Emotionsmodelle, kein DeepFace. MediaPipe FaceLandmarker liefert 52 Blendshapes, also FACS-Aktionseinheiten, und daraus werden sieben Emotionen gebaut. Jede bekommt ein Gewicht, das sagt, wie stark sie für ein Tal spricht.
+MediaPipe FaceLandmarker liefert pro Kamerabild 52 Blendshapes, also FACS-Aktionseinheiten, und daraus werden sieben Emotionen gebaut. Entscheidend ist, *was* dann verglichen wird: nicht der absolute Emotionsmix, sondern **die Abweichung vom eigenen Ruhezustand**. Wer grundsätzlich ernst schaut, wird nicht dafür bestraft.
 
-![Die Gewichte und die drei Urteilsbänder](../blog/img/ars-aut-abeat-methode.png)
+![Wie der Bruchpunkt gemessen wird](../blog/img/ars-aut-abeat-methode.png)
 
-*Ekel ist das Kernsignal und wiegt am schwersten. Freude zieht genauso stark in die Gegenrichtung. Zorn ist fast neutral, weil er im Gesicht zu nah an Konzentration liegt.*
+*Jede Emotion zählt, aber die klassischen Uncanny-Signale Ekel und Angst zählen am meisten. Das Bild mit der größten gewichteten Abweichung ist der Bruchpunkt. Liegt keine Abweichung über 0,08, gibt es keinen Bruchpunkt.*
 
-Der Score ist die gewichtete Summe, normalisiert auf 0 bis 1. Darüber liegen drei Bänder: unter 0,40 **FIRMA**, fester Boden. Bis 0,60 **LIMEN**, auf der Schwelle. Darüber **VALLIS**, im Tal.
+Dazu kommt eine Blickprüfung, damit nicht jedes Gesicht im Bild mitgezählt wird, das gerade woanders hinschaut: Kopfpose über `solvePnP`, und nur wer weniger als 35 Grad zur Seite und 30 Grad nach oben oder unten schaut, gilt als zugewandt. Gespeichert werden keine Bilder und keine Gesichter, nur Emotionswerte, Urteil und Bruchstelle.
 
-Dazu kommt eine Blickprüfung, damit nicht jedes Gesicht im Bild mitgezählt wird, das gerade woanders hinschaut: Kopfpose über `solvePnP` mit sechs Landmarken, und nur wer weniger als 35 Grad zur Seite und 30 Grad nach oben oder unten schaut, gilt als zugewandt.
+## Der Weg dahin
 
-## Der Teil, der wirklich schwierig war
+Die erste Fassung im April sah anders aus. Sechs Bildnisse entlang von Moris Achse, von der Fotografie über die Wachsfigur bis zum Animatronic, jeweils sechs Sekunden, und ein Score aus dem absoluten Emotionsmix. Gebaut war sie in Streamlit, und zwei Dinge daraus haben mich Abende gekostet:
 
-Nicht die Emotionen. Die Nebenläufigkeit.
+**Das iframe.** Setzt man `position: fixed` auf den Elternknoten der WebRTC-Komponente, bricht Streamlits Größenprotokoll, und die Peer-Verbindung wird bei jedem Rerun neu ausgehandelt. MediaPipe initialisiert sich dann im Sekundentakt neu. Die Lösung war, `position: fixed` auf das iframe selbst zu setzen.
 
-Der WebRTC-Callback `recv()` muss unter etwa 16 Millisekunden zurückkehren, sonst ruckelt das Bild. MediaPipe braucht deutlich länger. Also legt `recv()` den Frame nur in einen Puffer und kehrt sofort zurück, und ein Daemon-Thread liest mit 10 Hz aus diesem Puffer und rechnet. Der Streamlit-Hauptthread liest alle 750 bis 1500 ms einen Schnappschuss.
+**Ein Race in einer Fremdbibliothek.** `streamlit-webrtc` prüft in `SessionShutdownObserver.stop()` eine Threadreferenz und dereferenziert sie sechs Zeilen später. Ein paralleler Aufruf kann sie dazwischen auf `None` setzen.
 
-Zwei Dinge, die mich Abende gekostet haben und die ich deshalb aufschreibe:
+Die 45 Testmessungen dieser Fassung zeigten schon, was sich später bestätigt hat: Ekel, das Signal, auf dem die alte Skala stand, lag im Mittel bei 0,022. Ausgestellt wurde eine andere Fassung: FastAPI und React statt Streamlit, der Browser schickt die Kamerabilder per WebSocket an das Python-Backend, und statt eines absoluten Scores zählt der Bruchpunkt gegenüber der eigenen Baseline.
 
-**Das iframe.** Setzt man `position: fixed` auf den Elternknoten der WebRTC-Komponente, bricht Streamlits Größenprotokoll, und die Peer-Verbindung wird bei jedem Rerun neu ausgehandelt. MediaPipe initialisiert sich dann im Sekundentakt neu. Die Lösung ist, den Elternknoten in Ruhe zu lassen und `position: fixed` auf das iframe selbst zu setzen.
+## Was die Daten sagen
 
-**Ein Race in einer Fremdbibliothek.** `streamlit-webrtc` prüft in `SessionShutdownObserver.stop()` eine Threadreferenz und dereferenziert sie sechs Zeilen später. Ein paralleler Aufruf kann sie dazwischen auf `None` setzen. `app.py` patcht die Methode und kopiert die Referenz zuerst in eine lokale Variable.
+In der Datenbank liegen **185 vollständige Besuche**: 82 aus Illertissen (antike Skulpturen, Büsten und Gefäße) und 103 aus Landsberg (Gemälde). Die Testläufe aus der Entwicklung sind herausgerechnet. Daraus lässt sich eine These prüfen:
 
-## Was die Pilotdaten sagen
+> Die Grenze, an der ein Bild für uns aufhört, Kunst zu sein, liegt nicht am Anfang der Zerstörung, sondern in ihrer zweiten Hälfte. Und sie liegt für verschiedene Menschen, Orte und Motive an derselben Stelle.
 
-Und hier wird es unbequem.
+![Bei welchem Bild die Reaktion am stärksten war](../blog/img/ars-aut-abeat-ergebnis.png)
 
-In der Datenbank liegen **45 Messungen aus drei Entwicklungstagen im April 2026**. Über alle zusammen:
+| Aussage | Ergebnis | 95 % Konfidenzintervall |
+|---|---|---|
+| Besucher mit messbarem Bruchpunkt | 152 von 185 = **82 %** | 76 bis 87 % |
+| Bruchpunkte in Bild 6 bis 10 (Zufall: 50 %) | 92 von 152 = **61 %** | 53 bis 68 %, p = 0,012 |
+| Unterschied der mittleren Bruchstelle, Illertissen gegen Landsberg | **0,2 Bilder** | −0,8 bis +1,2, p = 0,77 |
 
-| Emotion | Mittel |
-|---|---|
-| Gleichmut | 0,455 |
-| Zorn | 0,173 |
-| Freude | 0,139 |
-| Überraschung | 0,133 |
-| Trauer | 0,031 |
-| Furcht | 0,024 |
-| **Ekel** | **0,022** |
+Das heißt: Die große Mehrheit reagiert messbar, der Bruch kommt signifikant häufiger spät als früh, und das Muster wiederholt sich an zwei unabhängigen Orten mit anderem Publikum und anderen Motiven. Jeder Ort für sich liegt bei rund 60 % späten Bruchpunkten, ist allein aber zu klein für Signifikanz (p ≈ 0,08). Zusammen ist der Effekt signifikant. **Wo Kunst endet, scheint mehr vom Grad der Zerstörung abzuhängen als vom Bild oder vom Betrachter.**
 
-Gesamtscore: **0,382**. Also FIRMA, und zwar knapp unter der Schwelle.
-
-Das ist ein Ergebnis, aber nicht das erhoffte. **Ekel ist das Signal, auf dem die ganze Messung steht, und es taucht praktisch nicht auf.** Ein Mittelwert von 0,022 bei einem Gewicht von 1,0 heißt, dass der Score in der Praxis fast vollständig von Gleichmut und Freude getrieben wird, also von den beiden Gewichten, die nach unten ziehen. Die Skala misst derzeit zuverlässiger, wer *nicht* ins Tal fällt, als wer.
-
-Drei Gründe kommen infrage, und ich kann sie mit diesen Daten nicht trennen:
-
-1. **Die Bildnisse sind zu harmlos.** Die 45 Messungen stammen aus drei Katalog-Generationen. Die ältesten sind Museumsstücke mit 30 Sekunden Betrachtungsdauer, dann kamen berühmte Gemälde, erst zuletzt der eigentliche Ähnlichkeits-Katalog. Ein Marmorkopf löst keinen Ekel aus, und das ist keine Erkenntnis über Mori, sondern über die Bildauswahl.
-2. **Ekel ist im Gesicht schwer zu sehen.** `noseSneer` und `mouthPucker` sind kleine Bewegungen. Bei Projektionsabstand und Hallenlicht gehen sie im Rauschen unter.
-3. **Menschen zeigen vor einer Kamera nichts.** Wer weiß, dass er gemessen wird, wird neutral. Der Gleichmut-Mittelwert von 0,455 ist auch das.
-
-Punkt drei ist der, der mich am meisten beschäftigt, weil er die Methode selbst betrifft und nicht ihre Parameter.
+Bei den Urteilen landen 70 % im Tal (VALLIS), 12 % auf der Schwelle (LIMEN) und 18 % auf festem Boden (FIRMA, *ars mansit*). Zwischen den Orten gibt es keinen signifikanten Unterschied (χ² p = 0,23).
 
 ## Ehrlich bleiben
 
-**Die Daten der Kunstnacht sind hier noch nicht drin.** Was in diesem Beitrag steht, ist der Pilot. Die Messungen vom Abend liegen auf dem Ausstellungsrechner und werden nachgereicht. Sie sind der eigentlich interessante Datensatz, weil dort zum ersten Mal Leute davorstanden, die vorher nichts von dem Projekt wussten.
+**Die zeitliche Drift ist die wichtigste Gegenerklärung.** Je länger die Baseline zurückliegt, desto mehr weicht jedes Gesicht ohnehin davon ab, egal was gezeigt wird. Späte Bilder hätten dann automatisch höhere Werte. Mit den gespeicherten Daten lässt sich das nicht ausschließen. Ein Kontrolldurchlauf, der zehnmal das unveränderte Original zeigt, würde es klären.
 
-**Die Skala hat sich geändert.** Die Urteile hießen einmal ARS, ABEAT und DUBIUM, heute VALLIS, LIMEN und FIRMA. In den alten Datensätzen stehen noch die alten Labels. Wer die beiden Generationen zusammen auswertet, muss das mappen, sonst rechnet er über zwei verschiedene Systeme.
+**Der Gipfel bei Bild 1 und 2.** 33 Bruchpunkte liegen ganz am Anfang. Der erste Schnitt vom Original zu einem neuen Bild erzeugt vermutlich eine Überraschung. Die Messung erfasst also auch Reaktionen auf den Wechsel selbst.
 
-**45 Messungen sind keine Stichprobe.** Sie sind ein Funktionsnachweis. Jede Zahl oben ist als Größenordnung zu lesen und nicht als Ergebnis.
+**„Wütend" ist wohl Konzentration.** Wut liegt im Mittel bei 29 % und ist bei 58 Besuchen die stärkste Emotion. Wer genau hinsieht, senkt die Augenbrauen, und das Modell liest das als Wut. Ekel und Angst, die klassischen Uncanny-Signale, bleiben unter 5 %.
+
+**Die These kam nach den Daten.** Die Teilung in zwei Hälften ist die naheliegendste Wahl, aber sie wurde nicht vorab festgelegt. Die nächste Ausstellung soll sie als echten Test prüfen.
+
+## In der Zeitung
+
+Das Landsberger Tagblatt hat über die Kunstnacht berichtet, mit Foto vor der Installation. Ein Satz daraus passt fast zu gut: *„Wir können heute Kunstwerke von künstlicher Intelligenz produzieren lassen, bei der Niemandem auffällt, dass sie nicht echt ist."* Die Daten sagen: Irgendwann fällt es doch auf, nur später, als man denkt.
 
 ## Der Abend
 
 Zwei Meter neben der Installation stand Karla, unser Unitree G1.
 
-Das hat mir etwas geliefert, das ich nicht geplant hatte. Meine Installation braucht eine Kamera, sieben Gewichte und eine Schwelle, um den Effekt sichtbar zu machen. Karla braucht das nicht. Sie muss nur aufstehen und ein paar Schritte gehen, und man sieht ihn direkt in den Gesichtern im Raum.
+Das hat mir etwas geliefert, das ich nicht geplant hatte. Unsere Installation braucht eine Kamera, sieben Gewichte und eine Schwelle, um den Effekt sichtbar zu machen. Karla braucht das nicht. Sie muss nur aufstehen und ein paar Schritte gehen, und man sieht ihn direkt in den Gesichtern im Raum.
 
 Das spricht nicht gegen das Messen. Es sagt nur, wo der schwierige Teil liegt: nicht darin, den Effekt auszulösen, sondern darin, ihn so festzuhalten, dass man ihn später noch nachrechnen kann.
 
+## Warum Ingenieure Kunst machen
+
+Zum Ende von Projekt 2 habe ich Constantin Wanninger gefragt, worum es in diesem Projekt eigentlich geht. Seine Antwort war eine Gegenfrage: „Was ist für dich ein Systems Engineer?" Ich war sprachlos. Irgendwas mit Maschinenbau, dachte ich. Dann kam der Satz, der hängen geblieben ist:
+
+> „Ich will, dass ihr wie Daniel Düsentrieb werdet. Jemand, der sich jede Domäne nehmen und daraus etwas erschaffen kann."
+
+Es ging also nie um Kunst allein. Für uns waren es gleich mehrere fremde Domänen: Kunstgeschichte, generative KI, Gesichtsanalyse und am Ende Statistik. Und der Name ist Programm: **PLEB** steht für Pascal Masny, Lukas Kraus, Erik Reusch und Baha Tombul. Vier Ingenieurstudenten, die nicht erklären können, warum ein Gemälde Millionen wert ist. Genau deshalb fragt die Installation nicht die Experten, wo Kunst endet, sondern jeden, der vor der Kamera steht.
+
 ## Technik
 
-`Python 3.12+` · `Streamlit` · `streamlit-webrtc` · `MediaPipe` (FaceLandmarker, PoseLandmarker) · `OpenCV` · `SQLAlchemy` · `SQLite`
+`Python` · `FastAPI` · `WebSocket` · `React` · `TypeScript` · `Vite` · `MediaPipe` (FaceLandmarker, PoseLandmarker) · `OpenCV` · `SQLAlchemy` · `SQLite` · `Stable Diffusion img2img`
 
-Schrift Cinzel und Cormorant Garamond, Palette Tinte `#1C1410`, Pergament `#F4E8D0`, Gold `#C9A961`, Burgund `#6B2C2C`. Alle Größen über `clamp()`, weil dasselbe Layout auf einem Handy und auf einem Beamer lesbar sein muss.
+Schrift Cinzel und Cormorant Garamond, Palette Tinte `#1C1410`, Pergament `#F4E8D0`, Gold `#C9A961`, Burgund `#6B2C2C`.
 
 Der Code liegt offen auf [GitHub](https://github.com/PascalMasny/ArsAutAbeat).
 
 Drei PDFs zum Mitnehmen:
 
-- **[One-Pager](../pdfs/ArsAutAbeat_OnePager.pdf)**, eine Seite, für den schnellen Überblick
-- **[Systembeschreibung](../pdfs/ArsAutAbeat_System.pdf)**, wie es funktioniert: Zustandsmaschine, Nebenläufigkeit, Bewertung
-- **[Auswertung der Pilotdaten](../pdfs/ArsAutAbeat_Auswertung.pdf)**, alle Zahlen aus diesem Beitrag und was ihnen im Weg steht
+- **[One-Pager](../pdfs/ArsAutAbeat_OnePager.pdf)**, eine Seite, wie die Installation funktioniert
+- **[Systembeschreibung](../pdfs/ArsAutAbeat_System.pdf)**, Ablauf, Messung, Bruchpunkt und Technik im Detail
+- **[Auswertung](../pdfs/ArsAutAbeat_Auswertung.pdf)**, alle 185 Besuche, die These, die Tests und was gegen sie spricht

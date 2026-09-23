@@ -2,12 +2,13 @@
   {
     "slug": "ars-aut-abeat",
     "date": "2026-09-24",
-    "cover": "blog/img/ars-aut-abeat-methode.png",
+    "cover": "blog/img/ars-aut-abeat-cover.jpg",
     "tags": [
       "projekt",
       "ki",
       "computer-vision",
       "kunst",
+      "statistik",
       "tha"
     ],
     "title": {
@@ -15,8 +16,8 @@
       "en": "Ars Aut Abeat"
     },
     "excerpt": {
-      "de": "Eine Installation, die misst, wie tief Besucher in den Uncanny Valley fallen. Sechs Bildnisse, eine Kamera, sieben gewichtete Emotionen, ein Urteil auf Latein. Gezeigt auf der Langen Kunstnacht in Landsberg am Lech, TTZ Data Science und Autonome Systeme der THA. Und der Befund aus den Pilotdaten: das Signal, auf dem die ganze Messung steht, taucht praktisch nicht auf.",
-      "en": "An installation that measures how deep visitors fall into the uncanny valley. Six likenesses, one camera, seven weighted emotions, a verdict in Latin. Shown at the Lange Kunstnacht in Landsberg am Lech, TTZ Data Science und Autonome Systeme at THA. And the finding from the pilot data: the signal the whole measurement rests on barely shows up."
+      "de": "Eine Installation, die misst, bei welchem Bild Kunst für einen Menschen aufhört, Kunst zu sein. Ein Gemälde zerfällt in zehn KI-Schritten, eine Kamera vergleicht jedes Bild mit dem eigenen Ruhezustand. Gezeigt in Illertissen und auf der Langen Kunstnacht in Landsberg am Lech. Der Befund aus 185 Besuchen: Kunst hört spät auf, und an beiden Orten an derselben Stelle.",
+      "en": "An installation that measures the picture at which art stops being art for a person. A painting falls apart in ten AI steps, and a camera compares every picture with your own resting state. Shown in Illertissen and at the Lange Kunstnacht in Landsberg am Lech. The finding from 185 visits: art ends late, and at the same point at both venues."
     },
     "pdfs": [
       {

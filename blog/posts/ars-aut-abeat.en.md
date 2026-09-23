@@ -1,119 +1,109 @@
-# Ars Aut Abeat: measuring the uncanny valley instead of talking about it
+# Ars Aut Abeat: at which picture does art stop being art?
 
-An interactive installation that measures how deep visitors fall into the uncanny valley. Shown on 19 September 2026 at the Lange Kunstnacht in Landsberg am Lech, as part of the **TTZ Data Science und Autonome Systeme** at THA, under the evening's theme "automated art".
+An interactive installation that measures the picture at which art stops being art for a person. Not by asking, but by reading their face. Built by **PLEB Art Consulting** in the Projekt 2 module of the Systems Engineering programme at TH Augsburg, and shown in two places:
 
-On the screen it is called **VALLIS · SIMVLACRI**, the valley of likeness. You stand in front of it, raise both hands, look at a likeness for six seconds, and get a verdict in Latin.
+- **16 July 2026**, the "Engineering meets Arts" vernissage at Vöhlinschloss Illertissen
+- **19 September 2026**, the 27th Lange Kunstnacht in Landsberg am Lech, at the **TTZ Data Science und Autonome Systeme** of THA, under the evening's theme "automated art"
+
+On the screen it is called **VALLIS · SIMVLACRI**, the valley of likeness. You stand in front of it, raise both hands, and watch a painting fall apart in ten steps. At the end there is a verdict in Latin: *ars aut abeat*, art, or let it go.
 
 ## Mori, 1970
 
-Masahiro Mori described what happens as something grows more like us: affinity rises, and then, just short of full human likeness, it flips. Not into indifference, but into revulsion. That is the uncanny valley.
+Masahiro Mori described what happens as something grows more like us: affinity rises, and then, just short of full human likeness, it flips. Not into indifference, but into unease. That is the uncanny valley.
 
-It gets discussed a lot and measured rarely. The installation turns that around: six likenesses arranged along exactly that axis, from unremarkable to unsettling.
-
-| Likeness | What it is |
-|---|---|
-| **Imago Vera** | photograph |
-| **Icon Picta** | painted portrait |
-| **Simulacrum Marmoreum** | marble bust |
-| **Effigies Cerea** | wax figure |
-| **Vultus Syntheticus** | AI-generated face |
-| **Automaton** | animatronic |
-
-The order is the hypothesis. Whether visitors' faces follow it is the question.
+It gets discussed a lot and measured rarely. The installation turns that around: it takes something that is unmistakably art, a classical painting of the human figure, and lets an AI repaint it until it goes wrong. The question is not whether it eventually stops being art. The question is **when**, and whether that happens at the same point for everyone.
 
 ## What happens when you stand in front of it
 
-A state machine with six phases, every duration tunable in `config.py`.
-
 | Phase | Duration | What happens |
 |---|---|---|
-| **IDLE** | open | You see yourself in the mirror, full screen |
-| **LOCKED** | 2.5 s | Both hands above the shoulders, held still for 1.5 s, then it locks in |
-| **VIEWING** | 6 s | The likeness in a gilded frame, live emotion bars in Latin beside it |
-| **VERDICT_PERSONAL** | 8 s | Your own breakdown, sealed in wax |
-| **VERDICT_COLLECTIVE** | 8 s | *Vox Populi*: the verdict of every previous visitor, and how close you are to it |
-| **FADE** | 3 s | "The valley awaits the next soul." |
+| **Rest** | open | You see yourself in the mirror. Raising both hands for 1.5 s starts the session, and doubles as consent |
+| **Baseline** | 19 s | The untouched original with title and description. The camera averages your face into a personal resting state: your face in front of real art |
+| **Gallery** | 30 s | Ten AI pictures, one every three seconds, with a soft crossfade. Each picture collects its own measurements |
+| **Verdict** | 25 s | The original, the last picture that was still art (**ARS**) and the breaking point (**ABEAT**) side by side, with your own reaction curve below |
 
-No button, no touchscreen, no explanation anyone has to read. Raising your hands is the only gesture, and it still works for someone pushed to the front by the crowd.
+No button, no touchscreen, no instructions anyone has to read. Anyone who reacts to no picture at all gets **ARS MANSIT**: for you, it stayed art. And the verdict says: *You drew this line, not the machine.*
+
+The ten pictures are made in advance with Stable Diffusion img2img. Pictures 1 to 5 are each generated directly from the original with increasing strength. From picture 6 on, every output goes back into the model: true model collapse, where errors compound until the paint disintegrates while the composition still holds.
 
 ## How the measurement works
 
-No TensorFlow emotion models, no DeepFace. MediaPipe FaceLandmarker gives 52 blendshapes, which are FACS action units, and seven emotions are built from those. Each carries a weight saying how strongly it argues for a valley.
+MediaPipe FaceLandmarker gives 52 blendshapes per camera frame, which are FACS action units, and seven emotions are built from those. What matters is *what* gets compared: not the absolute emotion mix, but **the deviation from your own resting state**. Someone who simply looks serious is not penalised for it.
 
-![The weights and the three verdict bands](../blog/img/ars-aut-abeat-methode.png)
+![How the breaking point is measured](../blog/img/ars-aut-abeat-methode.en.png)
 
-*Disgust is the core signal and weighs most. Joy pulls just as hard the other way. Anger sits close to neutral, because in a face it looks a lot like concentration.*
+*Every emotion counts, but the classic uncanny signals, disgust and fear, count most. The picture with the largest weighted deviation is the breaking point. If no deviation exceeds 0.08, there is no breaking point.*
 
-The score is the weighted sum, normalised to 0 to 1. Three bands sit on top: below 0.40 **FIRMA**, stable ground. Up to 0.60 **LIMEN**, at the threshold. Above that **VALLIS**, in the valley.
+A gaze check keeps faces that happen to be in frame but looking elsewhere out of the count: head pose via `solvePnP`, and only someone turned less than 35 degrees sideways and 30 degrees up or down counts as engaged. No images and no faces are stored, only emotion values, the verdict and the breaking point.
 
-A gaze check keeps faces that happen to be in frame but looking elsewhere out of the count: head pose via `solvePnP` on six landmarks, and only someone turned less than 35 degrees sideways and 30 degrees up or down counts as engaged.
+## How it got there
 
-## The part that was actually hard
+The first version in April looked different. Six likenesses along Mori's axis, from a photograph through a wax figure to an animatronic, six seconds each, and a score built from the absolute emotion mix. It was built in Streamlit, and two things from that version cost me evenings:
 
-Not the emotions. The concurrency.
+**The iframe.** Set `position: fixed` on the parent of the WebRTC component and Streamlit's sizing protocol breaks, so the peer connection renegotiates on every rerun and MediaPipe re-initialises every cycle. The fix was to put `position: fixed` on the iframe itself.
 
-The WebRTC `recv()` callback has to return in about 16 milliseconds or the video stutters. MediaPipe takes far longer. So `recv()` only drops the frame into a buffer and returns immediately, a daemon thread reads that buffer at 10 Hz and does the work, and the Streamlit main thread reads a snapshot every 750 to 1500 ms.
+**A race in someone else's library.** `streamlit-webrtc` checks a thread reference in `SessionShutdownObserver.stop()` and dereferences it six lines later. A concurrent call can null it out in between.
 
-Two things that cost me evenings and are therefore written down:
+The 45 test viewings of that version already showed what was later confirmed: disgust, the signal the old scale rested on, averaged 0.022. The version that was exhibited is a different one: FastAPI and React instead of Streamlit, the browser sends camera frames to the Python backend over a WebSocket, and instead of an absolute score it is the breaking point against your own baseline that counts.
 
-**The iframe.** Set `position: fixed` on the parent of the WebRTC component and Streamlit's sizing protocol breaks, so the peer connection renegotiates on every rerun and MediaPipe re-initialises every cycle. The fix is to leave the parent alone and put `position: fixed` on the iframe itself.
+## What the data says
 
-**A race in someone else's library.** `streamlit-webrtc` checks a thread reference in `SessionShutdownObserver.stop()` and dereferences it six lines later. A concurrent call can null it out in between. `app.py` patches the method to copy the reference into a local first.
+The database holds **185 complete visits**: 82 from Illertissen (ancient sculptures, busts and vessels) and 103 from Landsberg (paintings). Development test runs are excluded. That is enough to test a thesis:
 
-## What the pilot data says
+> The point at which a picture stops being art for us is not at the start of the destruction but in its second half. And it sits at the same place for different people, venues and subjects.
 
-And here it gets uncomfortable.
+![Which picture drew the strongest reaction](../blog/img/ars-aut-abeat-ergebnis.en.png)
 
-The database holds **45 viewings from three development days in April 2026**. Across all of them:
+| Claim | Result | 95 % confidence interval |
+|---|---|---|
+| Visitors with a measurable breaking point | 152 of 185 = **82 %** | 76 to 87 % |
+| Breaking points on pictures 6 to 10 (random: 50 %) | 92 of 152 = **61 %** | 53 to 68 %, p = 0.012 |
+| Difference in mean breaking point, Illertissen vs. Landsberg | **0.2 pictures** | −0.8 to +1.2, p = 0.77 |
 
-| Emotion | Mean |
-|---|---|
-| Neutral | 0.455 |
-| Angry | 0.173 |
-| Happy | 0.139 |
-| Surprise | 0.133 |
-| Sad | 0.031 |
-| Fear | 0.024 |
-| **Disgust** | **0.022** |
+In other words: the large majority reacts measurably, the break comes significantly more often late than early, and the pattern repeats at two independent venues with a different audience and different subjects. Each venue on its own sits at about 60 % late breaking points but is too small to be significant alone (p ≈ 0.08). Together the effect is significant. **Where art ends seems to depend more on how far the destruction has gone than on the picture or the viewer.**
 
-Overall score: **0.382**. So FIRMA, and only just below the threshold.
-
-That is a result, but not the hoped-for one. **Disgust is the signal the whole measurement rests on, and it barely shows up.** A mean of 0.022 against a weight of 1.0 means the score is driven almost entirely by neutral and happy in practice, which are the two weights pulling down. Right now the scale measures who does *not* fall into the valley more reliably than who does.
-
-Three explanations are in play and this data cannot separate them:
-
-1. **The likenesses are too harmless.** The 45 viewings span three catalogue generations: the oldest are museum pieces with 30-second viewing windows, then famous paintings, and only at the end the actual likeness catalogue. A marble head does not provoke disgust, and that is a fact about the image selection, not about Mori.
-2. **Disgust is hard to see in a face.** `noseSneer` and `mouthPucker` are small movements. At projection distance and hall lighting they disappear into the noise.
-3. **People show nothing in front of a camera.** Anyone who knows they are being measured goes neutral. A neutral mean of 0.455 is partly that.
-
-Number three is the one that bothers me most, because it is about the method itself rather than its parameters.
+As for verdicts, 70 % land in the valley (VALLIS), 12 % on the threshold (LIMEN) and 18 % on firm ground (FIRMA, *ars mansit*). There is no significant difference between the venues (χ² p = 0.23).
 
 ## Staying honest
 
-**The Kunstnacht data is not in here yet.** What this post reports is the pilot. The measurements from the evening are on the exhibition machine and will follow. They are the genuinely interesting set, because that was the first time people stood in front of it who knew nothing about the project.
+**Drift over time is the main alternative explanation.** The longer ago the baseline was taken, the further any face drifts from it, whatever is on screen. Late pictures would then score higher automatically. The stored data cannot rule that out. A control run that shows the untouched original ten times would settle it.
 
-**The scale changed.** The verdicts were once ARS, ABEAT and DUBIUM, and are now VALLIS, LIMEN and FIRMA. The old records still carry the old labels. Anyone evaluating both generations together has to map them, or they are averaging across two different systems.
+**The peak at pictures 1 and 2.** 33 breaking points sit right at the start. The first cut from the original to a new picture probably causes surprise. So the measurement also picks up reactions to the change itself.
 
-**45 viewings are not a sample.** They are a proof that the thing runs. Every number above is an order of magnitude, not a result.
+**"Angry" is probably concentration.** Anger averages 29 % and is the strongest emotion in 58 visits. People looking closely lower their brows, and the model reads that as anger. Disgust and fear, the classic uncanny signals, stay under 5 %.
+
+**The thesis came after the data.** Splitting into two halves is the most obvious choice, but it was not fixed in advance. The next exhibition is meant to test it properly.
+
+## In the paper
+
+The Landsberger Tagblatt covered the Kunstnacht, with a photo in front of the installation. One line from it fits almost too well: *"Today we can have artworks produced by artificial intelligence where nobody notices that they are not real."* The data says: at some point people do notice, just later than you would think.
 
 ## The evening
 
 Two metres from the installation stood Karla, our Unitree G1.
 
-That handed me something I had not planned. My installation needs a camera, seven weights and a threshold to make the effect visible. Karla needs none of it. She only has to stand up and take a few steps, and you see it directly in the faces in the room.
+That handed me something I had not planned. Our installation needs a camera, seven weights and a threshold to make the effect visible. Karla needs none of it. She only has to stand up and take a few steps, and you see it directly in the faces in the room.
 
 That is not an argument against measuring. It just says where the hard part is: not in triggering the effect, but in recording it so that it can still be recalculated afterwards.
 
+## Why engineers make art
+
+At the end of Projekt 2 I asked Constantin Wanninger what this project was actually about. He answered with a question: "What is a systems engineer to you?" I had no answer. Something with mechanical engineering, I thought. Then came the line that stuck:
+
+> "I want you to become like Gyro Gearloose. Someone who can take any domain and build something out of it."
+
+So it was never about art alone. For us it meant several unfamiliar domains at once: art history, generative AI, face analysis and, in the end, statistics. And the name says it: **PLEB** stands for Pascal Masny, Lukas Kraus, Erik Reusch and Baha Tombul. Four engineering students who could not tell you why one painting is worth millions. Which is exactly why the installation does not ask the experts where art ends, but whoever is standing in front of the camera.
+
 ## Stack
 
-`Python 3.12+` · `Streamlit` · `streamlit-webrtc` · `MediaPipe` (FaceLandmarker, PoseLandmarker) · `OpenCV` · `SQLAlchemy` · `SQLite`
+`Python` · `FastAPI` · `WebSocket` · `React` · `TypeScript` · `Vite` · `MediaPipe` (FaceLandmarker, PoseLandmarker) · `OpenCV` · `SQLAlchemy` · `SQLite` · `Stable Diffusion img2img`
 
-Type is Cinzel and Cormorant Garamond, palette ink `#1C1410`, parchment `#F4E8D0`, gold `#C9A961`, burgundy `#6B2C2C`. Every size goes through `clamp()`, because the same layout has to be readable on a phone and on a beamer.
+Type is Cinzel and Cormorant Garamond, palette ink `#1C1410`, parchment `#F4E8D0`, gold `#C9A961`, burgundy `#6B2C2C`.
 
 The code is open on [GitHub](https://github.com/PascalMasny/ArsAutAbeat).
 
 Three PDFs to take away (in German):
 
-- **[One-pager](../pdfs/ArsAutAbeat_OnePager.pdf)**, one page, for a quick look
-- **[System description](../pdfs/ArsAutAbeat_System.pdf)**, how it works: state machine, concurrency, scoring
-- **[Pilot evaluation](../pdfs/ArsAutAbeat_Auswertung.pdf)**, every number from this post and what stands in their way
+- **[One-pager](../pdfs/ArsAutAbeat_OnePager.pdf)**, one page on how the installation works
+- **[System description](../pdfs/ArsAutAbeat_System.pdf)**, flow, measurement, breaking point and technology in detail
+- **[Evaluation](../pdfs/ArsAutAbeat_Auswertung.pdf)**, all 185 visits, the thesis, the tests and what argues against it
