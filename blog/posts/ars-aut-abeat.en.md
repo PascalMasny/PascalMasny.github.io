@@ -80,7 +80,7 @@ The Landsberger Tagblatt covered the Kunstnacht, with a photo in front of the in
 
 ## The evening
 
-Two metres from the installation stood Karla, our Unitree G1.
+Two metres from the installation stood Karla, our Unitree G1 in cosplay.
 
 That handed me something I had not planned. Our installation needs a camera, seven weights and a threshold to make the effect visible. Karla needs none of it. She only has to stand up and take a few steps, and you see it directly in the faces in the room.
 

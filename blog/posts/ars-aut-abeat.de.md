@@ -80,7 +80,7 @@ Das Landsberger Tagblatt hat über die Kunstnacht berichtet, mit Foto vor der In
 
 ## Der Abend
 
-Zwei Meter neben der Installation stand Karla, unser Unitree G1.
+Zwei Meter neben der Installation stand Karla, unser Unitree G1 im Cosplay.
 
 Das hat mir etwas geliefert, das ich nicht geplant hatte. Unsere Installation braucht eine Kamera, sieben Gewichte und eine Schwelle, um den Effekt sichtbar zu machen. Karla braucht das nicht. Sie muss nur aufstehen und ein paar Schritte gehen, und man sieht ihn direkt in den Gesichtern im Raum.
 
