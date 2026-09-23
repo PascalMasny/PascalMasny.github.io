@@ -91,21 +91,43 @@ if (window.pdfjsLib) {
     'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 }
 
-// Render a post's PDF (META.pdf) inline as an e-reader: one page + prev/next.
+// Render a post's PDFs inline as an e-reader: one page + prev/next.
+// META.pdfs is a list of { url, label }; META.pdf stays supported as a single
+// document, so older posts keep working untouched.
 async function renderInlinePdf() {
   const wrap = document.getElementById('post-pdf');
   if (pdfRendered) return;
-  if (!META || !META.pdf) { wrap.innerHTML = ''; return; }
-  const fallback = `<a class="pdf-fallback" href="${asset(META.pdf)}" target="_blank" rel="noopener">PDF öffnen ↗</a>`;
+  if (!META) { wrap.innerHTML = ''; return; }
+
+  const docs = (Array.isArray(META.pdfs) && META.pdfs.length)
+    ? META.pdfs
+    : (META.pdf ? [{ url: META.pdf }] : []);
+  if (!docs.length) { wrap.innerHTML = ''; return; }
+
+  const labelOf = d => {
+    if (!d.label) return d.url.split('/').pop();
+    return typeof d.label === 'string' ? d.label : (d.label[lang] || d.label.de || d.label.en);
+  };
+  const fallback = docs
+    .map(d => `<a class="pdf-fallback" href="${asset(d.url)}" target="_blank" rel="noopener">${labelOf(d)} &#x2197;</a>`)
+    .join(' &middot; ');
   if (!window.pdfjsLib) { wrap.innerHTML = fallback; return; }
   pdfRendered = true;
+
   const fsLabel = lang === 'de' ? 'Vollbild' : 'Fullscreen';
+  const tabs = docs.length > 1
+    ? `<div class="reader-tabs" role="tablist">${docs.map((d, k) =>
+        `<button class="reader-tab${k === 0 ? ' is-on' : ''}" role="tab" data-doc="${k}"
+                 aria-selected="${k === 0}">${labelOf(d)}</button>`).join('')}</div>`
+    : '<div class="reader-spacer"></div>';
+
   wrap.innerHTML =
     `<div class="reader">
        <div class="reader-top">
+         ${tabs}
          <div class="reader-spacer"></div>
          <button class="reader-btn" id="reader-fs">&#x26F6; <span id="reader-fs-label">${fsLabel}</span></button>
-         <a class="reader-btn" id="reader-dl" href="${asset(META.pdf)}" download>&#x2193; Download</a>
+         <a class="reader-btn" id="reader-dl" href="${asset(docs[0].url)}" download>&#x2193; Download</a>
        </div>
        <div class="reader-stage"><canvas id="reader-canvas"></canvas></div>
        <div class="reader-bar">
@@ -114,6 +136,7 @@ async function renderInlinePdf() {
          <button class="reader-nav" id="reader-next" aria-label="next page">&#x203a;</button>
        </div>
      </div>`;
+
   const reader = wrap.querySelector('.reader');
   const stage  = wrap.querySelector('.reader-stage');
   const canvas = document.getElementById('reader-canvas');
@@ -121,11 +144,13 @@ async function renderInlinePdf() {
   const prev   = document.getElementById('reader-prev');
   const next   = document.getElementById('reader-next');
   const fsBtn  = document.getElementById('reader-fs');
-  let doc, num = 0, cur = 1, task = null;
+  const dl     = document.getElementById('reader-dl');
+  let doc, num = 0, cur = 1, task = null, active = -1;
 
   const isFs = () => document.fullscreenElement === reader;
 
   async function draw(n) {
+    if (!doc) return;
     n = Math.max(1, Math.min(num, n)); cur = n;
     count.textContent = `${n} / ${num}`;
     prev.classList.toggle('disabled', n <= 1);
@@ -148,6 +173,22 @@ async function renderInlinePdf() {
     try { await task.promise; } catch (_) { /* superseded */ }
   }
 
+  // Switching documents reuses the same canvas and always reopens at page one.
+  async function open(k) {
+    if (k === active) return;
+    active = k;
+    wrap.querySelectorAll('.reader-tab').forEach((b, i) => {
+      b.classList.toggle('is-on', i === k);
+      b.setAttribute('aria-selected', String(i === k));
+    });
+    dl.setAttribute('href', asset(docs[k].url));
+    count.textContent = '';
+    if (task) { try { task.cancel(); } catch (_) {} task = null; }
+    doc = await pdfjsLib.getDocument(asset(docs[k].url)).promise;
+    num = doc.numPages;
+    await draw(1);
+  }
+
   fsBtn.addEventListener('click', () => {
     if (!document.fullscreenElement) reader.requestFullscreen?.();
     else document.exitFullscreen?.();
@@ -156,15 +197,15 @@ async function renderInlinePdf() {
     stage.scrollTop = 0;
     draw(cur);
   });
+  wrap.querySelectorAll('.reader-tab').forEach(b =>
+    b.addEventListener('click', () => open(Number(b.dataset.doc)).catch(() => {})));
 
   try {
-    doc = await pdfjsLib.getDocument(asset(META.pdf)).promise;
-    num = doc.numPages;
     prev.addEventListener('click', () => draw(cur - 1));
     next.addEventListener('click', () => draw(cur + 1));
     let rt;
     window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => draw(cur), 150); });
-    await draw(1);
+    await open(0);
   } catch (_) {
     pdfRendered = false;
     wrap.innerHTML = fallback;

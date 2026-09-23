@@ -10,7 +10,6 @@
       "kunst",
       "tha"
     ],
-    "pdf": "pdfs/ArsAutAbeat_Auswertung.pdf",
     "title": {
       "de": "Ars Aut Abeat",
       "en": "Ars Aut Abeat"
@@ -18,7 +17,30 @@
     "excerpt": {
       "de": "Eine Installation, die misst, wie tief Besucher in den Uncanny Valley fallen. Sechs Bildnisse, eine Kamera, sieben gewichtete Emotionen, ein Urteil auf Latein. Gezeigt auf der Langen Kunstnacht in Landsberg am Lech, TTZ Data Science und Autonome Systeme der THA. Und der Befund aus den Pilotdaten: das Signal, auf dem die ganze Messung steht, taucht praktisch nicht auf.",
       "en": "An installation that measures how deep visitors fall into the uncanny valley. Six likenesses, one camera, seven weighted emotions, a verdict in Latin. Shown at the Lange Kunstnacht in Landsberg am Lech, TTZ Data Science und Autonome Systeme at THA. And the finding from the pilot data: the signal the whole measurement rests on barely shows up."
-    }
+    },
+    "pdfs": [
+      {
+        "url": "pdfs/ArsAutAbeat_OnePager.pdf",
+        "label": {
+          "de": "One-Pager",
+          "en": "One-pager"
+        }
+      },
+      {
+        "url": "pdfs/ArsAutAbeat_System.pdf",
+        "label": {
+          "de": "System",
+          "en": "System"
+        }
+      },
+      {
+        "url": "pdfs/ArsAutAbeat_Auswertung.pdf",
+        "label": {
+          "de": "Auswertung",
+          "en": "Evaluation"
+        }
+      }
+    ]
   },
   {
     "slug": "minti-wuerfel",
